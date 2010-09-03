@@ -20,10 +20,18 @@
         <developer>
             <id>roncemer</id>
             <name>Ronald B. Cemer</name>
+            <roles>
+                <role>build</role>
+                <role>release</role>
+            </roles>
         </developer>
         <developer>
             <id>mrwwhitney</id>
             <name>William Whitney</name>
+            <roles>
+                <role>build</role>
+                <role>release</role>
+            </roles>
         </developer>
         <developer>
             <id>ko5tik</id>
