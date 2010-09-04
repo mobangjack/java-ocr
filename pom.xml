@@ -6,7 +6,12 @@
     <packaging>pom</packaging>
     <name>Java OCR Parent project</name>
     <version>1.102-SNAPSHOT</version>
-    <url></url>
+    <url>http://www.sourceforge.net/projects/javaocr/</url>
+    <inceptionYear></inceptionYear>
+    <scm>
+        <connection>scm:svn:https://javaocr.svn.sourceforge.net/svnroot/javaocr</connection>
+        <developerConnection>scm:svn:https://javaocr.svn.sourceforge.net/svnroot/javaocr</developerConnection>
+    </scm>
     <modules>
         <module>core</module>
         <module>tools</module>
@@ -14,7 +19,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <licenses>
+        <license>
+            <url>file:LICENSE.txt</url>
+        </license>
+    </licenses>
     <developers>
         <developer>
             <id>roncemer</id>
