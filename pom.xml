@@ -72,4 +72,23 @@
             </resource>
         </resources>
     </build>
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>jtec-private</id>
+            <name>J Tec Team maven repository on pribluda.de</name>
+            <url>dav:https://www.pribluda.de/dav/m2</url>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>jtec-private</id>
+            <name>J Tec Team maven repository on pribluda.de</name>
+            <url>dav:https://www.pribluda.de/dav/m2</url>
+        </snapshotRepository>
+        <site>
+            <id>pribluda-private-site</id>
+            <name>J Tec Team site area on pribluda.de</name>
+            <url>dav:https://www.pribluda.de/dav/projects</url>
+        </site>
+    </distributionManagement>
 </project>
