@@ -1,0 +1,3 @@
+To build with Maven:
+
+   mvn clean install

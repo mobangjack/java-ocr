@@ -5,8 +5,9 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr;
 
-import java.util.logging.Logger;
 import net.sourceforge.javaocr.gui.GUIController;
+
+import java.util.logging.Logger;
 
 /**
  * Launches the GUI controller for the javaocr toolkit.

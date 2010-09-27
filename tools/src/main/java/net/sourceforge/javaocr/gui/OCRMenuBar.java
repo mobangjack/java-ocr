@@ -5,14 +5,11 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.gui;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import net.sourceforge.javaocr.Constants;
+
 
 /**
  * Provides the menu bar for the GUI.
@@ -72,7 +69,7 @@ public class OCRMenuBar extends JMenuBar
 
             public void actionPerformed(ActionEvent e)
             {
-                JOptionPane.showMessageDialog(null, "Java OCR\n Version: " + Constants.version
+                JOptionPane.showMessageDialog(null, "Java OCR\n Version: " + "1.102"
                         + "\n" + "https://sourceforge.net/projects/javaocr/" 
                         , "About", JOptionPane.INFORMATION_MESSAGE);
             }
