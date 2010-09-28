@@ -16,27 +16,27 @@ public class DocumentScannerListenerAdaptor
         implements DocumentScannerListener
 {
 
-    public void beginDocument(PixelImage pixelImage)
+    public void beginDocument(Image pixelImage)
     {
     }
 
-    public void beginRow(PixelImage pixelImage, int y1, int y2)
+    public void beginRow(Image pixelImage, int y1, int y2)
     {
     }
 
-    public void processChar(PixelImage pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2)
+    public void processChar(Image pixelImage, int x1, int y1, int x2, int y2, int rowY1, int rowY2)
     {
     }
 
-    public void processSpace(PixelImage pixelImage, int x1, int y1, int x2, int y2)
+    public void processSpace(Image pixelImage, int x1, int y1, int x2, int y2)
     {
     }
 
-    public void endRow(PixelImage pixelImage, int y1, int y2)
+    public void endRow(Image pixelImage, int y1, int y2)
     {
     }
 
-    public void endDocument(PixelImage pixelImage)
+    public void endDocument(Image pixelImage)
     {
     }
 }

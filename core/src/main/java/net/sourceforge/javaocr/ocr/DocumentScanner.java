@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * Utility class to scan a document, breaking it into rows and character blocks.
  * @author Ronald B. Cemer
+ * @author Konstantin Pribluda
  */
 public class DocumentScanner
 {
@@ -175,7 +176,7 @@ public class DocumentScanner
      * or <code>0</code> to stop scanning at the bottom boundary of the image.
      */
     public final void scan(
-            PixelImage pixelImage,
+            Image pixelImage,
             DocumentScannerListener listener,
             int blockX1,
             int blockY1,

@@ -3,17 +3,19 @@
 // All rights reserved.
 // This software is released under the BSD license.
 // Please see the accompanying LICENSE.txt for details.
-package net.sourceforge.javaocr.ocr;
+package net.sourceforge.javaocr.awt;
 
 import java.awt.*;
-import java.awt.image.*;
+import java.awt.image.MemoryImageSource;
+import java.awt.image.PixelGrabber;
+
 
 /**
- * Class to contain a pixel representation of an image.
+ * contains pixel representation of an image. utilises AWT classes
  * @author Ronald B. Cemer
+ * @author Konstantin Pribluda
  */
-public class PixelImage
-{
+public class PixelImage implements Image {
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
     protected static final float[] FILTER_FIR_COEFFS =
@@ -77,7 +79,7 @@ public class PixelImage
      * The image must be fully loaded.  Use a <code>MediaTracker</code> to
      * ensure this, if necessary.
      */
-    public PixelImage(Image image)
+    public PixelImage(java.awt.Image image)
     {
         width = image.getWidth(null);
         height = image.getHeight(null);
@@ -95,7 +97,7 @@ public class PixelImage
         }
     }
 
-    public Image rgbToImage(int[] rgbPixels, int width, int height, Component comp)
+    public java.awt.Image rgbToImage(int[] rgbPixels, int width, int height, Component comp)
     {
         return comp.createImage(new MemoryImageSource(width, height, rgbPixels, 0, width));
     }
@@ -193,7 +195,7 @@ public class PixelImage
         }
     }
 
-    public final int[] grayScaleToRGB(int[] pixels)
+    public static final int[] grayScaleToRGB(int[] pixels)
     {
         int[] newPixels = new int[pixels.length];
         for (int i = 0; i < newPixels.length; i++)

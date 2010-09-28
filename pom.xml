@@ -14,6 +14,7 @@
     </scm>
     <modules>
         <module>core</module>
+        <module>plugins</module>
         <module>tools</module>
     </modules>
     <properties>
@@ -55,8 +56,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.4</source>
+                    <target>1.4</target>
                 </configuration>
             </plugin>
         </plugins>
