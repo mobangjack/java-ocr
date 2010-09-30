@@ -45,7 +45,7 @@ public class PixelImageTest extends TestCase {
      */
     public void testEmptyColumnProcessing() {
             int data[] = {0, 1, 1, 1, 0, 1, 1, 1, 1};
-        PixelImage image = new PixelImage(data, 9, 1);
+        PixelImage image = new PixelImage(data, 1, 9);
 
         // just one pixel
         assertFalse(image.emptyVertical(0, 0, 0));

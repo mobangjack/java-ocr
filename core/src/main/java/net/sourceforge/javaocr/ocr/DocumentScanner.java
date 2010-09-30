@@ -4,11 +4,7 @@
 // All rights reserved.
 // This software is released under the BSD license.
 // Please see the accompanying LICENSE.txt for details.
-package net.sourceforge.javaocr.awt;
-
-import net.sourceforge.javaocr.ocr.DocumentScannerListener;
-import net.sourceforge.javaocr.ocr.Image;
-import net.sourceforge.javaocr.ocr.ImageScanner;
+package net.sourceforge.javaocr.ocr;
 
 import java.util.ArrayList;
 
