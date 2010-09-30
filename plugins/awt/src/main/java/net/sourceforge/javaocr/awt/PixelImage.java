@@ -15,7 +15,7 @@ import java.awt.image.PixelGrabber;
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
  */
-public class PixelImage implements Image {
+public class PixelImage implements net.sourceforge.javaocr.ocr.Image {
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
     protected static final float[] FILTER_FIR_COEFFS =
@@ -123,6 +123,28 @@ public class PixelImage implements Image {
     public final int getPixel(int x, int y)
     {
         return pixels[(y * width) + x];
+    }
+
+    /**
+     * TODO: implement me
+     * @param y    Y value
+     * @param from inclusive from
+     * @param to   exclusive to
+     * @return
+     */
+    public boolean emptyHorizontal(int y, int from, int to) {
+        return false;
+    }
+
+    /**
+     * TODO: imlpement me
+     * @param x    X Value
+     * @param from inclusive from
+     * @param to   exclusive to
+     * @return
+     */
+    public boolean emptyVertical(int x, int from, int to) {
+        return false;
     }
 
     private static final int rgbToGrayScale(int pix)

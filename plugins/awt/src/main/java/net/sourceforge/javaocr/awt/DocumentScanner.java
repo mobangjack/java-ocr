@@ -4,17 +4,20 @@
 // All rights reserved.
 // This software is released under the BSD license.
 // Please see the accompanying LICENSE.txt for details.
-package net.sourceforge.javaocr.ocr;
+package net.sourceforge.javaocr.awt;
 
-import java.util.*;
+import net.sourceforge.javaocr.ocr.DocumentScannerListener;
+import net.sourceforge.javaocr.ocr.Image;
+import net.sourceforge.javaocr.ocr.ImageScanner;
+
+import java.util.ArrayList;
 
 /**
  * Utility class to scan a document, breaking it into rows and character blocks.
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
  */
-public class DocumentScanner
-{
+public class DocumentScanner implements ImageScanner {
 
     /**
      * The maximum fraction a row's height can be of the previous row's height,
