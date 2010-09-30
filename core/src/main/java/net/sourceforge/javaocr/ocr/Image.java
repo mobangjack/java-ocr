@@ -44,4 +44,8 @@ public interface Image {
      * @return whether line is empty in image specific fashion
      */
     boolean emptyVertical(int x, int from, int to);
+
+
+    int getWidth();
+    int getHeight();
 }

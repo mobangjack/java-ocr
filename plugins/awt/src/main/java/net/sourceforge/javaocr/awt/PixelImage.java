@@ -16,6 +16,13 @@ import java.awt.image.PixelGrabber;
  * @author Konstantin Pribluda
  */
 public class PixelImage implements net.sourceforge.javaocr.ocr.Image {
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
     protected static final float[] FILTER_FIR_COEFFS =
