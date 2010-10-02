@@ -3,7 +3,7 @@
 // All rights reserved.
 // This software is released under the BSD license.
 // Please see the accompanying LICENSE.txt for details.
-package net.sourceforge.javaocr.awt;
+package net.sourceforge.javaocr.ocr;
 
 import java.awt.*;
 import java.awt.image.MemoryImageSource;
@@ -11,8 +11,7 @@ import java.awt.image.PixelGrabber;
 
 
 /**
- * contains pixel representation of an image. utilises AWT classes
- * TODO ??? Why awt at all?  Just utility
+ * contains pixel representation of an image
  *
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
@@ -55,22 +54,34 @@ public class PixelImage implements net.sourceforge.javaocr.ocr.Image {
      * Height of the image, in pixels.
      */
     public final int height;
-    /**
-     * Total number of pixels in the image (<code>width*height</code>).
-     */
-    public final int npix;
+
     /**
      * Aspect ratio of the image (<code>width/height</code>).
      */
     public final float aspectRatio;
 
+    
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    /**
+     * create empty pixel image
+     * @param height
+     * @param width
+     */
+    public PixelImage(int height, int width) {
+        this.height = height;
+        this.width = width;
+        pixels = new int[width * height];
+        aspectRatio = ((float) width) / ((float) height);
+    }
+
     /**
      * Construct a new <code>PixelImage</code> object from an array of
      * pixels.
      *
-     * @param pixels An array of pixels.  This can be in RGBA or grayscale.
-     *               By default, it is RGBA, but if the <code>toGrayScale()</code> method
-     *               has been called, each pixel will be in the range of 0-255 grayscale.
+     * @param pixels An array of pixels.
      * @param width  Width of the image, in pixels.
      * @param height Height of the image, in pixels.
      */
@@ -78,36 +89,9 @@ public class PixelImage implements net.sourceforge.javaocr.ocr.Image {
         this.pixels = pixels;
         this.width = width;
         this.height = height;
-        npix = width * height;
         aspectRatio = ((float) width) / ((float) height);
     }
 
-    /**
-     * Construct a new <code>PixelImage</code> object from an
-     * <code>Image</code>.
-     *
-     * @param image An <code>Image</code> from which to get the pixels.
-     *              The image must be fully loaded.  Use a <code>MediaTracker</code> to
-     *              ensure this, if necessary.
-     */
-    public PixelImage(java.awt.Image image) {
-        width = image.getWidth(null);
-        height = image.getHeight(null);
-        npix = width * height;
-        aspectRatio = ((float) width) / ((float) height);
-        pixels = new int[npix];
-        PixelGrabber grabber = new PixelGrabber(image, 0, 0, width, height, pixels, 0, width);
-        try {
-            grabber.grabPixels();
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public java.awt.Image rgbToImage(int[] rgbPixels, int width, int height, Component comp) {
-        return comp.createImage(new MemoryImageSource(width, height, rgbPixels, 0, width));
-    }
 
     /**
      * Get the index of a pixel at a specific <code>x,y</code> position.

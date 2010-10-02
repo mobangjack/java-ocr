@@ -1,13 +1,15 @@
 package net.sourceforge.javaocr.ocr;
 
 /**
- * Inteface encapsulating image finctionality. Concrete implementations shall be provided by plugins
+ * Inteface encapsulating image functionality. Concrete implementations shall be provided by plugins
  *
  * @author Konstantin Pribluda
  */
 public interface Image {
+    
     /**
-     * TODO: not sure what this means,  keep it for now
+     * pixel index in underlying array
+     * TODO: not sure this is necessary for outside interface
      *
      * @param x
      * @param y

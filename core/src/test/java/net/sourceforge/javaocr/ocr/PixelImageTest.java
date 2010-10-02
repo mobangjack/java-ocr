@@ -1,6 +1,7 @@
-package net.sourceforge.javaocr.awt;
+package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
+import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
  * test capabilities of pixel image
