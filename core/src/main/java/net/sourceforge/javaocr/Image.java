@@ -1,7 +1,7 @@
 package net.sourceforge.javaocr;
 
 /**
- * Inteface encapsulating image functionality. Concrete implementations shall be provided by plugins
+ * Interface encapsulating image functionality. Concrete implementations shall be provided by plugins
  *
  * @author Konstantin Pribluda
  */

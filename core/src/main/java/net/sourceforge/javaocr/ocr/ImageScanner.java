@@ -1,5 +1,8 @@
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.DocumentScannerListener;
+import net.sourceforge.javaocr.Image;
+
 /**
  * Interface contract to perform document scannung
  *

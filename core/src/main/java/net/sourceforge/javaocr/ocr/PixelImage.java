@@ -5,6 +5,8 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.*;
+
 
 /**
  * contains pixel representation of an image
@@ -16,6 +18,10 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
 
     public int getHeight() {
         return height;
+    }
+
+    public void filter(net.sourceforge.javaocr.ImageFilter filter) {
+        filter.process(pixels, width, height);
     }
 
     public int getWidth() {
@@ -56,13 +62,14 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      */
     public final float aspectRatio;
 
-    
+
     public float getAspectRatio() {
         return aspectRatio;
     }
 
     /**
      * create empty pixel image
+     *
      * @param height
      * @param width
      */
