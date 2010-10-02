@@ -5,6 +5,9 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.DocumentScannerListener;
+import net.sourceforge.javaocr.Image;
+
 /**
  * Empty implementation of DocumentScannerListener interface which can be
  * subclassed and only have the needed methods overridden.  This prevents

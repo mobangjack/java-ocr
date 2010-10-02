@@ -5,10 +5,6 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
-import java.awt.*;
-import java.awt.image.MemoryImageSource;
-import java.awt.image.PixelGrabber;
-
 
 /**
  * contains pixel representation of an image
@@ -16,7 +12,7 @@ import java.awt.image.PixelGrabber;
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
  */
-public class PixelImage implements net.sourceforge.javaocr.ocr.Image {
+public class PixelImage implements net.sourceforge.javaocr.Image {
 
     public int getHeight() {
         return height;

@@ -1,4 +1,4 @@
-package net.sourceforge.javaocr.ocr;
+package net.sourceforge.javaocr;
 
 /**
  * Inteface encapsulating image functionality. Concrete implementations shall be provided by plugins
@@ -50,4 +50,10 @@ public interface Image {
 
     int getWidth();
     int getHeight();
+
+    /**
+     * apply image filter
+     * @param filter
+     */
+   void filter(ImageFilter filter);
 }

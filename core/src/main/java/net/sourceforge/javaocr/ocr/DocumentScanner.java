@@ -6,6 +6,10 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.DocumentScannerListener;
+import net.sourceforge.javaocr.Image;
+import net.sourceforge.javaocr.ImageScanner;
+
 import java.util.ArrayList;
 
 /**
