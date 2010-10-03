@@ -1,7 +1,7 @@
 package net.sourceforge.javaocr;
 
 /**
- * Interface contract to perform document scannung
+ * Interface contract to perform document scanning
  *
  * @author Konstantin Pribluda
  */

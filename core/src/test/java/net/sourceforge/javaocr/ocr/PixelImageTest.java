@@ -1,7 +1,7 @@
 package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
-import net.sourceforge.javaocr.ocr.PixelImage;
+
 
 /**
  * test capabilities of pixel image
@@ -45,7 +45,7 @@ public class PixelImageTest extends TestCase {
      * assure proper finctionality of empty column testing
      */
     public void testEmptyColumnProcessing() {
-            int data[] = {0, 1, 1, 1, 0, 1, 1, 1, 1};
+        int data[] = {0, 1, 1, 1, 0, 1, 1, 1, 1};
         PixelImage image = new PixelImage(data, 1, 9);
 
         // just one pixel
@@ -67,6 +67,31 @@ public class PixelImageTest extends TestCase {
 
         // empty span to the end
         assertTrue(image.emptyVertical(0, 5, 8));
+    }
+
+
+    /**
+     * pixel image shall take full area if not specified
+     * explicitely
+     */
+    public void testBorderProcessing() {
+        int data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        PixelImage image = new PixelImage(data, 3, 3);
+
+        assertEquals(3, image.getWidth());
+        assertEquals(3, image.getHeight());
+        assertEquals(8, image.getPixel(2, 2));
+    }
+
+
+    /**
+     * box setting shall be honored.
+     */
+    public void testBoxSettingAreHonored() {
+        int data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        PixelImage image = new PixelImage(data, 3, 3, 1, 1, 1, 1);
+
+        assertEquals(4,image.getPixel(0,0));
     }
 
 }

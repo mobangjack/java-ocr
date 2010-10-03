@@ -5,8 +5,6 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
-import net.sourceforge.javaocr.*;
-
 
 /**
  * contains pixel representation of an image
@@ -15,18 +13,6 @@ import net.sourceforge.javaocr.*;
  * @author Konstantin Pribluda
  */
 public class PixelImage implements net.sourceforge.javaocr.Image {
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void filter(net.sourceforge.javaocr.ImageFilter filter) {
-        filter.process(pixels, width, height);
-    }
-
-    public int getWidth() {
-        return width;
-    }
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
     protected static final float[] FILTER_FIR_COEFFS =
@@ -57,15 +43,15 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      */
     public final int height;
 
+    public final int originX;
+    public final int originY;
+    public final int boxW;
+    public final int boxH;
     /**
      * Aspect ratio of the image (<code>width/height</code>).
      */
     public final float aspectRatio;
 
-
-    public float getAspectRatio() {
-        return aspectRatio;
-    }
 
     /**
      * create empty pixel image
@@ -73,11 +59,8 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      * @param height
      * @param width
      */
-    public PixelImage(int height, int width) {
-        this.height = height;
-        this.width = width;
-        pixels = new int[width * height];
-        aspectRatio = ((float) width) / ((float) height);
+    public PixelImage(int width, int height) {
+        this(new int[width * height], width, height, 0, 0, width, height);
     }
 
     /**
@@ -89,20 +72,57 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      * @param height Height of the image, in pixels.
      */
     public PixelImage(int[] pixels, int width, int height) {
-        this.pixels = pixels;
-        this.width = width;
+        this(pixels, width, height, 0, 0, width, height);
+    }
+
+    /**
+     * contruct image over the region of array
+     *
+     * @param data      array of pixel data
+     * @param width     image width
+     * @param height    image height
+     * @param originX   image region origin x
+     * @param originY   image region origin y
+     * @param boxWidth  image region width
+     * @param boxHeight image region height
+     */
+    public PixelImage(int[] data, int width, int height, int originX, int originY, int boxWidth, int boxHeight) {
+        this.pixels = data;
         this.height = height;
+        this.width = width;
+        this.originX = originX;
+        this.originY = originY;
+        this.boxW = boxWidth;
+        this.boxH = boxHeight;
         aspectRatio = ((float) width) / ((float) height);
     }
 
 
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void filter(net.sourceforge.javaocr.ImageFilter filter) {
+        filter.process(pixels, width, height);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     /**
      * Get the index of a pixel at a specific <code>x,y</code> position.
+     * TODO: remove me
      *
      * @param x The pixel's x position.
      * @param y The pixel's y position.
      * @return The pixel index (the index into the <code>pixels</code> array)
      *         of the pixel.
+     * @deprecated this is unnecessary for outside  entities, as we are opaque
      */
     public final int getPixelIndex(int x, int y) {
         return (y * width) + x;
@@ -172,6 +192,7 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      *                  grayscale, such that the darkest pixel in the image is all black and the lightest
      *                  pixel in the image is all white.
      */
+    /*
     public final void toGrayScale(boolean normalize) {
         if (npix == 0) {
             return;
@@ -205,7 +226,7 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
             }
         }
     }
-
+       */
     public static final int[] grayScaleToRGB(int[] pixels) {
         int[] newPixels = new int[pixels.length];
         for (int i = 0; i < newPixels.length; i++) {
