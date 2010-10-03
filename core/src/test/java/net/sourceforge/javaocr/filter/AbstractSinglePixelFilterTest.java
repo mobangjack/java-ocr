@@ -48,4 +48,34 @@ public class AbstractSinglePixelFilterTest extends TestCase {
         assertEquals(1, pixels.size());
         assertEquals(4, pixels.get(0));
     }
+
+    /**
+     * contact with left and top
+     */
+    public void testTopLeft() {
+        filter.process(data, 3, 3, 0, 0, 2, 2);
+
+
+        assertEquals(4, pixels.size());
+
+        assertEquals(0, pixels.get(0));
+        assertEquals(1, pixels.get(1));
+        assertEquals(3, pixels.get(2));
+        assertEquals(4, pixels.get(3));
+    }
+
+    /**
+     * contact with left and top
+     */
+    public void testBottomRight() {
+        filter.process(data, 3, 3, 1, 1, 2, 2);
+
+
+        assertEquals(4, pixels.size());
+
+        assertEquals(4, pixels.get(0));
+        assertEquals(5, pixels.get(1));
+        assertEquals(7, pixels.get(2));
+        assertEquals(8, pixels.get(3));
+    }
 }
