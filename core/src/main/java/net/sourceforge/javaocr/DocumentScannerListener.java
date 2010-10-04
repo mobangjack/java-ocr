@@ -5,7 +5,6 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr;
 
-import net.sourceforge.javaocr.Image;
 
 /**
  * Listener interface for the DocumentScanner utility class.
