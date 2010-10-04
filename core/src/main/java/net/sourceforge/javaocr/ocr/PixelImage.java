@@ -171,75 +171,14 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
         return true;
     }
 
-    private static final int rgbToGrayScale(int pix) {
-        int r = (pix >> 16) & 0xff;
-        int g = (pix >> 8) & 0xff;
-        int b = pix & 0xff;
-        int Y = ((r * 306) + (g * 601) + (b * 117)) >> 10;
-        if (Y < 0) {
-            Y = 0;
-        } else if (Y > 255) {
-            Y = 255;
-        }
-        return Y;
-    }
 
     /**
-     * Convert all pixels to grayscale from RGB or RGBA.
-     * Do not call this method if the pixels are not currently RGB or RGBA.
-     *
-     * @param normalize <code>true</code> to normalize the image after converting to
-     *                  grayscale, such that the darkest pixel in the image is all black and the lightest
-     *                  pixel in the image is all white.
+     * TODO:  factor out in filter class
+     * @deprecated
+     * @param pixels
+     * @param width
+     * @param height
      */
-    /*
-    public final void toGrayScale(boolean normalize) {
-        if (npix == 0) {
-            return;
-        }
-        if (!normalize) {
-            for (int i = 0; i < npix; i++) {
-                pixels[i] = rgbToGrayScale(pixels[i]);
-            }
-        } else {
-            int pix;
-            pixels[0] = pix = rgbToGrayScale(pixels[0]);
-            int min = pix, max = pix;
-            for (int i = 1; i < npix; i++) {
-                pixels[i] = pix = rgbToGrayScale(pixels[i]);
-                min = Math.min(min, pix);
-                max = Math.max(max, pix);
-            }
-            int range = max - min;
-            if (range < 1) {
-                for (int i = 0; i < npix; i++) {
-                    pixels[i] = 255;
-                }
-            } else {
-                for (int i = 0; i < npix; i++) {
-                    pixels[i] =
-                            Math.min(255,
-                                    Math.max(0,
-                                            ((pixels[i]
-                                                    - min) * 255) / range));
-                }
-            }
-        }
-    }
-       */
-    public static final int[] grayScaleToRGB(int[] pixels) {
-        int[] newPixels = new int[pixels.length];
-        for (int i = 0; i < newPixels.length; i++) {
-            int pix = pixels[i] & 0xff;
-            newPixels[i] = pix | (pix << 8) | (pix << 16) | 0xff000000;
-        }
-        return newPixels;
-    }
-
-    public final void filter() {
-        filter(pixels, width, height);
-    }
-
     public final void filter(int[] pixels, int width, int height) {
         float[] firSamples = new float[FILTER_FIR_COEFFS.length];
         float c;
