@@ -5,9 +5,12 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.charExtractor;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import net.sourceforge.javaocr.scanner.DocumentScanner;
+import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
+import net.sourceforge.javaocr.scanner.PixelImage;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -15,10 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import net.sourceforge.javaocr.scanner.DocumentScanner;
-import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
-import net.sourceforge.javaocr.scanner.PixelImage;
 
 /**
  * Saves all the characters in an image to an output directory individually. 
