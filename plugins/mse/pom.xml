@@ -6,10 +6,11 @@
         <artifactId>javaocr-plugins-parent</artifactId>
         <version>1.102-SNAPSHOT</version>
     </parent>
-    <artifactId>javaocr-plugin-awt</artifactId>
-    <name>Java OCR AWT Plugin</name>
+    <artifactId>javaocr-plugin-mse</artifactId>
+    <name>Java OCR MSE Plugin</name>
     <description>
-        encapsulate AWT based image processing classes
+        MSE (minimum square error) OCR classes
     </description>
- 
+        <dependencies>
+    </dependencies>
 </project>
