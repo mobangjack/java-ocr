@@ -8,7 +8,6 @@ package net.sourceforge.javaocr.ocrPlugins.handWriting;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.javaocr.ocrPlugins.aspectRatio.AspectRatioOCR;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.OCRScanner;

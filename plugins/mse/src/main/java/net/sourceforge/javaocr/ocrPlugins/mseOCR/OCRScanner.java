@@ -6,11 +6,6 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
-import java.awt.Image;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.logging.Logger;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
 import net.sourceforge.javaocr.scanner.PixelImage;
@@ -18,6 +13,12 @@ import net.sourceforge.javaocr.scanner.accuracy.AccuracyListenerInterface;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyProviderInterface;
 import net.sourceforge.javaocr.scanner.accuracy.OCRComp;
 import net.sourceforge.javaocr.scanner.accuracy.OCRIdentification;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * OCR document scanner.

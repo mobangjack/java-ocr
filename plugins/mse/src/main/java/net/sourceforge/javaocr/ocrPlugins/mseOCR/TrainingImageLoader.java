@@ -6,16 +6,17 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
-import java.awt.Image;
+import net.sourceforge.javaocr.scanner.DocumentScanner;
+import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
+import net.sourceforge.javaocr.scanner.PixelImage;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import net.sourceforge.javaocr.scanner.DocumentScanner;
-import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
-import net.sourceforge.javaocr.scanner.PixelImage;
 
 /**
  * Utility class to load an image file, break it into individual characters,

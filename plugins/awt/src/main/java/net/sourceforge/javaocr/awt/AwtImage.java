@@ -7,7 +7,7 @@ import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 
 /**
- * encapsulates AWT related functionality (creation out of awt)
+ * encapsulates AWT related functionality (image creation out of awt)
  */
 public class AwtImage extends PixelImage {
 
@@ -29,7 +29,7 @@ public class AwtImage extends PixelImage {
 
 
     /**
-     * retrieve awt image out og pixels
+     * retrieve awt image out of pixels
      * @param rgbPixels
      * @param width
      * @param height

@@ -5,13 +5,6 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.aspectRatio;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.logging.Logger;
 import net.sourceforge.javaocr.ocrPlugins.mseOCR.TrainingImage;
 import net.sourceforge.javaocr.scanner.DocumentScanner;
 import net.sourceforge.javaocr.scanner.DocumentScannerListenerAdaptor;
@@ -20,6 +13,10 @@ import net.sourceforge.javaocr.scanner.accuracy.AccuracyListenerInterface;
 import net.sourceforge.javaocr.scanner.accuracy.AccuracyProviderInterface;
 import net.sourceforge.javaocr.scanner.accuracy.OCRComp;
 import net.sourceforge.javaocr.scanner.accuracy.OCRIdentification;
+
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Provides an OCR that can be used in addition to other OCR plug-ins to

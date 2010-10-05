@@ -5,8 +5,9 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocrPlugins.mseOCR;
 
-import java.util.logging.Logger;
 import net.sourceforge.javaocr.scanner.PixelImage;
+
+import java.util.logging.Logger;
 
 /**
  * Class to hold a training image for a single character.
