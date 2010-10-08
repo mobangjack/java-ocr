@@ -136,7 +136,7 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      * @return The value of the pixel.
      */
     public final int getPixel(int x, int y) {
-        return pixels[(y * width) + x];
+        return pixels[((y + originY) * width) + x + originX];
     }
 
     /**
@@ -144,7 +144,7 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      *
      * @param y    Y value
      * @param from inclusive from
-     * @param to   exclusive to
+     * @param to   inclusive to
      * @return
      */
     public boolean emptyHorizontal(int y, int from, int to) {
@@ -159,11 +159,11 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
     /**
      * @param x    X Value
      * @param from inclusive from
-     * @param to   exclusive to
+     * @param to   inclusive to
      * @return
      */
     public boolean emptyVertical(final int x, final int from, final int to) {
-        for (int idx = from * width + x; idx <= to * from + x; idx += width) {
+        for (int idx = from * width + x; idx <= to * width + x; idx += width) {
             if (pixels[idx] == 0) {
                 return false;
             }

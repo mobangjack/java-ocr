@@ -14,8 +14,7 @@
         Master project for JavaOCR plugins
     </description>
     <modules>
-        <module>awt</module>
-        <module>mse</module>
+        <module>awt</module>  
     </modules>
     <dependencies>
         <dependency>
