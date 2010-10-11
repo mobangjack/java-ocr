@@ -6,16 +6,7 @@ package net.sourceforge.javaocr;
  * @author Konstantin Pribluda
  */
 public interface Image {
-    
-    /**
-     * pixel index in underlying array
-     * TODO: not sure this is necessary for outside interface
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    int getPixelIndex(int x, int y);
+
 
     /**
      * retrieve value of pixel in image specific fashion
@@ -49,11 +40,14 @@ public interface Image {
 
 
     int getWidth();
+
     int getHeight();
 
     /**
-     * apply image filter
+     * accept image filter. traversal is handled by image
+     * filtering is always done over whole image. 
+     *
      * @param filter
      */
-   void filter(ImageFilter filter);
+    void filter(ImageFilter filter); 
 }

@@ -12,7 +12,7 @@ package net.sourceforge.javaocr.ocr;
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
  */
-public class PixelImage implements net.sourceforge.javaocr.Image {
+public class PixelImage extends AbstractLinearImage {
     // 10-tap, lowpass Finite Impulse Response (FIR) filter.
 
     protected static final float[] FILTER_FIR_COEFFS =
@@ -34,19 +34,7 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      * has been called, each pixel will be in the range of 0-255 grayscale.
      */
     public final int[] pixels;
-    /**
-     * Width of the image, in pixels.
-     */
-    public final int width;
-    /**
-     * Height of the image, in pixels.
-     */
-    public final int height;
 
-    public final int originX;
-    public final int originY;
-    public final int boxW;
-    public final int boxH;
     /**
      * Aspect ratio of the image (<code>width/height</code>).
      */
@@ -87,13 +75,8 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
      * @param boxHeight image region height
      */
     public PixelImage(int[] data, int width, int height, int originX, int originY, int boxWidth, int boxHeight) {
+        super(boxHeight, originY, originX, width, boxWidth, height);
         this.pixels = data;
-        this.height = height;
-        this.width = width;
-        this.originX = originX;
-        this.originY = originY;
-        this.boxW = boxWidth;
-        this.boxH = boxHeight;
         aspectRatio = ((float) width) / ((float) height);
     }
 
@@ -102,16 +85,16 @@ public class PixelImage implements net.sourceforge.javaocr.Image {
         return aspectRatio;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
     public void filter(net.sourceforge.javaocr.ImageFilter filter) {
         filter.process(pixels, width, height);
     }
 
-    public int getWidth() {
-        return width;
+    /**
+     * process pixel in place
+     */
+    @Override
+    protected void processCurrent() {
+        pixels[currentIndex] = currentFilter.processPixel(pixels[currentIndex]);
     }
 
     /**

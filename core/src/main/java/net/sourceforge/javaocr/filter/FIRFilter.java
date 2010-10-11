@@ -1,9 +1,8 @@
 package net.sourceforge.javaocr.filter;
 
-import net.sourceforge.javaocr.ImageFilter;
-
 /**
  * apply FIR filter to image
+ * TODO: implement me
  */
 public class FIRFilter extends AbstractBaseFilter{
     float[] coeffs;

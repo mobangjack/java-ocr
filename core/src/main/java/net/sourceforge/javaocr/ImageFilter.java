@@ -26,4 +26,11 @@ public interface ImageFilter {
      * @param boxH
      */
     public void process(final int[] data, final int width, final int height, final int originX, final int originY,final int boxW, final int boxH);
+
+    /**
+     * process single pixel
+     * @param pixel
+     * @return
+     */
+    int processPixel(int pixel);
 }
