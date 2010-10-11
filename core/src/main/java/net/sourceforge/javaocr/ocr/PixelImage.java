@@ -35,11 +35,6 @@ public class PixelImage extends AbstractLinearImage {
      */
     public final int[] pixels;
 
-    /**
-     * Aspect ratio of the image (<code>width/height</code>).
-     */
-    public final float aspectRatio;
-
 
     /**
      * create empty pixel image
@@ -63,30 +58,9 @@ public class PixelImage extends AbstractLinearImage {
         this(pixels, width, height, 0, 0, width, height);
     }
 
-    /**
-     * contruct image over the region of array
-     *
-     * @param data      array of pixel data
-     * @param width     image width
-     * @param height    image height
-     * @param originX   image region origin x
-     * @param originY   image region origin y
-     * @param boxWidth  image region width
-     * @param boxHeight image region height
-     */
-    public PixelImage(int[] data, int width, int height, int originX, int originY, int boxWidth, int boxHeight) {
-        super(boxHeight, originY, originX, width, boxWidth, height);
-        this.pixels = data;
-        aspectRatio = ((float) width) / ((float) height);
-    }
-
-
-    public float getAspectRatio() {
-        return aspectRatio;
-    }
-
-    public void filter(net.sourceforge.javaocr.ImageFilter filter) {
-        filter.process(pixels, width, height);
+    public PixelImage(int[] pixels, int width, int height, int originX, int originY, int boxW, int boxH) {
+        super(width, height, originX, originY, boxW, boxH);
+        this.pixels = pixels;
     }
 
     /**
@@ -97,70 +71,18 @@ public class PixelImage extends AbstractLinearImage {
         pixels[currentIndex] = currentFilter.processPixel(pixels[currentIndex]);
     }
 
-    /**
-     * Get the index of a pixel at a specific <code>x,y</code> position.
-     * TODO: remove me
-     *
-     * @param x The pixel's x position.
-     * @param y The pixel's y position.
-     * @return The pixel index (the index into the <code>pixels</code> array)
-     *         of the pixel.
-     * @deprecated this is unnecessary for outside  entities, as we are opaque
-     */
-    public final int getPixelIndex(int x, int y) {
-        return (y * width) + x;
+    @Override
+    protected int getCurrent() {
+        return pixels[currentIndex];
     }
-
-    /**
-     * Get the value of a pixel at a specific <code>x,y</code> position.
-     *
-     * @param x The pixel's x position.
-     * @param y The pixel's y position.
-     * @return The value of the pixel.
-     */
-    public final int getPixel(int x, int y) {
-        return pixels[((y + originY) * width) + x + originX];
-    }
-
-    /**
-     * whether given span is empty.  we thread 0 as black and filed
-     *
-     * @param y    Y value
-     * @param from inclusive from
-     * @param to   inclusive to
-     * @return
-     */
-    public boolean emptyHorizontal(int y, int from, int to) {
-        for (int idx = y * width + from; idx <= y * width + to; idx++) {
-            if (pixels[idx] == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param x    X Value
-     * @param from inclusive from
-     * @param to   inclusive to
-     * @return
-     */
-    public boolean emptyVertical(final int x, final int from, final int to) {
-        for (int idx = from * width + x; idx <= to * width + x; idx += width) {
-            if (pixels[idx] == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     /**
      * TODO:  factor out in filter class
-     * @deprecated
+     *
      * @param pixels
      * @param width
      * @param height
+     * @deprecated
      */
     public final void filter(int[] pixels, int width, int height) {
         float[] firSamples = new float[FILTER_FIR_COEFFS.length];

@@ -15,7 +15,8 @@ public class FIRFilter extends AbstractBaseFilter{
         this.coeffs = coeffs;
     }
 
-    public void process(int[] data, int width, int height, int originX, int originY, int boxW, int boxH) {
 
+    public int processPixel(int pixel) {
+        return 0; 
     }
 }

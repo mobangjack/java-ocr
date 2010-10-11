@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 
 /**
+ * @author Konstantin Pribluda
  * test capabilities of pixel image
  */
 public class PixelImageTest extends TestCase {
@@ -19,24 +20,24 @@ public class PixelImageTest extends TestCase {
         PixelImage image = new PixelImage(data, 9, 1);
 
         // just one pixel
-        assertFalse(image.emptyHorizontal(0, 0, 0));
+        assertFalse(image.horizontalSpanEquals(0, 0, 0, 0));
         // 2 pixel,  left border is filled
-        assertFalse(image.emptyHorizontal(0, 0, 0));
+        assertFalse(image.horizontalSpanEquals(0, 0, 0, 0));
 
         // 1 pixel, empty
-        assertTrue(image.emptyHorizontal(0, 1, 1));
+        assertTrue(image.horizontalSpanEquals(0, 1, 1, 0));
 
         // pixel span empty
-        assertTrue(image.emptyHorizontal(0, 1, 3));
+        assertTrue(image.horizontalSpanEquals(0, 1, 3, 0));
 
         // one pixel on the right border
-        assertFalse(image.emptyHorizontal(0, 1, 4));
+        assertFalse(image.horizontalSpanEquals(0, 1, 4, 0));
 
         // pixel in the middle
-        assertFalse(image.emptyHorizontal(0, 3, 5));
+        assertFalse(image.horizontalSpanEquals(0, 3, 5, 0));
 
         // empty span to the end
-        assertTrue(image.emptyHorizontal(0, 5, 8));
+        assertTrue(image.horizontalSpanEquals(0, 5, 8, 0));
 
     }
 
@@ -49,24 +50,24 @@ public class PixelImageTest extends TestCase {
         PixelImage image = new PixelImage(data, 1, 9);
 
         // just one pixel
-        assertFalse(image.emptyVertical(0, 0, 0));
+        assertFalse(image.verticalSpanEquals(0, 0, 0, 0));
         // 2 pixel,  left border is filled
-        assertFalse(image.emptyVertical(0, 0, 0));
+        assertFalse(image.verticalSpanEquals(0, 0, 0, 0));
 
         // 1 pixel, empty
-        assertTrue(image.emptyVertical(0, 1, 1));
+        assertTrue(image.verticalSpanEquals(0, 1, 1, 0));
 
         // pixel span empty
-        assertTrue(image.emptyVertical(0, 1, 3));
+        assertTrue(image.verticalSpanEquals(0, 1, 3, 0));
 
         // one pixel on the right border
-        assertFalse(image.emptyVertical(0, 1, 4));
+        assertFalse(image.verticalSpanEquals(0, 1, 4, 0));
 
         // pixel in the middle
-        assertFalse(image.emptyVertical(0, 3, 5));
+        assertFalse(image.verticalSpanEquals(0, 3, 5, 0));
 
         // empty span to the end
-        assertTrue(image.emptyVertical(0, 5, 8));
+        assertTrue(image.verticalSpanEquals(0, 5, 8, 0));
     }
 
 
@@ -92,6 +93,15 @@ public class PixelImageTest extends TestCase {
         PixelImage image = new PixelImage(data, 3, 3, 1, 1, 1, 1);
 
         assertEquals(4,image.getPixel(0,0));
+    }
+
+
+    /**
+     * test proper traversal of image and passing to filter
+
+     */
+    public void testImageTraversal() {
+
     }
 
 }

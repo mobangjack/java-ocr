@@ -210,7 +210,7 @@ public class DocumentScanner implements ImageScanner {
         ArrayList al = new ArrayList();
         int y1 = 0;
         for (int y = blockY1; y < blockY2; y++) {
-            boolean isWhiteSpace = pixelImage.emptyHorizontal(y, blockX1, blockX2);
+            boolean isWhiteSpace = pixelImage.horizontalSpanEquals(y, blockX1, blockX2, 0);
 
             if (isWhiteSpace) {
                 if (!whiteLine) {
@@ -300,7 +300,7 @@ public class DocumentScanner implements ImageScanner {
                 liberalWhitespacePolicy = true;
             }
             int numWhitePixelsThisColumn = 0;
-            boolean isWhiteSpace = pixelImage.emptyVertical(x,y1,y2-1);
+            boolean isWhiteSpace = pixelImage.verticalSpanEquals(x,y1,y2-1, 0);
 
             if ((liberalWhitespacePolicy)
                     && (numWhitePixelsThisColumn
@@ -365,7 +365,7 @@ public class DocumentScanner implements ImageScanner {
             int cy1 = y1;
             // Adjust cy1 down to point to the the top line which is not all white.
             while (cy1 < y2) {
-                boolean isWhiteSpace = pixelImage.emptyHorizontal(cy1,cx1,cx2-1);
+                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy1,cx1,cx2-1, 0);
                 if (!isWhiteSpace) {
                     break;
                 }
@@ -375,7 +375,7 @@ public class DocumentScanner implements ImageScanner {
             // Adjust cy2 up to point to the the line after the last line
             // which is not all white.
             while (cy2 > cy1) {
-                boolean isWhiteSpace = pixelImage.emptyHorizontal(cy2-1,cx1,cx2-1);
+                boolean isWhiteSpace = pixelImage.horizontalSpanEquals(cy2-1,cx1,cx2-1, 0);
    
                 if (!isWhiteSpace) {
                     break;

@@ -24,9 +24,10 @@ public interface Image {
      * @param y    Y value
      * @param from inclusive from
      * @param to   inclusive to
+     * @param value
      * @return whether line is empty in image specific fashion
      */
-    boolean emptyHorizontal(int y, int from, int to);
+    boolean horizontalSpanEquals(final int y, final int from, final int to,final int value);
 
     /**
      * whether vertical line is empty between specified points
@@ -34,9 +35,10 @@ public interface Image {
      * @param x    X Value
      * @param from inclusive from
      * @param to   inclusive to
+     * @param value
      * @return whether line is empty in image specific fashion
      */
-    boolean emptyVertical(int x, int from, int to);
+    boolean verticalSpanEquals(final int x,final int from,final int to,final int value);
 
 
     int getWidth();

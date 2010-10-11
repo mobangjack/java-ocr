@@ -5,7 +5,7 @@ package net.sourceforge.javaocr.filter;
  */
 public class GrayscaleToRGBA  extends AbstractSinglePixelFilter {
 
-    protected int convert(int pixel) {
+    public int processPixel(int pixel) {
         return  pixel | (pixel << 8) | (pixel << 16) | 0xff000000;
     }
 }
