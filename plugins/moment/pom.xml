@@ -6,10 +6,11 @@
         <artifactId>javaocr-plugins-parent</artifactId>
         <version>1.102-SNAPSHOT</version>
     </parent>
-    <artifactId>javaocr-plugin-awt</artifactId>
-    <name>Java OCR AWT Plugin</name>
+    <artifactId>javaocr-plugin-moment</artifactId>
+    <name>Image moment plugin</name>
     <description>
-        encapsulate AWT based image processing classes
+        Filters to compute various message moments as well as
+        (Hu moments)
     </description>
- 
+                  
 </project>

@@ -14,9 +14,10 @@
         Master project for JavaOCR plugins
     </description>
     <modules>
+        <module>moment</module>  
         <module>awt</module>  
     </modules>
-    <dependencies>
+    <dependencies>         
         <dependency>
             <groupId>net.sourceforge.javaocr</groupId>
             <artifactId>javaocr-core</artifactId>
