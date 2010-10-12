@@ -16,26 +16,13 @@ public class RawMomentFilter extends AbstractBaseFilter {
 
 
     /**
-     * filter computing moment with giveb cardinality
+     * filter computing moment with given cardinality
      * @param a
      * @param b
      */
     public RawMomentFilter(int a, int b) {
         this.a = a;
         this.b = b;
-    }
-
-    public void process(int[] data, int width, int height, int originX, int originY, int boxW, int boxH) {
-        int scanStart;
-        int scanEnd;
-        final int maxRow = originY + boxH;
-        for (int j = originY, currentY = 0; j < maxRow; j++, currentY++) {
-            scanStart = originX + j * width;
-            scanEnd = scanStart + boxW;
-            for (int i = scanStart, currentX = 0; i < scanEnd; i++, currentX++) {
-                computeIndivudualMoment(data[i], currentX, currentY);
-            }
-        }
     }
 
     /**

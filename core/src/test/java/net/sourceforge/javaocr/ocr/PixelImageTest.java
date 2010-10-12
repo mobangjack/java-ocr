@@ -20,24 +20,21 @@ public class PixelImageTest extends TestCase {
         PixelImage image = new PixelImage(data, 9, 1);
 
         // just one pixel
-        assertFalse(image.horizontalSpanEquals(0, 0, 0, 0));
+        assertTrue(image.horizontalSpanEquals(0, 0, 0, 0));
         // 2 pixel,  left border is filled
-        assertFalse(image.horizontalSpanEquals(0, 0, 0, 0));
+        assertFalse(image.horizontalSpanEquals(0, 3, 4, 1));
 
-        // 1 pixel, empty
-        assertTrue(image.horizontalSpanEquals(0, 1, 1, 0));
+        // pixel span
+        assertTrue(image.horizontalSpanEquals(0, 1, 3, 1));
 
-        // pixel span empty
-        assertTrue(image.horizontalSpanEquals(0, 1, 3, 0));
+        // one pixel on the right border is wrong
+        assertFalse(image.horizontalSpanEquals(0, 1, 4, 1));
 
-        // one pixel on the right border
-        assertFalse(image.horizontalSpanEquals(0, 1, 4, 0));
+        // pixel in the middle is wrong
+        assertFalse(image.horizontalSpanEquals(0, 3, 5, 1));
 
-        // pixel in the middle
-        assertFalse(image.horizontalSpanEquals(0, 3, 5, 0));
-
-        // empty span to the end
-        assertTrue(image.horizontalSpanEquals(0, 5, 8, 0));
+        // span to the end
+        assertTrue(image.horizontalSpanEquals(0, 5, 8, 1));
 
     }
 
@@ -50,24 +47,23 @@ public class PixelImageTest extends TestCase {
         PixelImage image = new PixelImage(data, 1, 9);
 
         // just one pixel
-        assertFalse(image.verticalSpanEquals(0, 0, 0, 0));
+        assertTrue(image.verticalSpanEquals(0, 0, 0, 0));
         // 2 pixel,  left border is filled
-        assertFalse(image.verticalSpanEquals(0, 0, 0, 0));
+        assertFalse(image.verticalSpanEquals(0, 0, 1, 1));
 
-        // 1 pixel, empty
-        assertTrue(image.verticalSpanEquals(0, 1, 1, 0));
 
-        // pixel span empty
-        assertTrue(image.verticalSpanEquals(0, 1, 3, 0));
+
+        // pixel span
+        assertTrue(image.verticalSpanEquals(0, 1, 3, 1));
 
         // one pixel on the right border
-        assertFalse(image.verticalSpanEquals(0, 1, 4, 0));
+        assertFalse(image.verticalSpanEquals(0, 1, 4, 1));
 
         // pixel in the middle
-        assertFalse(image.verticalSpanEquals(0, 3, 5, 0));
+        assertFalse(image.verticalSpanEquals(0, 3, 5, 1));
 
-        // empty span to the end
-        assertTrue(image.verticalSpanEquals(0, 5, 8, 0));
+        // span to the end
+        assertTrue(image.verticalSpanEquals(0, 5, 8, 1));
     }
 
 

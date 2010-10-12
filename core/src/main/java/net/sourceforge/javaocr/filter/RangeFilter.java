@@ -1,5 +1,7 @@
 package net.sourceforge.javaocr.filter;
 
+import net.sourceforge.javaocr.PixelIterator;
+
 /**
  * gather min and max values from supplied pixels
  *
@@ -9,12 +11,6 @@ public class RangeFilter extends AbstractSinglePixelFilter {
     int min;
     int max;
 
-    protected int convert(int pixel) {
-        if (pixel < min) min = pixel;
-        if (pixel > max) max = pixel;
-        return pixel;
-    }
-
 
     public int getMax() {
         return max;
@@ -22,5 +18,12 @@ public class RangeFilter extends AbstractSinglePixelFilter {
 
     public int getMin() {
         return min;
+    }
+
+    @Override
+    protected void processPixel(PixelIterator iterator) {
+        final int pixel = iterator.next();
+        if (pixel < min) min = pixel;
+        if (pixel > max) max = pixel;
     }
 }

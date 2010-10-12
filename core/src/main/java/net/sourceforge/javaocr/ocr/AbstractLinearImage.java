@@ -38,11 +38,27 @@ public abstract class AbstractLinearImage implements Image {
      */
     public final float aspectRatio;
 
+    /**
+     * construct image over while linear array with specified width and height
+     *
+     * @param width  image width
+     * @param height image height
+     */
     protected AbstractLinearImage(int width, int height) {
         this(width, height, 0, 0, width, height);
 
     }
 
+    /**
+     * construct image over subset of image in linear array
+     *
+     * @param width   full image width
+     * @param height  full image height
+     * @param originX X-origin of subimage
+     * @param originY Y-origin of subimage
+     * @param boxW    subimage width
+     * @param boxH    subimage height
+     */
     protected AbstractLinearImage(int width, int height, int originX, int originY, int boxW, int boxH) {
         this.boxH = boxH;
         this.boxW = boxW;
@@ -54,15 +70,17 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
-     * perform image filtering
+     * perform image filtering. iterate over  pixels
      *
      * @param filter
      */
     public void filter(ImageFilter filter) {
-        final int maxRow = originY + boxH;
+        int maxRow = originY + boxH;
+        int scanStart;
+        int scanEnd;
         for (int j = originY; j < maxRow; j++) {
-            final int scanStart = originX + j * width;
-            final int scanEnd = scanStart + boxW;
+            scanStart = originX + j * width;
+            scanEnd = scanStart + boxW;
             for (currentIndex = scanStart; currentIndex < scanEnd; currentIndex++) {
                 // we aim to do this without explicit parameters
                 processCurrent();

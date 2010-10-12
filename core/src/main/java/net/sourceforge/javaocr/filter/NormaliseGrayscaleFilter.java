@@ -1,5 +1,7 @@
 package net.sourceforge.javaocr.filter;
 
+import net.sourceforge.javaocr.PixelIterator;
+
 /**
  * normalise grayscale pixels linear basing on min/max values
  *
@@ -20,11 +22,9 @@ public class NormaliseGrayscaleFilter extends AbstractSinglePixelFilter {
         range = max - min;
     }
 
-    /**
-     * @param pixel pixel value to be normalized
-     * @return
-     */
-    protected int convert(int pixel) {
-        return Math.min(255,Math.max(0,((pixel- min) * 255) / range));
+
+    @Override
+    protected void processPixel(PixelIterator iterator) {
+        iterator.put(Math.min(255, Math.max(0, ((iterator.next() - min) * 255) / range)));
     }
 }

@@ -2,14 +2,14 @@ package net.sourceforge.javaocr;
 
 /**
  * performs transformation of image data. can and certainly will modify image data in place
- * TODO: ideas how to do FIR needed
  */
 public interface ImageFilter {
 
     /**
-     * process single pixel
-     * @param pixel
-     * @return
+     * perform image processing
+     *
+     * @param image
      */
-    int processPixel(int pixel);
+    void process(Image image);
+
 }

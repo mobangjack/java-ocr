@@ -68,7 +68,7 @@ public class LinearImageTest extends TestCase {
                 return 0;
             }
         };
-
+        image.filter(filter);
         assertEquals(1, pixels.size());
         assertEquals(4, pixels.get(0));
     }
