@@ -38,6 +38,12 @@ public abstract class AbstractLinearImage implements Image {
      */
     public final float aspectRatio;
 
+
+    // iteration  step
+    int step;
+    // iteration border
+    int border;
+
     /**
      * construct image over while linear array with specified width and height
      *
@@ -89,17 +95,13 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
-     * process current pixel while filtering
-     */
-    abstract protected void processCurrent();
-
-    /**
      * retrieve current  pixel value
      *
      * @return current pixel value
      */
-    abstract protected int getCurrent();
+    abstract protected int get();
 
+    abstract protected void put(int what);
 
     /**
      * Get the value of a pixel at a specific <code>x,y</code> position.
@@ -171,5 +173,31 @@ public abstract class AbstractLinearImage implements Image {
             }
         }
         return true;
+    }
+
+
+    public void iterateV(int x, int from, int to) {
+
+    }
+
+    public void iterateH(int y, int from, int to) {
+
+    }
+
+    public void iterateH(int y) {
+        iterateH(y, 0, width);
+    }
+
+    public void iterateV(int x) {
+        iterateV(x, 0, height);
+    }
+
+
+    public boolean hasNext() {
+        return currentIndex < border;
+    }
+
+    public void next() {
+        currentIndex += step;
     }
 }

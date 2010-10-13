@@ -1,7 +1,6 @@
 package net.sourceforge.javaocr.filter;
 
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.PixelIterator;
 
 /**
  * abstract base class for filters operating on single pixels

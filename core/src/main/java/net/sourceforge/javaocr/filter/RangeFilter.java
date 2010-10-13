@@ -1,7 +1,5 @@
 package net.sourceforge.javaocr.filter;
 
-import net.sourceforge.javaocr.PixelIterator;
-
 /**
  * gather min and max values from supplied pixels
  *

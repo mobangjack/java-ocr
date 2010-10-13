@@ -1,7 +1,5 @@
 package net.sourceforge.javaocr.filter;
 
-import net.sourceforge.javaocr.PixelIterator;
-
 /**
  * transform pixel from grayscale to RGBA
  */

@@ -58,34 +58,43 @@ public interface Image {
     void filter(ImageFilter filter);
 
     /**
-     * convenience method to retrieve iterator over whole image row
-     *
-     * @return iterator
+     * convenience method to initialize iterator over whole image row
      */
-    PixelIterator hIterator(int y);
+    void iterateH(int y);
 
     /**
-     * retrieve iterator over part of row
+     * initialize iterator over part of row
      *
      * @param from from position
      * @param to   to position
-     * @return iterator
      */
-    PixelIterator hIterator(int y,int from, int to);
+    void iterateH(int y, int from, int to);
 
     /**
-     * convenience method retrieve iterator over whole image column
-     *
-     * @return iterator
+     * convenience method to initialize iterator over whole image column
      */
-    PixelIterator vIterator(int x);
+    void iterateV(int x);
 
     /**
-     * retrieve iterator over part of image column
+     * rinitialize iterator over part of column
      *
      * @param from
      * @param to
+     */
+    void iterateV(int x, int from, int to);
+
+    /**
+     * advance to next available pixel
+     *
      * @return
      */
-    PixelIterator vIterator(int x,int from, int to);
+    void next();
+
+    /**
+     * whether next pixel is available
+     *
+     * @return
+     */
+    boolean hasNext();
+
 }
