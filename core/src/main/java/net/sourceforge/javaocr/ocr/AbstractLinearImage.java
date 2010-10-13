@@ -112,7 +112,12 @@ public abstract class AbstractLinearImage implements Image {
      */
     public int getPixel(int x, int y) {
         currentIndex = ((y + originY) * width) + x + originX;
-        return getCurrent();
+        return get();
+    }
+
+    public void putPixel(int x, int y, int value) {
+        currentIndex = ((y + originY) * width) + x + originX;
+        put(value);
     }
 
     public int getHeight() {
@@ -127,19 +132,6 @@ public abstract class AbstractLinearImage implements Image {
         return aspectRatio;
     }
 
-    /**
-     * Get the index of a pixel at a specific <code>x,y</code> position.
-     * TODO: remove me
-     *
-     * @param x The pixel's x position.
-     * @param y The pixel's y position.
-     * @return The pixel index (the index into the <code>pixels</code> array)
-     *         of the pixel.
-     * @deprecated this is unnecessary for outside  entities, as we are opaque
-     */
-    public final int getPixelIndex(int x, int y) {
-        return (y * width) + x;
-    }
 
     /**
      * whether given span is empty.  we thread 0 as black and filed
@@ -152,7 +144,7 @@ public abstract class AbstractLinearImage implements Image {
      */
     public boolean horizontalSpanEquals(final int y, final int from, final int to, final int value) {
         for (currentIndex = y * width + from; currentIndex <= y * width + to; currentIndex++) {
-            if (getCurrent() != value) {
+            if (get() != value) {
                 return false;
             }
         }
@@ -168,7 +160,7 @@ public abstract class AbstractLinearImage implements Image {
      */
     public boolean verticalSpanEquals(final int x, final int from, final int to, final int value) {
         for (currentIndex = from * width + x; currentIndex <= to * width + x; currentIndex += width) {
-            if (getCurrent() != value) {
+            if (get() != value) {
                 return false;
             }
         }
@@ -177,11 +169,16 @@ public abstract class AbstractLinearImage implements Image {
 
 
     public void iterateV(int x, int from, int to) {
-
+        currentIndex = (from + originY) * width + x + originX;
+        border = (to + originY) * width + x + originX;
+        step = width;
     }
 
     public void iterateH(int y, int from, int to) {
-
+        final int base = (y + originY) * width + originX;
+        currentIndex = base + from;
+        border = base + to;
+        step = 1;
     }
 
     public void iterateH(int y) {
