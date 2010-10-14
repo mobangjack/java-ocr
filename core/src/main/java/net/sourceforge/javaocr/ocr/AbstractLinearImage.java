@@ -166,28 +166,29 @@ public abstract class AbstractLinearImage implements Image {
 
 
     public void iterateV(int x, int from, int to) {
-        currentIndex = (from + originY) * width + x + originX;
+        currentIndex = (from + originY - 1) * width + x + originX;
         border = (to + originY) * width + x + originX;
         step = width;
     }
 
     public void iterateH(int y, int from, int to) {
-        final int base = (y + originY) * width + originX;
+        final int base = (y + originY) * width + originX - 1;
         currentIndex = base + from;
-        border = base + to;
+        border = base + to + 1;
         step = 1;
     }
 
     public void iterateH(int y) {
-        iterateH(y, 0, width);
+        iterateH(y, 0, width-1);
     }
 
     public void iterateV(int x) {
-        iterateV(x, 0, height);
+        iterateV(x, 0, height-1);
     }
 
 
     public boolean hasNext() {
+        System.err.println("current: " + currentIndex + " border:" + border);
         return currentIndex < border;
     }
 
