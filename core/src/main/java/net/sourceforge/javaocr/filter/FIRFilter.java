@@ -4,7 +4,7 @@ import net.sourceforge.javaocr.Image;
 
 /**
  * apply FIR filter to image
- * TODO: implement me properly
+ * TODO: implement me   properly. will need output image to push  pixel to
  */
 public class FIRFilter extends AbstractBaseFilter{
     float[] coeffs;
@@ -21,4 +21,5 @@ public class FIRFilter extends AbstractBaseFilter{
     public void process(Image image) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
 }

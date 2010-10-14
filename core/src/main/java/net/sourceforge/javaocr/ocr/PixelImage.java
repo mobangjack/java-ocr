@@ -49,11 +49,15 @@ public class PixelImage extends AbstractLinearImage {
     }
 
     @Override
+
     public int get() {
         return pixels[currentIndex];
     }
 
-    public void put(int what) {
-        pixels[currentIndex] = what;
+    @Override
+    public void put(int value) {
+        pixels[currentIndex] = value;
+
     }
+
 }

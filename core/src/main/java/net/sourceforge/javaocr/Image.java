@@ -15,9 +15,30 @@ public interface Image {
      * @param y
      * @return
      */
-    int getPixel(int x, int y);
+    int get(int x, int y);
 
-    void putPixel(int x, int y, int value);
+    /**
+     * store pixel at specified position
+     *
+     * @param x
+     * @param y
+     * @param value
+     */
+    void put(int x, int y, int value);
+
+    /**
+     * retrieve pixekl at current position
+     *
+     * @return
+     */
+    int get();
+
+    /**
+     * store pixel at current position
+     *
+     * @param value
+     */
+    void put(int value);
 
     /**
      * whether horisontal line is empty between specified coordinates
@@ -50,14 +71,6 @@ public interface Image {
     int getHeight();
 
     /**
-     * accept image filter. traversal is handled by image
-     * filtering is always done over whole image.
-     *
-     * @param filter
-     */
-    void filter(ImageFilter filter);
-
-    /**
      * convenience method to initialize iterator over whole image row
      */
     void iterateH(int y);
@@ -84,11 +97,11 @@ public interface Image {
     void iterateV(int x, int from, int to);
 
     /**
-     * advance to next available pixel
+     * advance and retrieve next available pixel
      *
      * @return
      */
-    void next();
+    int next();
 
     /**
      * whether next pixel is available

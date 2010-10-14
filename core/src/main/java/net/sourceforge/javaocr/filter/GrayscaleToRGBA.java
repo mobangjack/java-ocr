@@ -1,13 +1,15 @@
 package net.sourceforge.javaocr.filter;
 
+import net.sourceforge.javaocr.Image;
+
 /**
  * transform pixel from grayscale to RGBA
  */
-public class GrayscaleToRGBA  extends AbstractSinglePixelFilter {
+public class GrayscaleToRGBA extends AbstractSinglePixelFilter {
 
 
     @Override
-    protected void processPixel(PixelIterator iterator) {
+    protected void processPixel(Image iterator) {
         final int pixel = iterator.next();
         iterator.put(pixel | (pixel << 8) | (pixel << 16) | 0xff000000);
     }

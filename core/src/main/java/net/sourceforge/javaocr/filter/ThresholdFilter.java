@@ -1,5 +1,7 @@
 package net.sourceforge.javaocr.filter;
 
+import net.sourceforge.javaocr.Image;
+
 /**
  * perform thershold filtering
  *
@@ -13,7 +15,7 @@ public class ThresholdFilter extends AbstractSinglePixelFilter {
     }
 
     @Override
-    protected void processPixel(PixelIterator iterator) {
-        iterator.put(iterator.next() > threshold ? 255 : 0);
+    protected void processPixel(Image image) {
+        image.put(image.next() > threshold ? 255 : 0);
     }
 }

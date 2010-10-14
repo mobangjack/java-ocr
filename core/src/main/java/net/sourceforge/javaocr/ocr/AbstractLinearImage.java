@@ -1,12 +1,11 @@
 package net.sourceforge.javaocr.ocr;
 
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.ImageFilter;
 
 /**
  * abstract base class encapsulating image functionality  for images repesented by linear arrays.
  * This class is stateful in regard to filtering, and thus not thread safe. Those optimisations aim
- * to reduce method invocations to be performant on davlik (android) wheredirect field access if more
+ * to reduce method invocations to be performant on davlik (android) where direct field access if more
  * performant than going through getter
  *
  * @author Konstantin Pribluda
@@ -29,10 +28,7 @@ public abstract class AbstractLinearImage implements Image {
      * actual position being processed
      */
     protected int currentIndex;
-    /**
-     * actual filter being processed
-     */
-    protected ImageFilter currentFilter;
+
     /**
      * Aspect ratio of the image (<code>width/height</code>).
      */
@@ -75,33 +71,21 @@ public abstract class AbstractLinearImage implements Image {
         aspectRatio = ((float) width) / ((float) height);
     }
 
-    /**
-     * perform image filtering. iterate over  pixels
-     *
-     * @param filter
-     */
-    public void filter(ImageFilter filter) {
-        int maxRow = originY + boxH;
-        int scanStart;
-        int scanEnd;
-        for (int j = originY; j < maxRow; j++) {
-            scanStart = originX + j * width;
-            scanEnd = scanStart + boxW;
-            for (currentIndex = scanStart; currentIndex < scanEnd; currentIndex++) {
-                // we aim to do this without explicit parameters
-                processCurrent();
-            }
-        }
-    }
 
     /**
      * retrieve current  pixel value
      *
      * @return current pixel value
      */
-    abstract protected int get();
+    abstract public int get();
 
-    abstract protected void put(int what);
+    /**
+     * save pixel to current position
+     *
+     * @param value
+     */
+    abstract public void put(int value);
+
 
     /**
      * Get the value of a pixel at a specific <code>x,y</code> position.
@@ -110,15 +94,28 @@ public abstract class AbstractLinearImage implements Image {
      * @param y The pixel's y position.
      * @return The value of the pixel.
      */
-    public int getPixel(int x, int y) {
-        currentIndex = ((y + originY) * width) + x + originX;
+    public int get(int x, int y) {
+        setCurrentIndex(x, y);
         return get();
     }
 
-    public void putPixel(int x, int y, int value) {
+
+    protected void setCurrentIndex(int x, int y) {
         currentIndex = ((y + originY) * width) + x + originX;
+    }
+
+    /**
+     * store pixel value
+     *
+     * @param x
+     * @param y
+     * @param value
+     */
+    public void put(int x, int y, int value) {
+        setCurrentIndex(x, y);
         put(value);
     }
+
 
     public int getHeight() {
         return height;
@@ -134,7 +131,7 @@ public abstract class AbstractLinearImage implements Image {
 
 
     /**
-     * whether given span is empty.  we thread 0 as black and filed
+     * whether given span equals to specific value
      *
      * @param y     Y value
      * @param from  inclusive from
@@ -194,7 +191,8 @@ public abstract class AbstractLinearImage implements Image {
         return currentIndex < border;
     }
 
-    public void next() {
+    public int next() {
         currentIndex += step;
+        return get();
     }
 }
