@@ -3,7 +3,7 @@ package net.sourceforge.javaocr.filter;
 import net.sourceforge.javaocr.Image;
 
 /**
- * perform thershold filtering
+ * perform threshold filtering
  *
  * @author Konstantin Pribluda
  */

@@ -33,7 +33,7 @@ public class ImageTraversalTest extends TestCase {
 
         AbstractMomentFilter filter = new AbstractMomentFilter(0, 0) {
             @Override
-            protected void computeIndivudualMoment(int pixel, int currentX, int currentY) {
+            protected void computeIndividualMoment(int pixel, int currentX, int currentY) {
                 // do nothing here as we harvest pixels in ALI
             }
         };

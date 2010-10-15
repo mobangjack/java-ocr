@@ -19,7 +19,7 @@ public abstract class AbstractMomentFilter implements ImageFilter {
     }
 
 
-    protected abstract void computeIndivudualMoment(int pixel, int currentX, int currentY);
+    protected abstract void computeIndividualMoment(int pixel, int currentX, int currentY);
 
     /**
      * navigate through while image
@@ -32,7 +32,11 @@ public abstract class AbstractMomentFilter implements ImageFilter {
             image.iterateH(y);
             x = 0;
             while(image.hasNext())
-                    computeIndivudualMoment(image.next(),x++,y);
+                    computeIndividualMoment(image.next(),x++,y);
         }
+    }
+
+    public float getMoment() {
+        return moment;
     }
 }

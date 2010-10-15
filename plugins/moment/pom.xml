@@ -10,7 +10,7 @@
     <name>Image moment plugin</name>
     <description>
         Filters to compute various message moments (raw and centered)
-        (Hu moments)
+        (Hu moments). Those moments are most usefull for binary images
     </description>
                   
 </project>

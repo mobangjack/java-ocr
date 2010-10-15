@@ -23,7 +23,7 @@ public class RawMomentFilter extends AbstractMomentFilter {
      * @return
      */
     @Override
-    protected void computeIndivudualMoment(int pixel, int currentX, int currentY) {
+    protected void computeIndividualMoment(int pixel, int currentX, int currentY) {
        moment +=  Math.pow(currentX, p) * Math.pow(currentY , q) * pixel;
     }
 
