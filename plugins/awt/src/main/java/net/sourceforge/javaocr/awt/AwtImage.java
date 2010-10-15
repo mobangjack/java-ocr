@@ -18,7 +18,7 @@ public class AwtImage extends PixelImage {
     public AwtImage(Image image) {
         super(image.getWidth(null), image.getHeight(null));
         
-        PixelGrabber grabber = new PixelGrabber(image, 0, 0, width, height, pixels, 0, width);
+        PixelGrabber grabber = new PixelGrabber(image, 0, 0, arrayWidth, arrayHeight, pixels, 0, arrayWidth);
         try {
             grabber.grabPixels();
         }

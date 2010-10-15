@@ -65,7 +65,7 @@ public class CharacterExtractor extends DocumentScannerListenerAdaptor
             BufferedImage characterImage = ImageIO.read(inputImage);
             characterImage = characterImage.getSubimage(x1, y1, areaW, areaH);
 
-            //Scale image so that both the height and width are less than std size
+            //Scale image so that both the arrayHeight and arrayWidth are less than std size
             if (characterImage.getWidth() > std_width)
             {
                 //Make image always std_width wide

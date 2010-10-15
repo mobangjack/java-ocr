@@ -9,7 +9,7 @@
     <artifactId>javaocr-plugin-moment</artifactId>
     <name>Image moment plugin</name>
     <description>
-        Filters to compute various message moments as well as
+        Filters to compute various message moments (raw and centered)
         (Hu moments)
     </description>
                   

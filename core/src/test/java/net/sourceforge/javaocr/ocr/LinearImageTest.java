@@ -11,11 +11,19 @@ public class LinearImageTest extends TestCase {
 
 
     /**
-     * aspect ratio setting shall be set  properly
+     * aspect ratio setting shall be set  properly   and taken from box size
      */
     public void testAspectRatioSetting() {
-        final TestLinearImage testLinearImage = new TestLinearImage(4, 3);
+        final TestLinearImage testLinearImage = new TestLinearImage(20, 30, 7, 8, 4, 3);
         assertEquals(4f / 3f, testLinearImage.getAspectRatio());
+    }
+
+
+    public void testWidthAndHeightAreTakenFromBox() {
+
+        final TestLinearImage testLinearImage = new TestLinearImage(4, 3, 1, 1, 1, 2);
+        assertEquals(1, testLinearImage.getWidth());
+        assertEquals(2, testLinearImage.getHeight());
     }
 
 
@@ -38,21 +46,21 @@ public class LinearImageTest extends TestCase {
      * - proper termination
      */
     public void testHIteratorSetting() {
-        final TestLinearImage testLinearImage = new TestLinearImage(4, 3);
+        final TestLinearImage testLinearImage = new TestLinearImage(20,30,0,0,4, 3);
         testLinearImage.iterateH(1);
 
-        // positioned before first pixel
-        assertEquals(3, testLinearImage.get());
+        // positioned before first pixel (last ion prev row)
+        assertEquals(19, testLinearImage.get());
         // and one is available
         assertTrue(testLinearImage.hasNext());
 
-        assertEquals(4, testLinearImage.next());
+        assertEquals(20, testLinearImage.next());
         assertTrue(testLinearImage.hasNext());
-        assertEquals(5, testLinearImage.next());
+        assertEquals(21, testLinearImage.next());
         assertTrue(testLinearImage.hasNext());
-        assertEquals(6, testLinearImage.next());
+        assertEquals(22, testLinearImage.next());
         assertTrue(testLinearImage.hasNext());
-        assertEquals(7, testLinearImage.next());
+        assertEquals(23, testLinearImage.next());
         assertFalse(testLinearImage.hasNext());
     }
 
@@ -60,24 +68,26 @@ public class LinearImageTest extends TestCase {
      * assure proper working of H-Iterator
      */
     public void testVIteratorSetting() {
-        final TestLinearImage testLinearImage = new TestLinearImage(4, 3);
+        final TestLinearImage testLinearImage = new TestLinearImage(10,12,0,0,4, 3);
         testLinearImage.iterateV(1);
         // before first row
-        assertEquals(-3, testLinearImage.get());
+        assertEquals(-9, testLinearImage.get());
         // and available
         assertTrue(testLinearImage.hasNext());
 
         assertEquals(1, testLinearImage.next());
         assertTrue(testLinearImage.hasNext());
 
-        assertEquals(5, testLinearImage.next());
+        assertEquals(11, testLinearImage.next());
         assertTrue(testLinearImage.hasNext());
 
-        assertEquals(9, testLinearImage.next());
+        assertEquals(21, testLinearImage.next());
         assertFalse(testLinearImage.hasNext());
     }
 
-
+    /**
+     * single pixel H-iterator shall work properly
+     */
     public void testSinglePixelIteratorH() {
         final TestLinearImage testLinearImage = new TestLinearImage(4, 3);
         testLinearImage.iterateH(1, 1, 1);
@@ -86,6 +96,22 @@ public class LinearImageTest extends TestCase {
         assertTrue(testLinearImage.hasNext());
 
         assertEquals(5, testLinearImage.next());
+        assertFalse(testLinearImage.hasNext());
+    }
+
+    /**
+     * single pixel v-interation shall work properly
+     */
+    public void testSinglePixelIteratorV() {
+        final TestLinearImage testLinearImage = new TestLinearImage(4, 3);
+        testLinearImage.iterateV(2, 2, 2);
+        // before first
+        assertEquals(6, testLinearImage.get());
+        // and available
+        assertTrue(testLinearImage.hasNext());
+        // step
+        assertEquals(10, testLinearImage.next());
+        // nothing more
         assertFalse(testLinearImage.hasNext());
     }
 

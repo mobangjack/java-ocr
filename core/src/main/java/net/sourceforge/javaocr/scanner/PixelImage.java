@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 /**
  * Class to contain a pixel representation of an image.
  * @author Ronald B. Cemer
+ * @deprecated   no need for double functionality
  */
 public class PixelImage
 {
@@ -49,11 +50,11 @@ public class PixelImage
      */
     public final int height;
     /**
-     * Total number of pixels in the image (<code>width*height</code>).
+     * Total number of pixels in the image (<code>arrayWidth*arrayHeight</code>).
      */
     public final int npix;
     /**
-     * Aspect ratio of the image (<code>width/height</code>).
+     * Aspect ratio of the image (<code>arrayWidth/arrayHeight</code>).
      */
     public final float aspectRatio;
 

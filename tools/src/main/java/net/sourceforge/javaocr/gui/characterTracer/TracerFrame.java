@@ -28,7 +28,7 @@ public class TracerFrame extends JFrame
         //Add to view
         this.add(imgPanel);
 
-        //Set frame width
+        //Set frame arrayWidth
         this.setSize(img.getWidth(), img.getHeight());
 
     }

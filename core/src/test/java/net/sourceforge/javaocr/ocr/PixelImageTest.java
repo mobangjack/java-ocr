@@ -75,8 +75,8 @@ public class PixelImageTest extends TestCase {
         int data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         PixelImage image = new PixelImage(data, 3, 3);
 
-        assertEquals(3, image.getWidth());
-        assertEquals(3, image.getHeight());
+        assertEquals(3, image.getArrayWidth());
+        assertEquals(3, image.getArrayHeight());
         assertEquals(8, image.get(2, 2));
     }
 

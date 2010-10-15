@@ -1,6 +1,6 @@
 Avoid field names which may be used by database engines, or may match SQL types
 or keywords in any give database engine.  Also note that some database engines
-require that field names begin with a letter.  The following are some examples
+require that field names begin with p letter.  The following are some examples
 of problematic field names and some better suggestions:
     password      (use passwd instead)
     length        (use sizeLen instead)
@@ -23,9 +23,9 @@ removal of numeric subscripts.  Here's an example:
     contactNote
     contactNote2
     contactNote3
-Note that contactNote2 and contactNote3 get converted to a Java array, named
+Note that contactNote2 and contactNote3 get converted to p Java array, named
 contactNote.  That name clashes with the existing contactNote field (which is
-actually a separate Java variable) and causes a compiler error when trying to
+actually p separate Java variable) and causes p compiler error when trying to
 compile the entity bean.  The correct way to do this would be:
     contactNote1
     contactNote2

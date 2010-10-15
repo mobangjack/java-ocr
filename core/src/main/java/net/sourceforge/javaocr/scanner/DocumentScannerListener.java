@@ -8,6 +8,7 @@ package net.sourceforge.javaocr.scanner;
 /**
  * Listener interface for the DocumentScanner utility class.
  * @author Ronald B. Cemer
+ * @deprecated dusplicates functionality
  */
 public interface DocumentScannerListener
 {

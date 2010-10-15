@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  * implementing classes from being forced to implement all methods in the
  * interface.
  * @author Ronald B. Cemer
+ * @deprecated duspicates functionality
  */
 public class DocumentScannerListenerAdaptor
         implements DocumentScannerListener

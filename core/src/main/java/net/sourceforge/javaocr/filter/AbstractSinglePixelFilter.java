@@ -10,7 +10,7 @@ public abstract class AbstractSinglePixelFilter extends AbstractBaseFilter {
         final int height = image.getHeight();
         for (int i = 0; i < height; i++) {
             for (image.iterateH(i); image.hasNext();) {
-                  processPixel(image);
+                processPixel(image);
             }
         }
     }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class DocumentScanner implements ImageScanner {
 
     /**
-     * The maximum fraction a row's height can be of the previous row's height,
+     * The maximum fraction a row's arrayHeight can be of the previous row's arrayHeight,
      * in order for the new (short) row to be merged in with the previous (tall)
      * row to form a single row.
      */
@@ -32,16 +32,16 @@ public class DocumentScanner implements ImageScanner {
      */
     protected float liberalPolicyAreaWhitespaceFraction = 0.95f;
     /**
-     * The minimum width of a space, expressed as a fraction of the height of a row of text.
+     * The minimum arrayWidth of a space, expressed as a fraction of the arrayHeight of a row of text.
      */
     protected float minSpaceWidthAsFractionOfRowHeight = 0.6f;
     /**
-     * The minimum width of a character, expressed as a fraction of the height of a row of text.
+     * The minimum arrayWidth of a character, expressed as a fraction of the arrayHeight of a row of text.
      */
     protected float minCharWidthAsFractionOfRowHeight = 0.35f;
     /**
-     * The minimum width of a character break (a vertical column of whitespace that separates
-     * two characters on a row of text), expressed as a fraction of the height of a row of text.
+     * The minimum arrayWidth of a character break (a vertical column of whitespace that separates
+     * two characters on a row of text), expressed as a fraction of the arrayHeight of a row of text.
      */
     protected float minCharBreakWidthAsFractionOfRowHeight = 0.05f;
     /**
@@ -52,7 +52,7 @@ public class DocumentScanner implements ImageScanner {
     protected int whiteThreshold = 128;
 
     /**
-     * @return The maximum fraction a row's height can be of the previous row's height,
+     * @return The maximum fraction a row's arrayHeight can be of the previous row's arrayHeight,
      *         in order for the new (short) row to be merged in with the previous (tall)
      *         row to form a single row.
      */
@@ -61,8 +61,8 @@ public class DocumentScanner implements ImageScanner {
     }
 
     /**
-     * @param shortRowFraction The maximum fraction a row's height can be of the previous
-     *                         row's height, in order for the new (short) row to be merged in with the previous (tall)
+     * @param shortRowFraction The maximum fraction a row's arrayHeight can be of the previous
+     *                         row's arrayHeight, in order for the new (short) row to be merged in with the previous (tall)
      *                         row to form a single row.
      */
     public void setShortRowFraction(float shortRowFraction) {
@@ -88,7 +88,7 @@ public class DocumentScanner implements ImageScanner {
     }
 
     /**
-     * @return The minimum width of a space, expressed as a fraction of the height of a row of
+     * @return The minimum arrayWidth of a space, expressed as a fraction of the arrayHeight of a row of
      *         text.
      */
     public float getMinSpaceWidthAsFractionOfRowHeight() {
@@ -97,15 +97,15 @@ public class DocumentScanner implements ImageScanner {
 
     /**
      * @param minSpaceWidthAsFractionOfRowHeight
-     *         The minimum width of a space, expressed as a
-     *         fraction of the height of a row of text.
+     *         The minimum arrayWidth of a space, expressed as a
+     *         fraction of the arrayHeight of a row of text.
      */
     public void setMinSpaceWidthAsFractionOfRowHeight(float minSpaceWidthAsFractionOfRowHeight) {
         this.minSpaceWidthAsFractionOfRowHeight = minSpaceWidthAsFractionOfRowHeight;
     }
 
     /**
-     * @return The minimum width of a character, expressed as a fraction of the height of a row
+     * @return The minimum arrayWidth of a character, expressed as a fraction of the arrayHeight of a row
      *         of text.
      */
     public float getMinCharWidthAsFractionOfRowHeight() {
@@ -114,16 +114,16 @@ public class DocumentScanner implements ImageScanner {
 
     /**
      * @param minCharWidthAsFractionOfRowHeight
-     *         The minimum width of a character, expressed as a
-     *         fraction of the height of a row of text.
+     *         The minimum arrayWidth of a character, expressed as a
+     *         fraction of the arrayHeight of a row of text.
      */
     public void setMinCharWidthAsFractionOfRowHeight(float minCharWidthAsFractionOfRowHeight) {
         this.minCharWidthAsFractionOfRowHeight = minCharWidthAsFractionOfRowHeight;
     }
 
     /**
-     * @return The minimum width of a character break (a vertical column of whitespace that
-     *         separates two characters on a row of text), expressed as a fraction of the height of
+     * @return The minimum arrayWidth of a character break (a vertical column of whitespace that
+     *         separates two characters on a row of text), expressed as a fraction of the arrayHeight of
      *         a row of text.
      */
     public float getMinCharBreakWidthAsFractionOfRowHeight() {
@@ -132,9 +132,9 @@ public class DocumentScanner implements ImageScanner {
 
     /**
      * @param minCharBreakWidthAsFractionOfRowHeight
-     *         The minimum width of a character break (a
+     *         The minimum arrayWidth of a character break (a
      *         vertical column of whitespace that separates two characters on a row of text), expressed
-     *         as a fraction of the height of a row of text.
+     *         as a fraction of the arrayHeight of a row of text.
      */
     public void setMinCharBreakWidthAsFractionOfRowHeight(float minCharBreakWidthAsFractionOfRowHeight) {
         this.minCharBreakWidthAsFractionOfRowHeight = minCharBreakWidthAsFractionOfRowHeight;

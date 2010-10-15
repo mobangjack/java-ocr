@@ -15,15 +15,15 @@ public abstract class AbstractLinearImage implements Image {
     /**
      * Width of the image, in pixels.
      */
-    public final int width;
+    public final int arrayWidth;
     /**
      * Height of the image, in pixels.
      */
-    protected final int height;
+    protected final int arrayHeight;
     protected final int originX;
     protected final int originY;
-    protected final int boxW;
-    protected final int boxH;
+    protected final int width;
+    protected final int height;
     /**
      * actual position being processed
      */
@@ -41,33 +41,33 @@ public abstract class AbstractLinearImage implements Image {
     int border;
 
     /**
-     * construct image over while linear array with specified width and height
+     * construct image over while linear array with specified arrayWidth and arrayHeight
      *
-     * @param width  image width
-     * @param height image height
+     * @param arrayWidth  image arrayWidth
+     * @param arrayHeight image arrayHeight
      */
-    protected AbstractLinearImage(int width, int height) {
-        this(width, height, 0, 0, width, height);
+    protected AbstractLinearImage(int arrayWidth, int arrayHeight) {
+        this(arrayWidth, arrayHeight, 0, 0, arrayWidth, arrayHeight);
 
     }
 
     /**
      * construct image over subset of image in linear array
      *
-     * @param width   full image width
-     * @param height  full image height
+     * @param arrayWidth   full image arrayWidth
+     * @param arrayHeight  full image arrayHeight
      * @param originX X-origin of subimage
      * @param originY Y-origin of subimage
-     * @param boxW    subimage width
-     * @param boxH    subimage height
+     * @param width    subimage arrayWidth
+     * @param height    subimage arrayHeight
      */
-    protected AbstractLinearImage(int width, int height, int originX, int originY, int boxW, int boxH) {
-        this.boxH = boxH;
-        this.boxW = boxW;
+    protected AbstractLinearImage(int arrayWidth, int arrayHeight, int originX, int originY, int width, int height) {
         this.height = height;
+        this.width = width;
+        this.arrayHeight = arrayHeight;
         this.originX = originX;
         this.originY = originY;
-        this.width = width;
+        this.arrayWidth = arrayWidth;
         aspectRatio = ((float) width) / ((float) height);
     }
 
@@ -101,7 +101,7 @@ public abstract class AbstractLinearImage implements Image {
 
 
     protected void setCurrentIndex(int x, int y) {
-        currentIndex = ((y + originY) * width) + x + originX;
+        currentIndex = ((y + originY) * arrayWidth) + x + originX;
     }
 
     /**
@@ -117,6 +117,18 @@ public abstract class AbstractLinearImage implements Image {
     }
 
 
+    public int getArrayHeight() {
+        return arrayHeight;
+    }
+
+    public int getArrayWidth() {
+        return arrayWidth;
+    }
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
     public int getHeight() {
         return height;
     }
@@ -124,11 +136,6 @@ public abstract class AbstractLinearImage implements Image {
     public int getWidth() {
         return width;
     }
-
-    public float getAspectRatio() {
-        return aspectRatio;
-    }
-
 
     /**
      * whether given span equals to specific value
@@ -140,12 +147,12 @@ public abstract class AbstractLinearImage implements Image {
      * @return
      */
     public boolean horizontalSpanEquals(final int y, final int from, final int to, final int value) {
-        for (currentIndex = y * width + from; currentIndex <= y * width + to; currentIndex++) {
-            if (get() != value) {
-                return false;
-            }
+        iterateH(y, from, to);
+        while (hasNext()) {
+            if (next() != value) return false;
         }
         return true;
+
     }
 
     /**
@@ -156,39 +163,38 @@ public abstract class AbstractLinearImage implements Image {
      * @return
      */
     public boolean verticalSpanEquals(final int x, final int from, final int to, final int value) {
-        for (currentIndex = from * width + x; currentIndex <= to * width + x; currentIndex += width) {
-            if (get() != value) {
-                return false;
-            }
+        iterateV(x, from, to);
+        while (hasNext()) {
+            if (next() != value) return false;
         }
         return true;
     }
 
 
     public void iterateV(int x, int from, int to) {
-        currentIndex = (from + originY - 1) * width + x + originX;
-        border = (to + originY) * width + x + originX;
-        step = width;
+        currentIndex = (from + originY - 1) * arrayWidth + x + originX;
+        border = (to + originY) * arrayWidth + x + originX;
+        step = arrayWidth;
     }
 
     public void iterateH(int y, int from, int to) {
-        final int base = (y + originY) * width + originX - 1;
+        final int base = (y + originY) * arrayWidth + originX - 1;
         currentIndex = base + from;
         border = base + to + 1;
         step = 1;
     }
 
     public void iterateH(int y) {
-        iterateH(y, 0, width-1);
+        iterateH(y, 0,width - 1);
     }
 
     public void iterateV(int x) {
-        iterateV(x, 0, height-1);
+        iterateV(x, 0, height - 1);
     }
 
 
     public boolean hasNext() {
-        System.err.println("current: " + currentIndex + " border:" + border);
+        //System.err.println("current: " + currentIndex + " border:" + border);
         return currentIndex < border;
     }
 

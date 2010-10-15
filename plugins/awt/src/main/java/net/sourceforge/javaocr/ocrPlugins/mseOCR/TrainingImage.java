@@ -42,11 +42,11 @@ public class TrainingImage extends PixelImage
      */
     public static final float BOTTOM_WHITE_SPACE_FRACTION_TOLERANCE = 0.3f;
     /**
-     * Fraction of the row height which is occupied by complete whitespace above the character.
+     * Fraction of the row arrayHeight which is occupied by complete whitespace above the character.
      */
     public final float topWhiteSpaceFraction;
     /**
-     * Fraction of the row height which is occupied by complete whitespace below the character.
+     * Fraction of the row arrayHeight which is occupied by complete whitespace below the character.
      */
     public final float bottomWhiteSpaceFraction;
     private int myMaxX;
@@ -58,12 +58,12 @@ public class TrainingImage extends PixelImage
      * Construct a new <code>TrainingImage</code> object from an array of
      * gray scale pixels.
      * @param pixels An array of pixels in the range 0-255.
-     * @param width The width of the image.
-     * @param height The height of the image.
+     * @param width The arrayWidth of the image.
+     * @param height The arrayHeight of the image.
      * @param topWhiteSpacePixels The number of scan lines at the top of this character cell which
-     * are all white.  These are excluded from the width and height of the training image.
+     * are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
      * @param bottomWhiteSpacePixels The number of scan lines at the bottom of this character cell
-     * which are all white.  These are excluded from the width and height of the training image.
+     * which are all white.  These are excluded from the arrayWidth and arrayHeight of the training image.
      */
     public TrainingImage(
             int[] pixels,
@@ -82,8 +82,8 @@ public class TrainingImage extends PixelImage
                 (float) bottomWhiteSpacePixels / (float) rowHeight;
         myMaxX = width - 1;
         myMaxY = height - 1;
-/// xShift = width/20;
-/// yShift = height/20;
+/// xShift = arrayWidth/20;
+/// yShift = arrayHeight/20;
     }
 
     /**
@@ -91,8 +91,8 @@ public class TrainingImage extends PixelImage
      * @param theirPixels An array of grayscale pixels which contains the block to be compared
      * This should be in binary format, with each pixel having a value of either <code>0</code>
      * or <code>255</code>.
-     * @param w The width of the pixel array.
-     * @param h The height of the pixel array.
+     * @param w The arrayWidth of the pixel array.
+     * @param h The arrayHeight of the pixel array.
      * @param x1 The position of the left border of the rectangle to be compared.
      * @param y1 The position of the top border of the rectangle to be compared.
      * @param x2 The position of the right border of the rectangle to be compared.
