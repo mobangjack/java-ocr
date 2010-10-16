@@ -17,5 +17,10 @@
             <artifactId>javaocr-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
+          <dependency>
+            <groupId>net.sourceforge.javaocr.plugins</groupId>
+            <artifactId>javaocr-plugin-awt</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
     </dependencies>
 </project>

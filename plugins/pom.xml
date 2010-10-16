@@ -14,7 +14,8 @@
         Master project for JavaOCR plugins
     </description>
     <modules>
-        <module>moment</module>  
+        <module>moment</module>
+        <module>fir</module>  
         <module>awt</module>  
     </modules>
     <dependencies>         

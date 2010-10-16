@@ -60,4 +60,8 @@ public class PixelImage extends AbstractLinearImage {
 
     }
 
+    @Override
+    public String toString() {
+        return "PixelImage{} " + super.toString();
+    }
 }

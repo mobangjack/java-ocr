@@ -202,4 +202,17 @@ public abstract class AbstractLinearImage implements Image {
         currentIndex += step;
         return get();
     }
+
+    @Override
+    public String toString() {
+        return "AbstractLinearImage{" +
+                "arrayHeight=" + arrayHeight +
+                ", arrayWidth=" + arrayWidth +
+                ", aspectRatio=" + aspectRatio +
+                ", height=" + height +
+                ", originX=" + originX +
+                ", originY=" + originY +
+                ", width=" + width +
+                '}';
+    }
 }

@@ -29,4 +29,9 @@ public class ByteImage extends AbstractLinearImage {
     public void put(int value) {
         image[currentIndex] = (byte) value;
     }
+
+    @Override
+    public String toString() {
+        return "ByteImage{} " + super.toString();
+    }
 }

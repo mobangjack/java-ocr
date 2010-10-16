@@ -9,6 +9,7 @@ package net.sourceforge.javaocr.scanner.accuracy;
 /**
  * Provides enum to identify the different ocr plugin types.
  * @author William Whitney
+ * @deprecated - why do we need this at all?
  */
 public enum OCRComp
 {
