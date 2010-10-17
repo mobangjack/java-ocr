@@ -2,6 +2,8 @@ package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
+
 /**
  * test capabilities of abstract linear image - correct traversal order
  *
@@ -46,7 +48,7 @@ public class LinearImageTest extends TestCase {
      * - proper termination
      */
     public void testHIteratorSetting() {
-        final TestLinearImage testLinearImage = new TestLinearImage(20,30,0,0,4, 3);
+        final TestLinearImage testLinearImage = new TestLinearImage(20, 30, 0, 0, 4, 3);
         testLinearImage.iterateH(1);
 
         // positioned before first pixel (last ion prev row)
@@ -68,7 +70,7 @@ public class LinearImageTest extends TestCase {
      * assure proper working of H-Iterator
      */
     public void testVIteratorSetting() {
-        final TestLinearImage testLinearImage = new TestLinearImage(10,12,0,0,4, 3);
+        final TestLinearImage testLinearImage = new TestLinearImage(10, 12, 0, 0, 4, 3);
         testLinearImage.iterateV(1);
         // before first row
         assertEquals(-9, testLinearImage.get());
@@ -115,7 +117,42 @@ public class LinearImageTest extends TestCase {
         assertFalse(testLinearImage.hasNext());
     }
 
+
+    /**
+     * image copy shall move pixels from one image to another
+     */
+    public void testImageCopy() {
+        final TestLinearImage src = new TestLinearImage(2, 3);
+        final TestLinearImage dst = new TestLinearImage(2, 3);
+        src.copy(dst);
+        assertEquals(0, dst.values.get(0));
+        assertEquals(1, dst.values.get(1));
+        assertEquals(2, dst.values.get(2));
+        assertEquals(3, dst.values.get(3));
+        assertEquals(4, dst.values.get(4));
+        assertEquals(5, dst.values.get(5));
+
+    }
+
+    /**
+      * image flip shall switch dimensions while copying
+      */
+     public void testImageFlip() {
+         final TestLinearImage src = new TestLinearImage(2, 3);
+         final TestLinearImage dst = new TestLinearImage(3, 2);
+         src.flip(dst);
+         assertEquals(0, dst.values.get(0));
+         assertEquals(2, dst.values.get(1));
+         assertEquals(4, dst.values.get(2));
+         assertEquals(1, dst.values.get(3));
+         assertEquals(3, dst.values.get(4));
+         assertEquals(5, dst.values.get(5));
+
+     }
+
     public class TestLinearImage extends AbstractLinearImage {
+        ArrayList values = new ArrayList();
+
         protected TestLinearImage(int width, int height) {
             super(width, height);
         }
@@ -131,7 +168,9 @@ public class LinearImageTest extends TestCase {
 
         @Override
         public void put(int value) {
-
+            values.add(value);
         }
     }
+
+
 }

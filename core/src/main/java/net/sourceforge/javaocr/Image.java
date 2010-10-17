@@ -112,8 +112,16 @@ public interface Image {
 
     /**
      * copy image content to another image
-     * TODO: do we have to chheck for sizes???
+     * TODO: do we have to check for sizes???
+     *
      * @param dst
      */
     void copy(Image dst);
+
+    /**
+     * copy image swithcing axes in process
+     *
+     * @param dst
+     */
+    void flip(Image dst);
 }

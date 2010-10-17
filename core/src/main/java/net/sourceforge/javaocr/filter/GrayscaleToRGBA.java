@@ -32,8 +32,10 @@ public class GrayscaleToRGBA extends AbstractSinglePixelFilter {
     }
 
     @Override
-    protected void processPixel(Image iterator) {
-        final int pixel = iterator.next();
-        iterator.put((pixel * cB >> 10) & 0xff | (((pixel * cG >> 10) & 0xff) << 8) | (((pixel * cR >> 10) & 0xff) << 16) | 0xff000000);
+    protected void processPixel(Image image) {
+        final int pixel = image.next() & 0xff;
+
+        //image.put((pixel * cB >> 10) & 0xff | (((pixel * cG >> 10) & 0xff) << 8) | (((pixel * cR >> 10) & 0xff) << 16) | 0xff000000);
+        image.put(0xff000000 | (pixel << 16) | (pixel << 8) | pixel);
     }
 }

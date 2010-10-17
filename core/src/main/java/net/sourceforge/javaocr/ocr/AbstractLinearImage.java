@@ -218,6 +218,20 @@ public abstract class AbstractLinearImage implements Image {
         }
     }
 
+   /**
+     * copy image content to destination with coordinate flip.  we hope that dimensions match
+     *
+     * @param dst
+     */
+    public void flip(Image dst) {
+        final int width = getWidth();
+        for (int i = 0; i < width; i++) {
+            for (iterateV(i), dst.iterateH(i); hasNext();) {
+                dst.next();
+                dst.put(next());
+            }
+        }
+    }
     @Override
     public String toString() {
         return "AbstractLinearImage{" +
