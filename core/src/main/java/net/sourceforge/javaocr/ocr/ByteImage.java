@@ -22,12 +22,12 @@ public class ByteImage extends AbstractLinearImage {
 
     @Override
     public int get() {
-       return image[currentIndex];
+       return image[currentIndex] &0xff;
     }
 
     @Override
     public void put(int value) {
-        image[currentIndex] = (byte) value;
+        image[currentIndex] = (byte) (value & 0xff);
     }
 
     @Override

@@ -54,12 +54,12 @@ public abstract class AbstractLinearImage implements Image {
     /**
      * construct image over subset of image in linear array
      *
-     * @param arrayWidth   full image arrayWidth
-     * @param arrayHeight  full image arrayHeight
-     * @param originX X-origin of subimage
-     * @param originY Y-origin of subimage
-     * @param width    subimage arrayWidth
-     * @param height    subimage arrayHeight
+     * @param arrayWidth  full image arrayWidth
+     * @param arrayHeight full image arrayHeight
+     * @param originX     X-origin of subimage
+     * @param originY     Y-origin of subimage
+     * @param width       subimage arrayWidth
+     * @param height      subimage arrayHeight
      */
     protected AbstractLinearImage(int arrayWidth, int arrayHeight, int originX, int originY, int width, int height) {
         this.height = height;
@@ -185,7 +185,7 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     public void iterateH(int y) {
-        iterateH(y, 0,width - 1);
+        iterateH(y, 0, width - 1);
     }
 
     public void iterateV(int x) {
@@ -201,6 +201,21 @@ public abstract class AbstractLinearImage implements Image {
     public int next() {
         currentIndex += step;
         return get();
+    }
+
+    /**
+     * copy image content to destination.  we hope that dimensions match
+     *
+     * @param dst
+     */
+    public void copy(Image dst) {
+        final int height = getHeight();
+        for (int i = 0; i < height; i++) {
+            for (iterateH(i), dst.iterateH(i); hasNext();) {
+                dst.next();
+                dst.put(next());
+            }
+        }
     }
 
     @Override

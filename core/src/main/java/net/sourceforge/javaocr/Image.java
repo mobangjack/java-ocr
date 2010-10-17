@@ -89,7 +89,7 @@ public interface Image {
     void iterateV(int x);
 
     /**
-     * rinitialize iterator over part of column
+     * initialize iterator over part of column
      *
      * @param from
      * @param to
@@ -110,4 +110,10 @@ public interface Image {
      */
     boolean hasNext();
 
+    /**
+     * copy image content to another image
+     * TODO: do we have to chheck for sizes???
+     * @param dst
+     */
+    void copy(Image dst);
 }
