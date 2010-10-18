@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
- * assure proper functionlaity of histogramm filter
+ * assure proper functionality of histogram filter
  */
 public class HistogrammTest extends TestCase {
     int[] values = new int[]{0, 1, 1, 2, 2, 2, 253, 253, 253, 254, 254, 255};
