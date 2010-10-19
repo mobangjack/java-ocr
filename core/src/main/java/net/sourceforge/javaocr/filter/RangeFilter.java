@@ -8,9 +8,8 @@ import net.sourceforge.javaocr.Image;
  * @author Konstantin Pribluda
  */
 public class RangeFilter extends AbstractSinglePixelFilter {
-    int min;
-    int max;
-
+    int min = 255;
+    int max = 0;
 
     public int getMax() {
         return max;
@@ -23,7 +22,9 @@ public class RangeFilter extends AbstractSinglePixelFilter {
     @Override
     protected void processPixel(Image image) {
         final int pixel = image.next();
+        System.err.println("processsing pixel:" + pixel);
         if (pixel < min) min = pixel;
         if (pixel > max) max = pixel;
+      
     }
 }

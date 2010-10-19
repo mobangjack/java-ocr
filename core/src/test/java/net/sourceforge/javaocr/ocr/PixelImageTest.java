@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Konstantin Pribluda
- * test capabilities of pixel image
+ *         test capabilities of pixel image
  */
 public class PixelImageTest extends TestCase {
 
@@ -52,7 +52,6 @@ public class PixelImageTest extends TestCase {
         assertFalse(image.verticalSpanEquals(0, 0, 1, 1));
 
 
-
         // pixel span
         assertTrue(image.verticalSpanEquals(0, 1, 3, 1));
 
@@ -88,16 +87,15 @@ public class PixelImageTest extends TestCase {
         int data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         PixelImage image = new PixelImage(data, 3, 3, 1, 1, 1, 1);
 
-        assertEquals(4,image.get(0,0));
+        assertEquals(4, image.get(0, 0));
     }
 
-
     /**
-     * test proper traversal of image and passing to filter
-
+     * shall create pixel array of proper size
      */
-    public void testImageTraversal() {
-
+    public void testConstructorWithImageCreation() {
+        PixelImage image = new PixelImage(2, 5);
+        assertEquals(10, image.pixels.length);
     }
 
 }
