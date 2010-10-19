@@ -23,16 +23,17 @@ public abstract class AbstractMomentFilter implements ImageFilter {
 
     /**
      * navigate through while image
+     *
      * @param image
      */
     public void process(Image image) {
         int x;
-        for(int y = 0; y < image.getHeight(); y++) {
-            System.err.println("y:" + y);
+        for (int y = 0; y < image.getHeight(); y++) {
+
             image.iterateH(y);
             x = 0;
-            while(image.hasNext())
-                    computeIndividualMoment(image.next(),x++,y);
+            while (image.hasNext())
+                computeIndividualMoment(image.next(), x++, y);
         }
     }
 

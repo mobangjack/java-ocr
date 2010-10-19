@@ -7,7 +7,7 @@
         <version>1.102-SNAPSHOT</version>
     </parent>
     <artifactId>javaocr-tools</artifactId>
-    <name>Java OCR Core library</name>
+    <name>Java OCR Tools</name>
     <description>
         tools using java ocr library
     </description>

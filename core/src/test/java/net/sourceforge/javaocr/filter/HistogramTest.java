@@ -6,13 +6,13 @@ import net.sourceforge.javaocr.ocr.PixelImage;
 /**
  * assure proper functionality of histogram filter
  */
-public class HistogrammTest extends TestCase {
+public class HistogramTest extends TestCase {
     int[] values = new int[]{0, 1, 1, 2, 2, 2, 253, 253, 253, 254, 254, 255};
 
     /**
-     * histogramm values shall be collected properly
+     * histogram values shall be collected properly
      */
-    public void testHistogrammCollection() {
+    public void testHistogrammCollectionAndReset() {
         PixelImage image = new PixelImage(values, 1, 12);
 
         HistogramFilter filter = new HistogramFilter();
@@ -28,6 +28,11 @@ public class HistogrammTest extends TestCase {
         assertEquals(2, filter.getHistogramm()[254]);
         assertEquals(1, filter.getHistogramm()[255]);
 
+
+        filter.reset();
+        for (int i = 0; i < 256; i++)
+            assertEquals(0, filter.getHistogramm()[i]);
+        assertEquals(0,filter.getTotalCount());
     }
 
     /**
@@ -72,5 +77,34 @@ public class HistogrammTest extends TestCase {
         } catch (IllegalArgumentException e) {
             // thar's ok, we await this one
         }
+    }
+
+
+    /**
+     * adaptive threshold computation shall be performed properl. it shall
+     * place threshold direct between 2 prominent modes.
+     */
+    public void testAdaptiveThresholdComputation() {
+        HistogramFilter histogram = new HistogramFilter();
+        histogram.getHistogramm()[10] = 100;
+        histogram.getHistogramm()[50] = 100;
+
+        // we await it on position 29 ( middle of interval, 30 -1 )
+        assertEquals(30, histogram.adaptiveThreshold());
+
+        histogram.reset();
+
+        histogram.getHistogramm()[10] = 100;
+        histogram.getHistogramm()[210] = 200;
+        // we await it on position 110 - right in the middle
+        assertEquals(110, histogram.adaptiveThreshold());
+
+        histogram.reset();
+        histogram.getHistogramm()[150] = 100;
+        histogram.getHistogramm()[250] = 100;
+
+        // we await it on position 180
+        assertEquals(100, histogram.adaptiveThreshold(90));
+        
     }
 }
