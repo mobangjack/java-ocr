@@ -15,5 +15,10 @@ public abstract class AbstractSinglePixelFilter extends AbstractBaseFilter {
         }
     }
 
-    protected abstract void processPixel(Image iterator);
+    /**
+     * process single image pixel subclass shall retrieve current pixel value with image.next()
+     * and store it with image.put() after processing
+     * @param image
+     */
+    protected abstract void processPixel(Image image);
 }

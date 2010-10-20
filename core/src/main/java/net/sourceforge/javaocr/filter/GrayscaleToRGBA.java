@@ -1,41 +1,17 @@
 package net.sourceforge.javaocr.filter;
 
-import net.sourceforge.javaocr.Image;
-
 /**
  * transform pixel from grayscale to RGBA  (well,  actually ARGB)
  */
-public class GrayscaleToRGBA extends AbstractSinglePixelFilter {
-
-    final int cR;
-    final int cG;
-    final int cB;
-
+public class GrayscaleToRGBA extends LookupTableFilter {
+  
     /**
-     * construct with default coefficients (306,601,117)
+     * construct flat ramp
      */
     public GrayscaleToRGBA() {
-        this(306, 601, 117);
-    }
-
-    /**
-     * construct with weight coefficients. multiplication results are divided by 1024
-     *
-     * @param cR
-     * @param cG
-     * @param cB
-     */
-    public GrayscaleToRGBA(int cR, int cG, int cB) {
-        this.cB = cB;
-        this.cG = cG;
-        this.cR = cR;
-    }
-
-    @Override
-    protected void processPixel(Image image) {
-        final int pixel = image.next() & 0xff;
-
-        //image.put((pixel * cB >> 10) & 0xff | (((pixel * cG >> 10) & 0xff) << 8) | (((pixel * cR >> 10) & 0xff) << 16) | 0xff000000);
-        image.put(0xff000000 | (pixel << 16) | (pixel << 8) | pixel);
+       super(new int[256]);
+        for(int i = 0; i < 256; i++) {
+            lut[i] = 0xff000000 | i << 16 | i <<8 | i;
+        }
     }
 }

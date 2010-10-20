@@ -1,30 +1,23 @@
 package net.sourceforge.javaocr.filter;
 
-import net.sourceforge.javaocr.Image;
-
 /**
  * normalise grayscale pixels linear basing on min/max values
- *
  * @author Konstantin Pribluda
  */
-public class NormaliseGrayscaleFilter extends AbstractSinglePixelFilter {
-    int min;
-    int max;
-    int range;
+public class NormaliseGrayscaleFilter extends LookupTableFilter {
+   
 
     /**
+     * create and initialise lookup table
      * @param max max pixel value in image
      * @param min min pixel value in image
      */
-    public NormaliseGrayscaleFilter(int max, int min) {
-        this.max = max;
-        this.min = min;
-        range = max - min;
+    public NormaliseGrayscaleFilter(int min, int max) {
+        super(new int[256]);
+        int range = max - min;
+        for(int i = 0; i < 256; i++){
+            lut[i] = Math.min(255, Math.max(0, ((i - min) * 255) / range));           
+        }
     }
 
-
-    @Override
-    protected void processPixel(Image image) {
-        image.put(Math.min(255, Math.max(0, ((image.next() - min) * 255) / range)));
-    }
 }
