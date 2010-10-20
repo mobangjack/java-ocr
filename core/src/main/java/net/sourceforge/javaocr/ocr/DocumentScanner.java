@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  * Utility class to scan a document, breaking it into rows and character blocks.
- *
+ * TODO: evaluate and maybe rewrite
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
  */

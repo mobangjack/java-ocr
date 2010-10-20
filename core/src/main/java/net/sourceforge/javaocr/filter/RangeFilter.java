@@ -21,10 +21,8 @@ public class RangeFilter extends AbstractSinglePixelFilter {
 
     @Override
     protected void processPixel(Image image) {
-        final int pixel = image.next();
-        System.err.println("processsing pixel:" + pixel);
+        final int pixel = image.next();        
         if (pixel < min) min = pixel;
-        if (pixel > max) max = pixel;
-      
+        if (pixel > max) max = pixel;      
     }
 }

@@ -4,7 +4,7 @@ import net.sourceforge.javaocr.Image;
 
 /**
  * perform threshold filtering
- *
+ * TODO: do we need to make this via threshold? 
  * @author Konstantin Pribluda
  */
 public class ThresholdFilter extends AbstractSinglePixelFilter {
