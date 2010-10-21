@@ -1,6 +1,7 @@
 package net.sourceforge.javaocr.filter;
 
 import junit.framework.TestCase;
+import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ocr.AbstractLinearImage;
 
 /**
@@ -42,6 +43,10 @@ public class GrayscaleToRGBATestCase extends TestCase {
         @Override
         public void put(int value) {
             pixel = value;
+        }
+
+        public Image chisel(int fromX, int fromY, int width, int height) {
+            return null; 
         }
     }
 

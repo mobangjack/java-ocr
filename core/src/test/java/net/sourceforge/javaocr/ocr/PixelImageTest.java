@@ -1,6 +1,7 @@
 package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
+import net.sourceforge.javaocr.Image;
 
 
 /**
@@ -98,4 +99,17 @@ public class PixelImageTest extends TestCase {
         assertEquals(10, image.pixels.length);
     }
 
+
+    /**
+     * shall chisel image properly
+     */
+    public void testImageChiseling() {
+        int[] data = new int[]{0, 1, 2, 3};
+        PixelImage image = new PixelImage(data, 2, 2);
+
+        final Image chisel = image.chisel(1, 1, 1, 1);
+        assertEquals(3, chisel.get(0, 0));
+        assertEquals(1, chisel.getWidth());
+        assertEquals(1, chisel.getHeight());
+    }
 }

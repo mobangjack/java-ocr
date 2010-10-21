@@ -1,6 +1,7 @@
 package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
+import net.sourceforge.javaocr.Image;
 
 import java.util.ArrayList;
 
@@ -169,6 +170,10 @@ public class LinearImageTest extends TestCase {
         @Override
         public void put(int value) {
             values.add(value);
+        }
+
+        public Image chisel(int fromX, int fromY, int width, int height) {
+            return null;  
         }
     }
 

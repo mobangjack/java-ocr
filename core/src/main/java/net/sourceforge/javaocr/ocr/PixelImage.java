@@ -5,6 +5,8 @@
 // Please see the accompanying LICENSE.txt for details.
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.Image;
+
 
 /**
  * contains pixel representation of an image
@@ -58,6 +60,10 @@ public class PixelImage extends AbstractLinearImage {
     public void put(int value) {
         pixels[currentIndex] = value;
 
+    }
+
+    public Image chisel(int fromX, int fromY, int width, int height) {
+        return new PixelImage(pixels, arrayWidth, arrayHeight, originX + fromX, originY + fromY, width, height);
     }
 
     @Override

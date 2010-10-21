@@ -1,16 +1,18 @@
 package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
+import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.filter.GrayscaleToRGBA;
 import net.sourceforge.javaocr.filter.HistogramFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 
 /**
  * test capabilities of byte images
- * TODO: implement testing of byte to int conversion,  shall be able to set and retrieve values from 0 to 255 properly, maybe bigger
  */
 public class ByteImageTest extends TestCase {
-
+    /**
+     * must allow value setting and retrieval as unsigned
+     */
     public void testValuesAreSetAndRetrievedProperlyAsUnsigned() {
         ByteImage image = new ByteImage(1, 1);
 
@@ -22,7 +24,22 @@ public class ByteImageTest extends TestCase {
         assertEquals(129, image.get());
     }
 
+    /**
+     * shall chisel image properly
+     */
+    public void testImageChiseling() {
+        byte[] data = new byte[]{0, 1, 2, 3};
+        ByteImage image = new ByteImage(data, 2, 2);
 
+        final Image chisel = image.chisel(1, 1, 1, 1);
+        assertEquals(3, chisel.get(0, 0));
+        assertEquals(1, chisel.getWidth());
+        assertEquals(1, chisel.getHeight());
+    }
+
+    /**
+     * TODO:  this is only for performance testing and shall go somewhere more appropriate
+     */
     public void testPerformance() {
         byte[] pixels = new byte[720 * 480];
 

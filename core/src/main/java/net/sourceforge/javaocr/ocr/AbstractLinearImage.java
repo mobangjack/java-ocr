@@ -15,14 +15,26 @@ public abstract class AbstractLinearImage implements Image {
     /**
      * Width of the image, in pixels.
      */
-    public final int arrayWidth;
+    protected final int arrayWidth;
     /**
      * Height of the image, in pixels.
      */
     protected final int arrayHeight;
+    /**
+     * X-origin inside array
+     */
     protected final int originX;
+    /**
+     * Y-origin inside array
+     */
     protected final int originY;
+    /**
+     * actual image width
+     */
     protected final int width;
+    /**
+     * actual image height
+     */
     protected final int height;
     /**
      * actual position being processed
@@ -32,7 +44,7 @@ public abstract class AbstractLinearImage implements Image {
     /**
      * Aspect ratio of the image (<code>width/height</code>).
      */
-    public final float aspectRatio;
+    protected final float aspectRatio;
 
 
     // iteration  step
@@ -48,7 +60,6 @@ public abstract class AbstractLinearImage implements Image {
      */
     protected AbstractLinearImage(int arrayWidth, int arrayHeight) {
         this(arrayWidth, arrayHeight, 0, 0, arrayWidth, arrayHeight);
-
     }
 
     /**
@@ -105,7 +116,8 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
-     * store pixel value
+     * store pixel value. manipulates current image pointer (
+     * do not call it while iterating, use put(pixel) instead)
      *
      * @param x
      * @param y
@@ -204,6 +216,17 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
+     * advance to next and store pixel at current position
+     *
+     * @param pixel
+     */
+    public void next(int pixel) {
+        currentIndex += step;
+        put(pixel);
+
+    }
+
+    /**
      * copy image content to destination.  we hope that dimensions match
      *
      * @param dst
@@ -212,13 +235,12 @@ public abstract class AbstractLinearImage implements Image {
         final int height = getHeight();
         for (int i = 0; i < height; i++) {
             for (iterateH(i), dst.iterateH(i); hasNext();) {
-                dst.next();
-                dst.put(next());
+                dst.next(next());
             }
         }
     }
 
-   /**
+    /**
      * copy image content to destination with coordinate flip.  we hope that dimensions match
      *
      * @param dst
@@ -227,11 +249,11 @@ public abstract class AbstractLinearImage implements Image {
         final int width = getWidth();
         for (int i = 0; i < width; i++) {
             for (iterateV(i), dst.iterateH(i); hasNext();) {
-                dst.next();
-                dst.put(next());
+                dst.next(next());
             }
         }
     }
+
     @Override
     public String toString() {
         return "AbstractLinearImage{" +

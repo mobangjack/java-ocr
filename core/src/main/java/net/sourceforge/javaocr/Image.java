@@ -1,7 +1,11 @@
 package net.sourceforge.javaocr;
 
 /**
- * Interface encapsulating image functionality. Concrete implementations shall be provided by plugins
+ * Image functionality. Images are opaque objects and hide implementation details
+ * (especially storage layout or actual pixel representation). Images provide way to iterate
+ * over it (thus, they are statefull and NOT thread safe), and retrieve and set current pixel.
+ * Convenience methods to set given pixels are provided, but iterating methods shall be used for
+ * high performance bulk operations
  *
  * @author Konstantin Pribluda
  */
@@ -27,14 +31,14 @@ public interface Image {
     void put(int x, int y, int value);
 
     /**
-     * retrieve pixekl at current position
+     * retrieve pixekl at current position, does not modify current image pointer
      *
      * @return
      */
     int get();
 
     /**
-     * store pixel at current position
+     * store pixel at current position, does not modify current image pointer
      *
      * @param value
      */
@@ -65,9 +69,16 @@ public interface Image {
      */
     boolean verticalSpanEquals(final int x, final int from, final int to, final int value);
 
-
+    /**
+     * @return image width
+     */
     int getWidth();
 
+    /**
+     * image height
+     *
+     * @return
+     */
     int getHeight();
 
     /**
@@ -104,6 +115,11 @@ public interface Image {
     int next();
 
     /**
+     * store and advance to next pixel
+     */
+    void next(int pixel);
+
+    /**
      * whether next pixel is available
      *
      * @return
@@ -112,16 +128,36 @@ public interface Image {
 
     /**
      * copy image content to another image
-     * TODO: do we have to check for sizes???
      *
-     * @param dst
+     * @param dst destination image
      */
     void copy(Image dst);
 
     /**
      * copy image swithcing axes in process
      *
-     * @param dst
+     * @param dst destination image
      */
     void flip(Image dst);
+
+    /**
+     * chisel out subimage out of original one.  be carefull with dimensions -
+     * no internal checks are done. Operation works in place and no data is copied.
+     * 
+     *
+     * @param oringinX    subimage origin X
+     * @param originY    subimage origin Y
+     * @param width      subimage width
+     * @param height     subimage height
+     * @return   image region as image
+     */
+    Image chisel(int fromX, int fromY, int width, int height);
+
+    /**
+     * aspect ration of this image
+     * TODO: do we actually need this?
+     *
+     * @return
+     */
+    float getAspectRatio();
 }

@@ -1,5 +1,7 @@
 package net.sourceforge.javaocr.ocr;
 
+import net.sourceforge.javaocr.Image;
+
 /**
  * image backed by byte array
  */
@@ -22,12 +24,16 @@ public class ByteImage extends AbstractLinearImage {
 
     @Override
     public int get() {
-       return image[currentIndex] &0xff;
+        return image[currentIndex] & 0xff;
     }
 
     @Override
     public void put(int value) {
-        image[currentIndex] = (byte) (value & 0xff);
+        image[currentIndex] = (byte) (value);
+    }
+
+    public Image chisel(int fromX, int fromY, int width, int height) {
+        return new ByteImage(image, arrayWidth, arrayHeight, originX + fromX, originY + fromY, width, height);
     }
 
     @Override
