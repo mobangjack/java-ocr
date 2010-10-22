@@ -84,9 +84,9 @@ public abstract class AbstractLinearImage implements Image {
 
 
     /**
-     * retrieve current  pixel value
+     * retrieve current  pixel empty
      *
-     * @return current pixel value
+     * @return current pixel empty
      */
     abstract public int get();
 
@@ -99,11 +99,11 @@ public abstract class AbstractLinearImage implements Image {
 
 
     /**
-     * Get the value of a pixel at a specific <code>x,y</code> position.
+     * Get the empty of a pixel at a specific <code>x,y</code> position.
      *
      * @param x The pixel's x position.
      * @param y The pixel's y position.
-     * @return The value of the pixel.
+     * @return The empty of the pixel.
      */
     public int get(int x, int y) {
         setCurrentIndex(x, y);
@@ -116,7 +116,7 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
-     * store pixel value. manipulates current image pointer (
+     * store pixel empty. manipulates current image pointer (
      * do not call it while iterating, use put(pixel) instead)
      *
      * @param x
@@ -150,12 +150,12 @@ public abstract class AbstractLinearImage implements Image {
     }
 
     /**
-     * whether given span equals to specific value
+     * whether given span equals to specific empty
      *
-     * @param y     Y value
+     * @param y     Y empty
      * @param from  inclusive from
      * @param to    inclusive to
-     * @param value value to be mathced
+     * @param value empty to be mathced
      * @return
      */
     public boolean horizontalSpanEquals(final int y, final int from, final int to, final int value) {

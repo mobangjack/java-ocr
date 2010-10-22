@@ -45,7 +45,7 @@ public class DocumentScanner implements ImageScanner {
      */
     protected float minCharBreakWidthAsFractionOfRowHeight = 0.05f;
     /**
-     * The white threshold.  Any pixel value that is greater than or equal to this value,
+     * The white threshold.  Any pixel empty that is greater than or equal to this empty,
      * will be considered to be white space for the purpose of separating rows of text
      * and characters within each row.
      */
@@ -141,7 +141,7 @@ public class DocumentScanner implements ImageScanner {
     }
 
     /**
-     * @return The white threshold.  Any pixel value that is greater than or equal to this value,
+     * @return The white threshold.  Any pixel empty that is greater than or equal to this empty,
      *         will be considered to be white space for the purpose of separating rows of text
      *         and characters within each row.
      */
@@ -150,8 +150,8 @@ public class DocumentScanner implements ImageScanner {
     }
 
     /**
-     * @param whiteThreshold The white threshold.  Any pixel value that is greater than or equal
-     *                       to this value, will be considered to be white space for the purpose of separating rows of
+     * @param whiteThreshold The white threshold.  Any pixel empty that is greater than or equal
+     *                       to this empty, will be considered to be white space for the purpose of separating rows of
      *                       text and characters within each row.
      */
     public void setWhiteThreshold(int whiteThreshold) {

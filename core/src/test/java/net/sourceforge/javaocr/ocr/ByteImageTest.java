@@ -11,7 +11,7 @@ import net.sourceforge.javaocr.filter.ThresholdFilter;
  */
 public class ByteImageTest extends TestCase {
     /**
-     * must allow value setting and retrieval as unsigned
+     * must allow empty setting and retrieval as unsigned
      */
     public void testValuesAreSetAndRetrievedProperlyAsUnsigned() {
         ByteImage image = new ByteImage(1, 1);
