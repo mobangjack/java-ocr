@@ -29,6 +29,10 @@ public class ImageTraversalTest extends TestCase {
             public void put(int value) {
                 // no op here
             }
+
+            public Image chisel(int fromX, int fromY, int width, int height) {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
         };
 
         AbstractMomentFilter filter = new AbstractMomentFilter(0, 0) {
