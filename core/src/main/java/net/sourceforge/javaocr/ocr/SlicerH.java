@@ -4,7 +4,7 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ImageSlicer;
 
 /**
- * class performing image sliciing.  it's a goog idea to preprocess image and made it binary.
+ * class performing image sliciing.  it's a good idea to pre process image and made it binary.
  * image slicing does not move data around and does not modify it.  slicer is not thread safe.
  *
  * @author Konstantin Pribluda
@@ -34,7 +34,7 @@ public class SlicerH implements ImageSlicer {
     }
 
     /**
-     * start horisontal slicing from designated position tolerating some empty rows
+     * start horizontal slicing from designated position tolerating some empty rows
      *
      * @param from      starting position
      * @param tolerance amount of empty rows allowed inside consecutive image
@@ -76,7 +76,7 @@ public class SlicerH implements ImageSlicer {
     }
 
     /**
-     * chisel out subimage  with preconfigured tolerance
+     * chisel out sub-image  with pre configured tolerance
      *
      * @return subimage
      */
@@ -94,12 +94,15 @@ public class SlicerH implements ImageSlicer {
                 // decrease reserve
                 toleranceReserve--;
             } else {
-                // increase reserve
+                // initialise reserve
                 toleranceReserve = tolerance + 1;
             }
         }
+        // we bailed out.  step back for used up tolerance
+        currentPosition -= tolerance - toleranceReserve + 1;
+        
         // ok,  now we are ready with scan did we collected something?
-        if( imageStart != currentPosition) {
+        if( imageStart < currentPosition) {
             System.err.println("image start:" + imageStart);
             System.err.println("currentPosition:" + currentPosition);
             // apparently. chisel image
