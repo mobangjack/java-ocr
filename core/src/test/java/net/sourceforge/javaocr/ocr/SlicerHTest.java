@@ -24,9 +24,9 @@ public class SlicerHTest extends TestCase {
     }
 
     /**
-     * vertical iteration test
+     * test image on end is recognised properly
      */
-    public void testIteration() {
+    public void testSubimageOnEnd() {
         byte[] data = new byte[]{0, 0, 1};
         Image image = new ByteImage(data, 1, 3);
 
@@ -48,6 +48,32 @@ public class SlicerHTest extends TestCase {
         assertFalse(slicer.hasNext());
     }
 
+
+    public void testSubimageOnEndWithTolerance() {
+        byte[] data = new byte[]{0, 0, 1};
+        Image image = new ByteImage(data, 1, 3);
+
+        SlicerH slicer = new SlicerH(image, 0);
+
+        slicer.slice(0,1);
+        // must have image
+        assertTrue(slicer.hasNext());
+
+
+        Image slice = slicer.next();
+
+        assertNotNull(slice);
+        assertEquals(1, slice.getHeight());
+        assertEquals(1, slice.getWidth());
+        assertEquals(1, slice.get(0, 0));
+
+        // no image anymore
+        assertFalse(slicer.hasNext());
+    }
+
+    /**
+     *
+     */
     public void testThatImageOnStartIsRecognisedProperly() {
         byte[] data = new byte[]{1, 0, 0};
         Image image = new ByteImage(data, 1, 3);
@@ -71,7 +97,29 @@ public class SlicerHTest extends TestCase {
     /**
      * gap below tolerance shall not produce another slice
      */
-    public void testTolerance() {
-        byte[] data = new byte[]{0, 0, 1};
+    public void testToleranceIsRespected() {
+        byte[] data = new byte[]{0, 0, 1, 0, 1, 0, 0, 0};
+
+        Image image = new ByteImage(data, 1, 8);
+
+        SlicerH slicer = new SlicerH(image, 0);
+
+        slicer.slice(0,1);
+
+        assertTrue(slicer.hasNext());
+        Image slice = slicer.next();
+
+        assertNotNull(slice);
+
+        assertEquals(3, slice.getHeight());
+        assertEquals(1, slice.getWidth());
+
+        assertEquals(1, slice.get(0, 0));
+        assertEquals(0, slice.get(0, 1));
+        assertEquals(1, slice.get(0, 2));
+
+        // no image anymore
+        assertFalse(slicer.hasNext());
+
     }
 }

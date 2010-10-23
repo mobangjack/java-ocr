@@ -98,6 +98,7 @@ public class SlicerH implements ImageSlicer {
                 toleranceReserve = tolerance + 1;
             }
         }
+        
         // we bailed out.  step back for used up tolerance
         currentPosition -= tolerance - toleranceReserve + 1;
         
