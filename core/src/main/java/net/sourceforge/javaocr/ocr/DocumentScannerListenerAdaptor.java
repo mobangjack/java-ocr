@@ -14,6 +14,7 @@ import net.sourceforge.javaocr.Image;
  * implementing classes from being forced to implement all methods in the
  * interface.
  * @author Ronald B. Cemer
+ * @deprecated finctionalitz is not necessary anymore
  */
 public class DocumentScannerListenerAdaptor
         implements DocumentScannerListener

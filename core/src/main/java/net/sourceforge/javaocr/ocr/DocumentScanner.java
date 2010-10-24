@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * TODO: evaluate and maybe rewrite
  * @author Ronald B. Cemer
  * @author Konstantin Pribluda
+ * @deprecated finctionality now in image slicers
  */
 public class DocumentScanner implements ImageScanner {
 
