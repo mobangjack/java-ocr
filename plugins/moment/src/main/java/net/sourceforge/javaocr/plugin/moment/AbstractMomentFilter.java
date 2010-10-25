@@ -11,7 +11,7 @@ public abstract class AbstractMomentFilter implements ImageFilter {
     int currentY;
     int p;
     int q;
-    float moment;
+    double moment;
 
     public AbstractMomentFilter(int p, int q) {
         this.p = p;
@@ -37,7 +37,7 @@ public abstract class AbstractMomentFilter implements ImageFilter {
         }
     }
 
-    public float getMoment() {
+    public double getMoment() {
         return moment;
     }
 }

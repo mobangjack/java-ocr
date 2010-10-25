@@ -7,8 +7,8 @@ package net.sourceforge.javaocr.plugin.moment;
  * TODO: add m00, and normalisation computation !!!!! (page45) 
  */
 public class CentralMomentFilter extends AbstractMomentFilter {
-    float xMean;
-    float yMean;
+    double xMean;
+    double yMean;
 
 
     /**
@@ -17,7 +17,7 @@ public class CentralMomentFilter extends AbstractMomentFilter {
      * @param xMean M10
      * @param yMean M01
      */
-    public CentralMomentFilter(int p, int q, float xMean, float yMean) {
+    public CentralMomentFilter(int p, int q, double xMean, double yMean) {
         super(p, q);
         this.xMean = xMean;
         this.yMean = yMean;
@@ -27,5 +27,14 @@ public class CentralMomentFilter extends AbstractMomentFilter {
     @Override
     protected void computeIndividualMoment(int pixel, int currentX, int currentY) {
         moment += Math.pow(currentX - xMean, p) * Math.pow(currentY - yMean, q) * pixel;
+    }
+
+    /**
+     * normalise, not sure whether this has be done here...
+     * @param m00
+     * @return  normalised moment value
+     */
+    public double normalise(double m00) {
+       return getMoment() / Math.pow(m00,(p + q)/2 + 1); 
     }
 }
