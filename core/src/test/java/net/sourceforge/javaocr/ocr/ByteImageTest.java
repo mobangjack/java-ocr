@@ -55,7 +55,7 @@ public class ByteImageTest extends TestCase {
             long hist = System.nanoTime();
             final int thr = histogramm.adaptiveThreshold();
 
-            (new ThresholdFilter(thr)).process(dest);
+            (new ThresholdFilter(thr, 255, 0)).process(dest);
             long threshold = System.nanoTime();
             (new GrayscaleToRGBA()).process(dest);
             long gtrgb = System.nanoTime();
