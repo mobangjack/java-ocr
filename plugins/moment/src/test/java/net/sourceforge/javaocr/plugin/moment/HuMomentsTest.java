@@ -16,6 +16,10 @@ public class HuMomentsTest extends TestCase {
     public void testThat7MomentsAreDelivered() {
         byte[] data = new byte[]{0, 1};
         Image image = new ByteImage(data, 1, 2);
-        assertEquals(7, HuMoments.compute(image));
+        final double[] moments = HuMoments.compute(image);
+        assertEquals(7, moments.length);
+        for(double i:moments) {
+            System.err.println(i);
+        }
     }
 }

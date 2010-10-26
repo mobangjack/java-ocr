@@ -23,6 +23,6 @@ public class RawMomentFilterTest extends TestCase {
         RawMomentFilter filter = new RawMomentFilter(0, 0);
         filter.computeIndividualMoment(100, 1, 2);
         filter.computeIndividualMoment(120, 1, 5);
-        assertEquals(220f, filter.getMoment());
+        assertEquals(220d, filter.getMoment());
     }
 }
