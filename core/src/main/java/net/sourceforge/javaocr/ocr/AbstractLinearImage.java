@@ -149,6 +149,14 @@ public abstract class AbstractLinearImage implements Image {
         return width;
     }
 
+    public int getOriginX() {
+        return originX;
+    }
+
+    public int getOriginY() {
+        return originY;
+    }
+
     /**
      * whether given span equals to specific empty
      *
@@ -266,4 +274,6 @@ public abstract class AbstractLinearImage implements Image {
                 ", width=" + width +
                 '}';
     }
+
+
 }

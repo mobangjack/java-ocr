@@ -81,6 +81,10 @@ public interface Image {
      */
     int getHeight();
 
+    public int getOriginX();
+
+    public int getOriginY();
+
     /**
      * convenience method to initialize iterator over whole image row
      */
@@ -143,13 +147,12 @@ public interface Image {
     /**
      * chisel out subimage out of original one.  be carefull with dimensions -
      * no internal checks are done. Operation works in place and no data is copied.
-     * 
      *
-     * @param oringinX    subimage origin X
-     * @param originY    subimage origin Y
-     * @param width      subimage width
-     * @param height     subimage height
-     * @return   image region as image
+     * @param oringinX subimage origin X
+     * @param originY  subimage origin Y
+     * @param width    subimage width
+     * @param height   subimage height
+     * @return image region as image
      */
     Image chisel(int fromX, int fromY, int width, int height);
 
