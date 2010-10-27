@@ -5,7 +5,6 @@ import net.sourceforge.javaocr.Image;
 /**
  * apply FIR filter to image
  * TODO: implement me properly. will need output image to push pixel to
- * please have a look at ImageFilter.process(Image input, Image output)
  */
 public class FIRFilter extends AbstractBaseFilter{
     float[] coeffs;

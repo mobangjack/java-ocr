@@ -11,13 +11,5 @@ public interface ImageFilter {
      * @param image
      */
     void process(Image image);
-    
-//    /**
-//     * perform image processing from input to output
-//     * 
-//     * @param input source image
-//     * @param output destination image
-//     */
-//    void process(Image input, Image output);
 
 }

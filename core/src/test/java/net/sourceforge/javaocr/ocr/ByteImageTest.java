@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.filter.GrayscaleToRGBA;
 import net.sourceforge.javaocr.filter.HistogramFilter;
+import net.sourceforge.javaocr.filter.MedianFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 
 /**
@@ -45,6 +46,7 @@ public class ByteImageTest extends TestCase {
 
         ByteImage image = new ByteImage(pixels, 720, 480, 360, 0, 133, 480);
         PixelImage dest = new PixelImage(480, 133);
+        PixelImage median = new PixelImage(480, 133);
 
         HistogramFilter histogramm = new HistogramFilter();
         for (int i = 0; i < 100; i++) {
@@ -57,14 +59,17 @@ public class ByteImageTest extends TestCase {
 
             (new ThresholdFilter(thr, 255, 0)).process(dest);
             long threshold = System.nanoTime();
-            (new GrayscaleToRGBA()).process(dest);
+            (new MedianFilter(median, 3, 3)).process(dest);
+            long med = System.nanoTime();
+            (new GrayscaleToRGBA()).process(median);
             long gtrgb = System.nanoTime();
 
             System.err.println("start:" + start);
             System.err.println("flip:" + (flip - start));
             System.err.println("hist:" + (hist - flip));
             System.err.println("thr:" + (threshold - hist));
-            System.err.println("to rgb:" + (gtrgb - threshold));
+            System.err.println("median:" + (med - threshold));
+            System.err.println("to rgb:" + (gtrgb - med));
             System.err.println("=================================");
         }
     }
