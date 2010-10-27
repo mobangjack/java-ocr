@@ -6,7 +6,7 @@ package net.sourceforge.javaocr;
 public interface ImageFilter {
 
     /**
-     * perform image processing overwriting the image with the result
+     * perform image processing possibly overwriting the image with the result
      *
      * @param image
      */

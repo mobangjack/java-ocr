@@ -3,13 +3,12 @@ package net.sourceforge.javaocr.ocr;
 import net.sourceforge.javaocr.Image;
 
 /**
- * abstract base class encapsulating image functionality  for images repesented by linear arrays.
+ * abstract base class encapsulating image functionality  for images represented by linear arrays.
  * This class is stateful in regard to filtering, and thus not thread safe. Those optimisations aim
  * to reduce method invocations to be performant on davlik (android) where direct field access if more
  * performant than going through getter
  *
  * @author Konstantin Pribluda
- *         TODO: move scanning code for segmentation here!!!!
  */
 public abstract class AbstractLinearImage implements Image {
     /**

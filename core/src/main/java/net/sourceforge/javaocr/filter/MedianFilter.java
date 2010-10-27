@@ -9,7 +9,7 @@ import net.sourceforge.javaocr.ImageFilter;
 
 /**
  * Apply median filter to image, useful to clean up after thresholding.
- * FIXME currently works only for grayscale images
+ * TODO FIXME currently works only for grayscale images
  * @author Andrea De Pasquale
  */
 public class MedianFilter implements ImageFilter {
@@ -66,8 +66,7 @@ public class MedianFilter implements ImageFilter {
 						
 						// and put it into the list
 						filter.add(input.get(j, k));
-						System.out.println("pixel (" + j + ", " + k + ") is "
-								+ input.get(j, k));
+
 						
 					}
 				}
@@ -76,8 +75,7 @@ public class MedianFilter implements ImageFilter {
 				Collections.sort(filter);
 				int median = filter.size() / 2;
 				output.put(x, y, filter.get(median));
-				System.out.println("median for (" + x + ", " + y + ") is "
-						+ filter.get(median) + " at " + median);
+
 				
 			}
 		}
