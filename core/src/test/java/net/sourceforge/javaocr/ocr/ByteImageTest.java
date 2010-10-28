@@ -59,7 +59,7 @@ public class ByteImageTest extends TestCase {
 
             (new ThresholdFilter(thr, 255, 0)).process(dest);
             long threshold = System.nanoTime();
-            (new MedianFilter(median, 3, 3)).process(dest);
+            (new MedianFilter(3, 3, median)).process(dest);
             long med = System.nanoTime();
             (new GrayscaleToRGBA()).process(median);
             long gtrgb = System.nanoTime();
