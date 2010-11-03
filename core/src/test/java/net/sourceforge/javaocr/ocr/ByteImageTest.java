@@ -2,10 +2,7 @@ package net.sourceforge.javaocr.ocr;
 
 import junit.framework.TestCase;
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.filter.GrayscaleToRGBA;
-import net.sourceforge.javaocr.filter.HistogramFilter;
-import net.sourceforge.javaocr.filter.ThresholdFilter;
-import net.sourceforge.javaocr.plugin.fir.MedianFilter;
+
 
 /**
  * test capabilities of byte images
@@ -41,6 +38,7 @@ public class ByteImageTest extends TestCase {
     /**
      * TODO:  this is only for performance testing and shall go somewhere more appropriate
      */
+    /*
     public void testPerformance() {
         byte[] pixels = new byte[720 * 480];
 
@@ -72,5 +70,5 @@ public class ByteImageTest extends TestCase {
             System.err.println("to rgb:" + (gtrgb - med));
             System.err.println("=================================");
         }
-    }
+    }  */
 }
