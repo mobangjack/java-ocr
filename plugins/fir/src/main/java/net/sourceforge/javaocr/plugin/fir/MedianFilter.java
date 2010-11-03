@@ -1,4 +1,4 @@
-package net.sourceforge.javaocr.filter;
+package net.sourceforge.javaocr.plugin.fir;
 
 import java.util.Arrays;
 

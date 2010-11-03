@@ -1,12 +1,13 @@
-package net.sourceforge.javaocr.filter;
+package net.sourceforge.javaocr.plugin.fir;
 
 import net.sourceforge.javaocr.Image;
+import net.sourceforge.javaocr.ImageFilter;
 
 /**
  * Abstract base class for filters operating on pixel neighborhood
  * @author Andrea De Pasquale
  */
-public abstract class AbstractNeighborhoodFilter extends AbstractBaseFilter {
+public abstract class AbstractNeighborhoodFilter implements ImageFilter {
 	
 	protected int filterW, filterH; 
 	private int sizeL, sizeR, sizeT, sizeB;

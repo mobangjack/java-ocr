@@ -4,8 +4,8 @@ import junit.framework.TestCase;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.filter.GrayscaleToRGBA;
 import net.sourceforge.javaocr.filter.HistogramFilter;
-import net.sourceforge.javaocr.filter.MedianFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
+import net.sourceforge.javaocr.plugin.fir.MedianFilter;
 
 /**
  * test capabilities of byte images

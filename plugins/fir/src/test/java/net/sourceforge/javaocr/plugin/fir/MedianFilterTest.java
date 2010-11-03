@@ -1,7 +1,8 @@
-package net.sourceforge.javaocr.filter;
+package net.sourceforge.javaocr.plugin.fir;
 
 import junit.framework.TestCase;
 import net.sourceforge.javaocr.ocr.PixelImage;
+import net.sourceforge.javaocr.plugin.fir.MedianFilter;
 
 /**
  * Test for <code>MedianFilter</code> class
