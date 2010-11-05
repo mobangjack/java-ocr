@@ -10,7 +10,7 @@ public interface ImageSlicer {
      *
      * @param fromY starting Y
      */
-    public void slice(int fromY);
+    public ImageSlicer slice(int fromY);
 
     /**
      * start horizontal slicing with defined tolerance
@@ -18,7 +18,7 @@ public interface ImageSlicer {
      * @param fromY     starting position
      * @param tolerance amount of empty rows allowed inside consecutive image
      */
-    public void slice(int fromY, int tolerance);
+    public ImageSlicer slice(int fromY, int tolerance);
 
 
     /**

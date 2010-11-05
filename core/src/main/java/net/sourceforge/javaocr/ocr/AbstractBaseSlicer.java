@@ -24,8 +24,8 @@ public abstract class AbstractBaseSlicer implements ImageSlicer {
      *
      * @param fromY starting Y
      */
-    public void slice(int fromY) {
-        slice(fromY, 0);
+    public ImageSlicer slice(int fromY) {
+        return slice(fromY, 0);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class AbstractBaseSlicer implements ImageSlicer {
      * @param from      starting position
      * @param tolerance amount of empty rows allowed inside consecutive image
      */
-    public void slice(int from, int tolerance) {
+    public ImageSlicer slice(int from, int tolerance) {
 
         boolean rowEmpty;
         this.tolerance = tolerance;
@@ -53,6 +53,7 @@ public abstract class AbstractBaseSlicer implements ImageSlicer {
                 break;
             }
         }
+        return this;
     }
 
     /**

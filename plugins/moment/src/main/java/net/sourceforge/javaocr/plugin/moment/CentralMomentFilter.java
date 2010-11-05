@@ -3,8 +3,6 @@ package net.sourceforge.javaocr.plugin.moment;
 /**
  * computes central moments of image. see wikipedia or book of your choice about
  * details. needs M10 & M01 to be computed before using it
- *
- * TODO: add m00, and normalisation computation !!!!! (page45) 
  */
 public class CentralMomentFilter extends AbstractMomentFilter {
     double xMean;
