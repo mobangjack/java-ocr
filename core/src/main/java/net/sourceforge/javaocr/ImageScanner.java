@@ -4,6 +4,7 @@ package net.sourceforge.javaocr;
  * Interface contract to perform document scanning
  *
  * @author Konstantin Pribluda
+ * @deprecated - do we need this interface at all?
  */
 public interface ImageScanner {
     /**
