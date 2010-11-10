@@ -9,7 +9,6 @@ import net.sourceforge.javaocr.Image;
  * http://www.informatik.haw-hamburg.de/fileadmin/Homepages/ProfMeisel/Vorlesungen/WP_RobotVision/V/RV06.pdf
  * pages 44-46
  * <p/>
- * TODO: implement normalisation properly,  see page 45 need changes in central moment !!!!!
  */
 public class HuMoments {
 
