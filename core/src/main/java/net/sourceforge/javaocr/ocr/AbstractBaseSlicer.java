@@ -47,8 +47,7 @@ public abstract class AbstractBaseSlicer implements ImageSlicer {
         boolean rowEmpty;
         this.tolerance = tolerance;
         for (currentPosition = from; currentPosition < border; currentPosition++) {
-            rowEmpty = spanEmpty();
-            System.err.println("row " + currentPosition + " empty:" + rowEmpty);
+            rowEmpty = spanEmpty();          
             if (!rowEmpty) {
                 break;
             }
