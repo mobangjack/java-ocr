@@ -12,20 +12,24 @@ import net.sourceforge.javaocr.Image;
  */
 public class HuMoments {
 
-    static RawMomentFilter M00 = new RawMomentFilter(0, 0);
-    static RawMomentFilter M10 = new RawMomentFilter(1, 0);
-    static RawMomentFilter M01 = new RawMomentFilter(0, 1);
 
     public static double[] compute(Image image) {
+
+
+
+
         // m00 - used to normalise moments
+        RawMomentFilter M00 = new RawMomentFilter(0, 0);
         M00.process(image);
         double m00 = M00.getMoment();
 
         //  m10
+        RawMomentFilter M10 = new RawMomentFilter(1, 0);
         M10.process(image);
         double m10 = M10.getMoment();
 
         //  m01
+        RawMomentFilter M01 = new RawMomentFilter(0, 1);
         M10.process(image);
         double m01 = M01.getMoment();
 
