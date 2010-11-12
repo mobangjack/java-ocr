@@ -19,9 +19,7 @@ public class HuMomentsTest extends TestCase {
         Image image = new ByteImage(data, 1, 2);
         final double[] moments = HuMoments.compute(image);
         assertEquals(7, moments.length);
-        for (double i : moments) {
-            System.err.println(i);
-        }
+       
     }
 
 
@@ -59,7 +57,7 @@ public class HuMomentsTest extends TestCase {
 
 
     public void testVTranslationInvariance() {
-              int[] data = new int[]
+        int[] data = new int[]
                 {
                         0, 0, 0, 0,
                         0, 1, 1, 1,
@@ -90,6 +88,78 @@ public class HuMomentsTest extends TestCase {
         }
     }
 
+    /**
+     * moments shall be invariant to mirroring
+     */
+    public void testMirroringInvariance() {
+        int[] data = new int[]
+                {
+                        0, 0, 0, 0,
+                        0, 1, 1, 1,
+                        0, 0, 0, 1,
+                        0, 0, 0, 0,
+                };
+
+        int[] mirrorData = new int[]
+                {
+                        0, 0, 0, 0,
+                        0, 0, 0, 1,
+                        0, 1, 1, 1,
+                        0, 0, 0, 0,
+                };
+
+        Image full = new PixelImage(data, 4, 4);
+        Image mirror = new PixelImage(mirrorData, 4, 4);
+
+        double[] moments = HuMoments.compute(full);
+        double[] momentsMirror = HuMoments.compute(mirror);
+
+        System.err.println("-----------------");
+        printMoment("full:\t", moments);
+        printMoment("mirror:\t", momentsMirror);
+
+        for (int i = 0; i < 6; i++) {
+            assertEquals("mirror " + i, moments[i], momentsMirror[i]);
+        }
+        // phi 7 changes sign on mirroring
+        assertEquals(moments[6], -1 * momentsMirror[6]);
+
+    }
+
+
+    public void testRotationIrrelevance() {
+        int[] data = new int[]
+                {
+                        0, 0, 0, 0,
+                        0, 1, 1, 1,
+                        0, 0, 0, 1,
+                        0, 0, 0, 0,
+                };
+
+        int[] rotatedData = new int[]
+                {
+                        0, 0, 1, 0,
+                        0, 0, 1, 0,
+                        0, 1, 1, 0,
+                        0, 0, 0, 0,
+                };
+
+        Image full = new PixelImage(data, 4, 4);
+        Image rotated = new PixelImage(rotatedData, 4, 4);
+
+
+        double[] moments = HuMoments.compute(full);
+        double[] momentsRotated = HuMoments.compute(rotated);
+
+        System.err.println("-----------------");
+        printMoment("full:\t", moments);
+        printMoment("rotated:\t", momentsRotated);
+
+        for (int i = 0; i < 7; i++) {
+            assertEquals("rotated " + i, moments[i], momentsRotated[i]);
+        }
+
+    }
 
     private void printMoment(final String label, double[] momentsFull) {
         StringBuilder builder = new StringBuilder();

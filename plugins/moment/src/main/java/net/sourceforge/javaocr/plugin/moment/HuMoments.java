@@ -20,19 +20,19 @@ public class HuMoments {
         RawMomentFilter M00 = new RawMomentFilter(0, 0);
         M00.process(image);
         double m00 = M00.getMoment();
-        //System.err.println("m00:" + m00);
+
 
         //  m10
         RawMomentFilter M10 = new RawMomentFilter(1, 0);
         M10.process(image);
         double m10 = M10.getMoment();
-        //System.err.println("m10:" + m10);
+
 
         //  m01
         RawMomentFilter M01 = new RawMomentFilter(0, 1);
         M01.process(image);
         double m01 = M01.getMoment();
-        //System.err.println("m01:" + m01);
+     
 
 
         // ready to compute image weight center, will be used for central moments computation
