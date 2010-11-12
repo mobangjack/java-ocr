@@ -16,28 +16,31 @@ public class HuMoments {
     public static double[] compute(Image image) {
 
 
-
-
         // m00 - used to normalise moments
         RawMomentFilter M00 = new RawMomentFilter(0, 0);
         M00.process(image);
         double m00 = M00.getMoment();
+        //System.err.println("m00:" + m00);
 
         //  m10
         RawMomentFilter M10 = new RawMomentFilter(1, 0);
         M10.process(image);
         double m10 = M10.getMoment();
+        //System.err.println("m10:" + m10);
 
         //  m01
         RawMomentFilter M01 = new RawMomentFilter(0, 1);
-        M10.process(image);
+        M01.process(image);
         double m01 = M01.getMoment();
+        //System.err.println("m01:" + m01);
 
 
         // ready to compute image weight center, will be used for central moments computation
         double xMean = m10 / m00;
         double yMean = m01 / m00;
+        //System.err.println("xmean: " + xMean + " ymean: " + yMean);
 
+        
         // Phi1 -> n20 + n02
         CentralMomentFilter N20 = new CentralMomentFilter(2, 0, xMean, yMean);
         CentralMomentFilter N02 = new CentralMomentFilter(0, 2, xMean, yMean);
@@ -59,7 +62,7 @@ public class HuMoments {
 
         double n11 = N11.normalise(m00);
 
-        moments[1] = (n20 - n02) * (n20 - n02) + 4 * n11 * n11;
+        moments[1] = Math.pow(n20 - n02, 2) + 4 * Math.pow(n11, 2);
 
         // Phi3  (n30 - 3n12)^2 + (n03-3n21)^2 
         CentralMomentFilter N30 = new CentralMomentFilter(3, 0, xMean, yMean);
@@ -82,22 +85,22 @@ public class HuMoments {
 
         double n12 = N12.normalise(m00);
 
-        moments[2] = (n30 - 3 * n12) * (n30 - 3 * n12) + (n03 - 3 * n21) * (n03 - 3 * n21);
+        moments[2] = Math.pow(n30 - 3 * n12, 2) + Math.pow(n03 - 3 * n21, 2);
 
         //Phi4  (n30 + 3n12)^2 + (n03 + 3n21)^2
-        moments[3] = (n30 + n12) * (n30 + n12) + (n03 + n21) * (n03 + n21);
+        moments[3] = Math.pow(n30 + n12, 2) + Math.pow(n03 + n21, 2);
 
         // Phi5
-        moments[4] = (n30 - 3 * n12) * (n30 + n12) * ((n30 + n12) * (n30 + n12) - 3 * (n03 + n21) * (n03 + n21)) +
-                (n03 - 3 * n21) * (n03 + n21) * ((n03 + n21) * (n03 + n21) - 3 * (n30 + n12) * (n30 + n12));
+        moments[4] = (n30 - 3 * n12) * (n30 + n12) * (Math.pow(n30 + n12, 2) - 3 * Math.pow(n21 + n03, 2)) +
+                (n03 - 3 * n21) * (n03 + n21) * (Math.pow(n03 + n21, 2) - 3 * Math.pow(n30 + n12, 2));
 
         // Phi 6
-        moments[5] = (n20 - n02) * ((n30 + n12) * (n30 + n12) - (n21 + n03) * (n21 + n03)) +
-                4 * n11 * (n30 + n12) * (n30 + n21);
+        moments[5] = (n20 - n02) * (Math.pow(n30 + n12, 2) - Math.pow(n21 + n03, 2)) +
+                4 * n11 * (n30 + n12) * (n03 + n21);
 
         // Phi 7
-        moments[6] = (3 * n21 - n03) * (n30 + n12) * ((n30 + n12) * (n30 + n12) - 3 * (n21 + n03) * (n21 + n03)) +
-                (n30 - 3 * n12) * (n21 + n03) * ((n03 + n21) * (n03 + n21) - 3 * (n30 + n12) * (n30 + n12));
+        moments[6] = (3 * n21 - n03) * (n30 + n12) * (Math.pow(n30 + n12, 2) - 3 * Math.pow(n21 + n03, 2)) +
+                (n30 - 3 * n12) * (n21 + n03) * (Math.pow(n03 + n21, 2) - 3 * Math.pow(n30 + n12, 2));
 
         return moments;
     }
