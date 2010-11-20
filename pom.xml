@@ -15,6 +15,7 @@
     <modules>
         <module>core</module>
         <module>plugins</module>
+        <module>demos</module>
         <module>tools</module>
     </modules>
     <properties>
