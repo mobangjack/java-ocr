@@ -26,7 +26,7 @@ public class ThresholdFilter extends AbstractSinglePixelFilter {
      * construct with specified values for above and below
      *
      * @param threshold threshold value
-     * @param above     value to use for values over the threshold
+     * @param above     value to use for values strictly over the threshold
      * @param below     value to substitute for values below the threshold
      */
     public ThresholdFilter(final int threshold, final int above, final int below) {
