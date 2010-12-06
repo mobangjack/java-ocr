@@ -102,8 +102,6 @@ public abstract class AbstractBaseSlicer implements ImageSlicer {
 
         // ok,  now we are ready with scan did we collected something?
         if( imageStart < currentPosition) {
-            System.err.println("image start:" + imageStart);
-            System.err.println("currentPosition:" + currentPosition);
             // apparently. chisel image
             final Image returnImage = chisel(imageStart);
 
