@@ -9,7 +9,7 @@
     <artifactId>javaocr-plugin-vector</artifactId>
     <name>Feature vector plugin</name>
     <description>
-        Performs image matching based on feature vectors.  One example of thise
+        Performs image matching based on feature vectors.  One example of those
         would be double array produced by HuMoments. (See moments plugin) 
     </description>
 </project>

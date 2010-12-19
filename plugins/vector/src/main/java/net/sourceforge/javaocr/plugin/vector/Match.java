@@ -4,8 +4,8 @@ package net.sourceforge.javaocr.plugin.vector;
  * contains vector of image features expressed as double values for some character.
  * instance of match are trained by means of feature vectors.  feature extraction
  * and classification is out of scope of this class
- * traning involves collection of statsic dat. calculation of distribution parameters is done
- * in sliding way - samples are not kept
+ * training involves collection of statistic data. calculation of distribution
+ * parameters is done in sliding way - samples are not kept
  *
  * @author Konstantin Pribluda
  */
@@ -29,6 +29,8 @@ public class Match {
     public Match(char c, int size) {
         this.c = c;
         this.size = size;
+        sum = new double[size];
+        quads = new double[size];
     }
 
 
@@ -50,7 +52,7 @@ public class Match {
     /**
      * lazily calculate and return variance vector
      *
-     * @return  variance vector
+     * @return variance vector
      */
     public double[] getVar() {
         if (var == null) {
