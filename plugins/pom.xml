@@ -15,7 +15,7 @@
     </description>
     <modules>
         <module>moment</module>
-        <module>vector</module>
+        <module>cluster</module>
         <module>fir</module>
         <module>awt</module>
     </modules>

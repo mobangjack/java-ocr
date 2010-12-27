@@ -1,31 +1,29 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
 /**
- * defines cluster of features 
+ * cluster woth normally distributed features.
+ *
  * @author Konstantin Pribluda
  */
-public class NormalDistributionCluster {
-    char c;
-
+public abstract class NormalDistributionCluster implements Cluster {
     double[] sum;
     double[] quads;
     double[] mx;
     double[] var;
     int amountSamples;
 
-    int size;
+    int dimensions;
 
     /**
-     * construct match object
+     * constructs
      *
      * @param c    assotiated character
      * @param size size of feature cluster
      */
-    public NormalDistributionCluster(char c, int size) {
-        this.c = c;
-        this.size = size;
-        sum = new double[size];
-        quads = new double[size];
+    public NormalDistributionCluster(int dimensions) {
+        this.dimensions = dimensions;
+        sum = new double[dimensions];
+        quads = new double[dimensions];
     }
 
 
@@ -36,8 +34,8 @@ public class NormalDistributionCluster {
      */
     public double[] getMx() {
         if (mx == null) {
-            mx = new double[getSize()];
-            for (int i = 0; i < size; i++) {
+            mx = new double[getDimensions()];
+            for (int i = 0; i < getDimensions(); i++) {
                 mx[i] = getAmountSamples() == 0 ? 0 : sum[i] / getAmountSamples();
             }
         }
@@ -51,8 +49,8 @@ public class NormalDistributionCluster {
      */
     public double[] getVar() {
         if (var == null) {
-            var = new double[getSize()];
-            for (int i = 0; i < getSize(); i++) {
+            var = new double[getDimensions()];
+            for (int i = 0; i < getDimensions(); i++) {
                 var[i] = getAmountSamples() == 0 ? 0 : quads[i] - sum[i] * sum[i] / getAmountSamples();
             }
         }
@@ -72,7 +70,7 @@ public class NormalDistributionCluster {
         mx = null;
         var = null;
 
-        for (int i = 0; i < getSize(); i++) {
+        for (int i = 0; i < getDimensions(); i++) {
             sum[i] += samples[i];
             quads[i] += samples[i] * samples[i];
         }
@@ -104,20 +102,7 @@ public class NormalDistributionCluster {
         this.amountSamples = amountSamples;
     }
 
-    public char getC() {
-        return c;
+    public int getDimensions() {
+        return dimensions;
     }
-
-    public void setC(char c) {
-        this.c = c;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
 }

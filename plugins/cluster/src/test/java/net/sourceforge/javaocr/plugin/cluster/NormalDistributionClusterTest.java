@@ -12,9 +12,13 @@ public class NormalDistributionClusterTest extends TestCase {
      * test that constructor paramaters  are stored
      */
     public void testParameterStorage() {
-        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster('a', 1);
-        assertEquals('a', normalDistributionCluster.getC());
-        assertEquals(1, normalDistributionCluster.getSize());
+        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster(1){
+            public double distance(double[] features) {
+                return 0;
+            }
+        };
+
+        assertEquals(1, normalDistributionCluster.getDimensions());
     }
 
     /**
@@ -22,7 +26,11 @@ public class NormalDistributionClusterTest extends TestCase {
      */
     @Test
     public void testThatNoSamplesMeansNullExpectationEndVariation() {
-        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster('a', 1);
+        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster(1){
+            public double distance(double[] features) {
+                return 0;
+            }
+        };
 
         for (double mx : normalDistributionCluster.getMx())
             assertEquals(0d, mx);
@@ -36,7 +44,11 @@ public class NormalDistributionClusterTest extends TestCase {
      */
     @Test
     public void testSizeIsPropagatedToArrays() {
-        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster('a', 5);
+        NormalDistributionCluster normalDistributionCluster = new NormalDistributionCluster(5){
+            public double distance(double[] features) {
+                return 0;
+            }
+        };;
 
         assertEquals(5, normalDistributionCluster.getMx().length);
         assertEquals(5, normalDistributionCluster.getVar().length);

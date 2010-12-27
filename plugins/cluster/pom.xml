@@ -9,7 +9,6 @@
     <artifactId>javaocr-plugin-cluster</artifactId>
     <name>Feature vector plugin</name>
     <description>
-        Performs image matching based on feature vectors.  One example of those
-        would be double array produced by HuMoments. (See moments plugin) 
+        Performs image matching based on cluster analysis techniques
     </description>
 </project>
