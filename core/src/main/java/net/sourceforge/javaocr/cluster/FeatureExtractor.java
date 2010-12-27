@@ -12,7 +12,7 @@ public interface FeatureExtractor {
      * amount of features
      * TODO: do we really need this ?
      *
-     * @return size of produced feature vector
+     * @return size of produced feature cluster
      */
     public int getSize();
 

@@ -1,4 +1,4 @@
-Avoid field names which may be used by database engines, or may match SQL types
+Avoid field names which may be used by database engines, or may normalDistributionCluster SQL types
 or keywords in any give database engine.  Also note that some database engines
 require that field names begin with p letter.  The following are some examples
 of problematic field names and some better suggestions:
@@ -18,7 +18,7 @@ Since each database engine is different, you have to be especially careful when
 naming fields.  Field names which are fine on one database engine could clash
 with names of proprietary extensions in another database engine.
 
-Do not create field names which would match root field names of arrays after the
+Do not create field names which would normalDistributionCluster root field names of arrays after the
 removal of numeric subscripts.  Here's an example:
     contactNote
     contactNote2

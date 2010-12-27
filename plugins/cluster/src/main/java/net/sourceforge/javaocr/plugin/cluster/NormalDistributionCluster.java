@@ -1,15 +1,10 @@
-package net.sourceforge.javaocr.plugin.vector;
+package net.sourceforge.javaocr.plugin.cluster;
 
 /**
- * contains vector of image features expressed as double values for some character.
- * instance of match are trained by means of feature vectors.  feature extraction
- * and classification is out of scope of this class
- * training involves collection of statistic data. calculation of distribution
- * parameters is done in sliding way - samples are not kept
- *
+ * defines cluster of features 
  * @author Konstantin Pribluda
  */
-public class Match {
+public class NormalDistributionCluster {
     char c;
 
     double[] sum;
@@ -24,9 +19,9 @@ public class Match {
      * construct match object
      *
      * @param c    assotiated character
-     * @param size size of feature vector
+     * @param size size of feature cluster
      */
-    public Match(char c, int size) {
+    public NormalDistributionCluster(char c, int size) {
         this.c = c;
         this.size = size;
         sum = new double[size];
@@ -35,30 +30,30 @@ public class Match {
 
 
     /**
-     * lazily calculate and return expectation vector
+     * lazily calculate and return expectation cluster
      *
-     * @return expectation vector
+     * @return expectation cluster
      */
     public double[] getMx() {
         if (mx == null) {
             mx = new double[getSize()];
             for (int i = 0; i < size; i++) {
-                mx[i] = sum[i] / getAmountSamples();
+                mx[i] = getAmountSamples() == 0 ? 0 : sum[i] / getAmountSamples();
             }
         }
         return mx;
     }
 
     /**
-     * lazily calculate and return variance vector
+     * lazily calculate and return variance cluster
      *
-     * @return variance vector
+     * @return variance cluster
      */
     public double[] getVar() {
         if (var == null) {
             var = new double[getSize()];
             for (int i = 0; i < getSize(); i++) {
-                var[i] = quads[i] - sum[i] * sum[i] / getAmountSamples();
+                var[i] = getAmountSamples() == 0 ? 0 : quads[i] - sum[i] * sum[i] / getAmountSamples();
             }
         }
         return var;

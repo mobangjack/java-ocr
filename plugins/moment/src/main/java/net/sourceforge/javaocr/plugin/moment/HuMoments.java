@@ -1,6 +1,7 @@
 package net.sourceforge.javaocr.plugin.moment;
 
 import net.sourceforge.javaocr.Image;
+import net.sourceforge.javaocr.cluster.FeatureExtractor;
 
 /**
  * class encapsulate Hu moment computations. See Gonzalez/Woods, Digital Image Processing, Prentice Hall
@@ -10,10 +11,10 @@ import net.sourceforge.javaocr.Image;
  * pages 44-46
  * <p/>
  */
-public class HuMoments {
+public class HuMoments implements FeatureExtractor {
 
 
-    public static double[] compute(Image image) {
+    public double[] extract(Image image) {
 
 
         // m00 - used to normalise moments
@@ -32,7 +33,6 @@ public class HuMoments {
         RawMomentFilter M01 = new RawMomentFilter(0, 1);
         M01.process(image);
         double m01 = M01.getMoment();
-     
 
 
         // ready to compute image weight center, will be used for central moments computation
@@ -40,7 +40,7 @@ public class HuMoments {
         double yMean = m01 / m00;
         //System.err.println("xmean: " + xMean + " ymean: " + yMean);
 
-        
+
         // Phi1 -> n20 + n02
         CentralMomentFilter N20 = new CentralMomentFilter(2, 0, xMean, yMean);
         CentralMomentFilter N02 = new CentralMomentFilter(0, 2, xMean, yMean);
@@ -104,4 +104,14 @@ public class HuMoments {
 
         return moments;
     }
+
+    /**
+     * tehre are 7 momemts defined
+     *
+     * @return
+     */
+    public int getSize() {
+        return 7;
+    }
+
 }

@@ -6,7 +6,7 @@
         <artifactId>javaocr-plugins-parent</artifactId>
         <version>1.102-SNAPSHOT</version>
     </parent>
-    <artifactId>javaocr-plugin-vector</artifactId>
+    <artifactId>javaocr-plugin-cluster</artifactId>
     <name>Feature vector plugin</name>
     <description>
         Performs image matching based on feature vectors.  One example of those
