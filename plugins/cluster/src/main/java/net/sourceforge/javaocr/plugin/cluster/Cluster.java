@@ -9,7 +9,12 @@ import net.sourceforge.javaocr.cluster.Metric;
  * @author Konstantin Pribluda
  */
 public interface Cluster extends Metric {
-    
+
+    /**
+     * centroid of cluster
+     * @return  centroid of cluster
+     */
+    public double[] center();
     /**
      * train cluster with feature vector
      *
@@ -17,11 +22,5 @@ public interface Cluster extends Metric {
      */
     public void train(double[] features);
 
-    /**
-     * distance between feature vector and cluster
-     *
-     * @param features features extracted from image
-     * @return distance meassure
-     */
-    public double distance(double features[]);
+
 }

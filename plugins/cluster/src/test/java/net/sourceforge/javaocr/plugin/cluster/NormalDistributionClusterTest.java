@@ -32,7 +32,7 @@ public class NormalDistributionClusterTest extends TestCase {
             }
         };
 
-        for (double mx : normalDistributionCluster.getMx())
+        for (double mx : normalDistributionCluster.center())
             assertEquals(0d, mx);
 
         for (double var : normalDistributionCluster.getVar())
@@ -50,7 +50,7 @@ public class NormalDistributionClusterTest extends TestCase {
             }
         };;
 
-        assertEquals(5, normalDistributionCluster.getMx().length);
+        assertEquals(5, normalDistributionCluster.center().length);
         assertEquals(5, normalDistributionCluster.getVar().length);
         assertEquals(5, normalDistributionCluster.getSum().length);
         assertEquals(5, normalDistributionCluster.getQuads().length);

@@ -33,7 +33,7 @@ public abstract class NormalDistributionCluster implements Cluster {
      *
      * @return expectation cluster
      */
-    public double[] getMx() {
+    public double[] center() {
         if (mx == null) {
             mx = new double[getDimensions()];
             for (int i = 0; i < getDimensions(); i++) {

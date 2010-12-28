@@ -26,6 +26,6 @@ public class EuclidianDistanceCluster extends NormalDistributionCluster {
     }
 
     double computeDimension(double dimension, int i) {
-        return Math.pow(getMx()[i] - dimension, 2);
+        return Math.pow(center()[i] - dimension, 2);
     }
 }
