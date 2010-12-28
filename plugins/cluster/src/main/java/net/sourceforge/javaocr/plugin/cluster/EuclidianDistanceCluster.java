@@ -2,6 +2,7 @@ package net.sourceforge.javaocr.plugin.cluster;
 
 /**
  * cluster calculating euclidian distance
+ *
  * @author Konstantin Pribluda
  */
 public class EuclidianDistanceCluster extends NormalDistributionCluster {
@@ -18,9 +19,13 @@ public class EuclidianDistanceCluster extends NormalDistributionCluster {
 
     public double distance(double[] features) {
         double cumulated = 0;
-        for(int i = 0; i < getDimensions(); i++) {
-            cumulated += Math.pow(getMx()[i] - features[i],2);
+        for (int i = 0; i < getDimensions(); i++) {
+            cumulated += computeDimension(features[i], i);
         }
         return Math.sqrt(cumulated);
+    }
+
+    double computeDimension(double dimension, int i) {
+        return Math.pow(getMx()[i] - dimension, 2);
     }
 }

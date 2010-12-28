@@ -17,7 +17,8 @@ public class HuMomentsTest extends TestCase {
     public void testThat7MomentsAreDelivered() {
         byte[] data = new byte[]{0, 1};
         Image image = new ByteImage(data, 1, 2);
-        final double[] moments = HuMoments.compute(image);
+
+        final double[] moments = (new HuMoments()).extract(image);
         assertEquals(7, moments.length);
        
     }
@@ -37,10 +38,10 @@ public class HuMomentsTest extends TestCase {
         Image right = new PixelImage(data, 4, 4, 1, 0, 3, 4);
         Image wrap = new PixelImage(data, 4, 4, 1, 0, 2, 4);
 
-        double[] momentsFull = HuMoments.compute(full);
-        double[] momentsLeft = HuMoments.compute(left);
-        double[] momentsRight = HuMoments.compute(right);
-        double[] momentsWrap = HuMoments.compute(wrap);
+        double[] momentsFull = (new HuMoments()).extract(full);
+        double[] momentsLeft = (new HuMoments()).extract(left);
+        double[] momentsRight = (new HuMoments()).extract(right);
+        double[] momentsWrap = (new HuMoments()).extract(wrap);
 
         printMoment("full :\t", momentsFull);
         printMoment("left :\t", momentsLeft);
@@ -70,10 +71,10 @@ public class HuMomentsTest extends TestCase {
         Image bottom = new PixelImage(data, 4, 4, 0, 1, 4, 3);
         Image wrap = new PixelImage(data, 4, 4, 0, 1, 4, 2);
 
-        double[] momentsFull = HuMoments.compute(full);
-        double[] momentsTop = HuMoments.compute(top);
-        double[] momentsBottom = HuMoments.compute(bottom);
-        double[] momentsWrap = HuMoments.compute(wrap);
+        double[] momentsFull = (new HuMoments()).extract(full);
+        double[] momentsTop = (new HuMoments()).extract(top);
+        double[] momentsBottom = (new HuMoments()).extract(bottom);
+        double[] momentsWrap = (new HuMoments()).extract(wrap);
 
         printMoment("full:\t", momentsFull);
         printMoment("top:\t", momentsTop);
@@ -111,8 +112,8 @@ public class HuMomentsTest extends TestCase {
         Image full = new PixelImage(data, 4, 4);
         Image mirror = new PixelImage(mirrorData, 4, 4);
 
-        double[] moments = HuMoments.compute(full);
-        double[] momentsMirror = HuMoments.compute(mirror);
+        double[] moments = (new HuMoments()).extract(full);
+        double[] momentsMirror = (new HuMoments()).extract(mirror);
 
         System.err.println("-----------------");
         printMoment("full:\t", moments);
@@ -148,8 +149,8 @@ public class HuMomentsTest extends TestCase {
         Image rotated = new PixelImage(rotatedData, 4, 4);
 
 
-        double[] moments = HuMoments.compute(full);
-        double[] momentsRotated = HuMoments.compute(rotated);
+        double[] moments = (new HuMoments()).extract(full);
+        double[] momentsRotated = (new HuMoments()).extract(rotated);
 
         System.err.println("-----------------");
         printMoment("full:\t", moments);

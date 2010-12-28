@@ -1,7 +1,8 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
 /**
- * cluster woth normally distributed features.
+ * cluster woth normally distributed features. this abstract provides computation of
+ * expectation and standart deviation without storing sample values 
  *
  * @author Konstantin Pribluda
  */
