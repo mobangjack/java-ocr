@@ -52,7 +52,7 @@ public abstract class NormalDistributionCluster implements Cluster {
         if (var == null) {
             var = new double[getDimensions()];
             for (int i = 0; i < getDimensions(); i++) {
-                var[i] = getAmountSamples() == 0 ? 0 : quads[i] - sum[i] * sum[i] / getAmountSamples();
+                var[i] = getAmountSamples() == 0 ? 0 : (quads[i] - sum[i] * sum[i]/getAmountSamples()) / getAmountSamples();
             }
         }
         return var;

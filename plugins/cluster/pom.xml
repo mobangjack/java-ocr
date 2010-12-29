@@ -9,6 +9,14 @@
     <artifactId>javaocr-plugin-cluster</artifactId>
     <name>Feature vector plugin</name>
     <description>
-        Performs image matching based on cluster analysis techniques
+        Performs image matching based on cluster analysis techniques. Use commons-math
+        for matrix computations
     </description>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math</artifactId>
+            <version>2.1</version>
+        </dependency>        
+    </dependencies>
 </project>
