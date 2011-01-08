@@ -157,6 +157,20 @@ public interface Image {
     Image chisel(int fromX, int fromY, int width, int height);
 
     /**
+     * full row out of image
+     * @param y  coordinate
+     * @return row image
+     */
+    Image row(int y);
+
+    /**
+     * full column out of image
+     * @param x coordinate
+     * @return   column image
+     */
+    Image column(int x);
+    
+    /**
      * aspect ration of this image
      * TODO: do we actually need this?
      *

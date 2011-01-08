@@ -275,4 +275,11 @@ public abstract class AbstractLinearImage implements Image {
     }
 
 
+    public Image row(int y) {
+        return chisel(0, y, width, 1);
+    }
+
+    public Image column(int x) {
+        return chisel(x, 0, 1, height);
+    }
 }
