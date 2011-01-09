@@ -145,7 +145,7 @@ public interface Image {
     void flip(Image dst);
 
     /**
-     * chisel out subimage out of original one.  be carefull with dimensions -
+     * chisel out sub-image out of original one.  be careful with dimensions -
      * no internal checks are done. Operation works in place and no data is copied.
      *
      * @param fromX    subimage origin X

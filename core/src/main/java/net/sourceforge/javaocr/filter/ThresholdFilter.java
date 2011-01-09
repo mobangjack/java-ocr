@@ -4,7 +4,7 @@ import net.sourceforge.javaocr.Image;
 
 /**
  * perform threshold filtering
- * TODO: do we need to make this via threshold? Yep - 'if' is still faster than lookup in narray
+ * TODO: do we need to make this via threshold? Yep - 'if' is still faster than lookup in array
  *
  * @author Konstantin Pribluda
  */
