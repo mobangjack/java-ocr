@@ -102,4 +102,16 @@ public class SauvolaBinarisationFilter implements ImageFilter {
             }
         }
     }
+
+    public int getAbove() {
+        return above;
+    }
+
+    public int getBelow() {
+        return below;
+    }
+
+    public int getHalfWindow() {
+        return halfWindow;
+    }
 }

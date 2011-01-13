@@ -7,7 +7,8 @@ import org.apache.commons.math.linear.RealMatrix;
 
 /**
  * cluster providing Mahalanobis distance meassure
- * ( do not ask me to pronouce this ) 
+ * ( do not ask me to pronouce this )
+ *
  * @author Konstantin Pribluda
  */
 public class MahalanobisDistanceCluster extends NormalDistributionCluster {
@@ -18,12 +19,23 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
     /**
      * constructs   mahalanobis distance cluster
      *
-     * @param c    assotiated character
-     * @param size size of feature cluster
+     * @param dimensions amount of dimensions in  cluster
      */
     public MahalanobisDistanceCluster(int dimensions) {
         super(dimensions);
         sumxy = new double[dimensions][dimensions];
+    }
+
+    /**
+     * convenience constructor to instantiate trained distance cluster
+     *
+     * @param mx     expectation walues
+     * @param var    variance values
+     * @param invcov inverse covariance matrix
+     */
+    public MahalanobisDistanceCluster(double[] mx, double[] var, double[][] invcov) {
+        super(mx, var);
+        this.invcov = invcov;
     }
 
     /**
@@ -34,14 +46,14 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      */
     public double distance(double[] features) {
         // if we were invalidated,  recalculate matrix
-        if(invcov == null) {
+        if (invcov == null) {
             invcov = matrix();
         }
         // calculate mahalanubis distance
         double cumulated = 0;
-        for(int i = 0; i < getDimensions(); i++) {
+        for (int i = 0; i < getDimensions(); i++) {
             double xmxc = 0;
-            for(int j = 0; j < getDimensions(); j++) {
+            for (int j = 0; j < getDimensions(); j++) {
                 xmxc += invcov[j][i] * (features[j] - center()[j]);
             }
             cumulated += xmxc * (features[i] - center()[i]);
@@ -69,29 +81,34 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
 
     /**
      * calculate covariance matrix  and invert it
+     *
      * @return
      */
     double[][] matrix() {
         double cov[][] = new double[getDimensions()][getDimensions()];
-       // System.out.println("covariance:");
-       // StringBuilder var = new StringBuilder();
+        // System.out.println("covariance:");
+        // StringBuilder var = new StringBuilder();
         for (int i = 0; i < getDimensions(); i++) {
-           // var.append(getVar()[i]).append("\t");
-          //  StringBuilder sb = new StringBuilder();
+            // var.append(getVar()[i]).append("\t");
+            //  StringBuilder sb = new StringBuilder();
             for (int j = 0; j < getDimensions(); j++) {
 
                 cov[i][j] += sumxy[i][j] / getAmountSamples() - center()[i] * center()[j];
-             //   sb.append(cov[i][j]).append("\t");
+                //   sb.append(cov[i][j]).append("\t");
             }
-           // System.out.println(sb.toString());
+            // System.out.println(sb.toString());
         }
-       // System.out.println("variance:");
-       // System.out.println(var.toString());
+        // System.out.println("variance:");
+        // System.out.println(var.toString());
         RealMatrix a = new Array2DRowRealMatrix(cov);
-        DecompositionSolver solver = new LUDecompositionImpl(a,Double.MIN_VALUE).getSolver();
+        DecompositionSolver solver = new LUDecompositionImpl(a, Double.MIN_VALUE).getSolver();
 
         final RealMatrix inverse = solver.getInverse();
-       // System.out.println("inverse:" + inverse);
+        // System.out.println("inverse:" + inverse);
         return inverse.getData();
+    }
+
+    public double[][] getInvcov() {
+        return invcov;
     }
 }

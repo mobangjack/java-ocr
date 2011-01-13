@@ -1,7 +1,7 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
 /**
- * cluster woth normally distributed features. this abstract provides computation of
+ * cluster with normally distributed features. this abstract provides computation of
  * expectation and standart deviation without storing sample values 
  *
  * @author Konstantin Pribluda
@@ -18,8 +18,8 @@ public abstract class NormalDistributionCluster implements Cluster {
     /**
      * constructs
      *
-     * @param c    assotiated character
-     * @param size size of feature cluster
+     * @param dimensions  amount of dimenstions
+
      */
     public NormalDistributionCluster(int dimensions) {
         this.dimensions = dimensions;
@@ -27,6 +27,15 @@ public abstract class NormalDistributionCluster implements Cluster {
         quads = new double[dimensions];
     }
 
+    /**
+     * convenience constructor to create already trained distribution cluster
+     * @param mx precooked expectation values
+     * @param var precooked variance
+     */
+    public NormalDistributionCluster(double[] mx, double[] var) {
+        this.mx = mx;
+        this.var = var;
+    }
 
     /**
      * lazily calculate and return expectation cluster
