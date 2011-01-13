@@ -41,15 +41,15 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
     /**
      * calculate mahalanubis distance
      *
-     * @param features amoutn of fweatures shall correspond to amount dimenstions
-     * @return
+     * @param features amount of features shall correspond to amount dimensions
+     * @return  calculated distance
      */
     public double distance(double[] features) {
         // if we were invalidated,  recalculate matrix
         if (invcov == null) {
             invcov = matrix();
         }
-        // calculate mahalanubis distance
+        // calculate mahalanobis distance
         double cumulated = 0;
         for (int i = 0; i < getDimensions(); i++) {
             double xmxc = 0;
@@ -59,8 +59,10 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
             cumulated += xmxc * (features[i] - center()[i]);
         }
 
-
-        return Math.sqrt(cumulated);
+        //System.out.println("m cumulated:"  + cumulated);
+        //TODO:  why it was negative producing NAN? Is there a mistake? 
+        // does not hurt absoluting it though...
+        return Math.sqrt(Math.abs(cumulated));
     }
 
     /**

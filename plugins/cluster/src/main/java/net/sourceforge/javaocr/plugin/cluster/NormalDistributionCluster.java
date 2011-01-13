@@ -35,6 +35,7 @@ public abstract class NormalDistributionCluster implements Cluster {
     public NormalDistributionCluster(double[] mx, double[] var) {
         this.mx = mx;
         this.var = var;
+        this.dimensions = mx.length;
     }
 
     /**
