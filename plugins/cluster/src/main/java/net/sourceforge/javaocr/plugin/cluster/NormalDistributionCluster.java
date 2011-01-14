@@ -15,6 +15,7 @@ public abstract class NormalDistributionCluster implements Cluster {
 
     int dimensions;
 
+
     /**
      * constructs
      *

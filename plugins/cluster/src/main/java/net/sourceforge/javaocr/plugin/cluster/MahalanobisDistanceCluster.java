@@ -33,8 +33,8 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      * @param var    variance values
      * @param invcov inverse covariance matrix
      */
-    public MahalanobisDistanceCluster(double[] mx, double[] var, double[][] invcov) {
-        super(mx, var);
+    public MahalanobisDistanceCluster(double[] mx, double[][] invcov) {
+        super(mx, null);
         this.invcov = invcov;
     }
 
@@ -42,7 +42,7 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      * calculate mahalanubis distance
      *
      * @param features amount of features shall correspond to amount dimensions
-     * @return  calculated distance
+     * @return calculated distance
      */
     public double distance(double[] features) {
         // if we were invalidated,  recalculate matrix
@@ -113,4 +113,6 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
     public double[][] getInvcov() {
         return invcov;
     }
+
+
 }
