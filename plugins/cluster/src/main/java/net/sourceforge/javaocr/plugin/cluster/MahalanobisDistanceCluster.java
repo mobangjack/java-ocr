@@ -7,7 +7,7 @@ import org.apache.commons.math.linear.RealMatrix;
 
 /**
  * cluster providing Mahalanobis distance meassure
- * ( do not ask me to pronouce this )
+ * ( do not ask me to pronounce this )
  *
  * @author Konstantin Pribluda
  */
@@ -30,7 +30,6 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      * convenience constructor to instantiate trained distance cluster
      *
      * @param mx     expectation walues
-     * @param var    variance values
      * @param invcov inverse covariance matrix
      */
     public MahalanobisDistanceCluster(double[] mx, double[][] invcov) {
@@ -88,20 +87,21 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      */
     double[][] matrix() {
         double cov[][] = new double[getDimensions()][getDimensions()];
-        // System.out.println("covariance:");
-        // StringBuilder var = new StringBuilder();
+        //System.out.println("covariance:");
+        //StringBuilder var = new StringBuilder();
         for (int i = 0; i < getDimensions(); i++) {
-            // var.append(getVar()[i]).append("\t");
-            //  StringBuilder sb = new StringBuilder();
+            //var.append(getVar()[i]).append("\t");
+            //StringBuilder sb = new StringBuilder();
             for (int j = 0; j < getDimensions(); j++) {
 
                 cov[i][j] += sumxy[i][j] / getAmountSamples() - center()[i] * center()[j];
-                //   sb.append(cov[i][j]).append("\t");
+
+                //sb.append(cov[i][j]).append("\t");
             }
-            // System.out.println(sb.toString());
+            //System.out.println(sb.toString());
         }
-        // System.out.println("variance:");
-        // System.out.println(var.toString());
+        //System.out.println("variance:");
+        //System.out.println(var.toString());
         RealMatrix a = new Array2DRowRealMatrix(cov);
         DecompositionSolver solver = new LUDecompositionImpl(a, Double.MIN_VALUE).getSolver();
 

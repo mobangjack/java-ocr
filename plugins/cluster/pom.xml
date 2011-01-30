@@ -7,9 +7,9 @@
         <version>1.102-SNAPSHOT</version>
     </parent>
     <artifactId>javaocr-plugin-cluster</artifactId>
-    <name>Feature vector plugin</name>
+    <name>Cluster analyse plugin</name>
     <description>
-        Performs image matching based on cluster analysis techniques. Use commons-math
+        Performs image matching based on cluster analysis techniques. Uses commons-math
         for matrix computations
     </description>
     <dependencies>
