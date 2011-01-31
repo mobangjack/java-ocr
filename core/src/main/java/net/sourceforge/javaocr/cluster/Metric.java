@@ -19,4 +19,6 @@ public interface Metric {
      * @return amount of dimensions
      */
     int getDimensions();
+
+   
 }

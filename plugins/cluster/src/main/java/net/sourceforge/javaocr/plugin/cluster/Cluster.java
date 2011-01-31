@@ -26,18 +26,5 @@ public interface Cluster extends Metric {
      */
     public void train(double[] features);
 
-    /**
-     * mean distance of cluster members from
-     * middle of the cluster
-     *
-     * @return
-     */
-    public double mx();
-
-    /**
-     * variance of cluster members distance
-     *
-     * @return
-     */
-    public double var();
+  
 }

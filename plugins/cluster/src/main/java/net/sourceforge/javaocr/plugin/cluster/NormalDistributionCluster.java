@@ -117,4 +117,12 @@ public abstract class NormalDistributionCluster implements Cluster {
     public int getDimensions() {
         return dimensions;
     }
+
+    public double mx() {
+        return 0;
+    }
+
+    public double var() {
+        return 0;  
+    }
 }
