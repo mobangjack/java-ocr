@@ -11,10 +11,11 @@ import net.sourceforge.javaocr.filter.AbstractSinglePixelFilter;
  */
 public class FreeSpacesExtractor extends AbstractSinglePixelFilter implements FeatureExtractor {
     int[] workingScan;
-    // cound ot found congituous spaces
+    // count ot found contiguous spaces
     int spaceCount;
     // index into processing row
     int index;
+    //whether we are on a free scan
     boolean free = false;
     // number of currently scanned space group
     int currentSpaceNumber;
@@ -50,6 +51,11 @@ public class FreeSpacesExtractor extends AbstractSinglePixelFilter implements Fe
         super.process(image);
     }
 
+    /**
+     * process single pixel. a lot of voodoo magic emerged  from
+     * test driven development - it is correct but not designed  
+     * @param image
+     */
     @Override
     protected void processPixel(Image image) {
         // in case next pixel is free
