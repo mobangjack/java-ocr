@@ -1,7 +1,6 @@
 package net.sourceforge.javaocr.filter;
 
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.ImageFilter;
 import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
@@ -20,20 +19,18 @@ import net.sourceforge.javaocr.ocr.PixelImage;
  *
  * @author Konstantin Pribluda
  */
-public class SauvolaBinarisationFilter implements ImageFilter {
+public class SauvolaBinarisationFilter extends MedianFilter {
 
-    final int halfWindow;
+
     final int above;
     final int below;
     final int range;
     final double weight;
-    final int squareWindow;
+
     Image destination;
-    private PixelImage augmentedMeanImage;
     private PixelImage augmentedSquaresImage;
-    private IntregralImageFilter integralImageFilter;
     private SquaredIntergalImageFilter squaredIntergalImageFilter;
-    private Image meanImage;
+
     private Image squaresImage;
 
     /**
@@ -45,61 +42,49 @@ public class SauvolaBinarisationFilter implements ImageFilter {
      * @param window      computing Window size
      */
     public SauvolaBinarisationFilter(int above, int below, Image destination, int maxValue, double weight, int window) {
+        super(destination, window);
         this.above = above;
         this.below = below;
-        this.destination = destination;
+
         this.range = maxValue / 2;
         this.weight = weight;
-        // we need those for all the computations, so precompute them
-        this.halfWindow = window / 2;
-        this.squareWindow = halfWindow * halfWindow * 4;
+
 
         // augmented images have empty borders for kernel processing
-        augmentedMeanImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
         augmentedSquaresImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
-
-
-        meanImage = augmentedMeanImage.chisel(halfWindow, halfWindow, destination.getWidth(), destination.getHeight());
         squaresImage = augmentedSquaresImage.chisel(halfWindow, halfWindow, destination.getWidth(), destination.getHeight());
-
-        integralImageFilter = new IntregralImageFilter(meanImage);
         squaredIntergalImageFilter = new SquaredIntergalImageFilter(squaresImage);
     }
 
-
+    /**
+     * traversal will be done bt median filter, actual processing delegated
+     * to derived method
+     *
+     * @param image
+     */
+    @Override
     public void process(Image image) {
-
-        // calculate means
-        integralImageFilter.process(image);
-        // and squares
+        // compute squares here
         squaredIntergalImageFilter.process(image);
 
-        final int height = image.getHeight();
-        final int width = image.getWidth();
+        super.process(image);
+    }
 
-        // since processing result on image borders is  invalid,
-        // we just ignore them for sake of performance.  caller shall take care about proper padding
-        final int maxY = height - halfWindow;
-        final int maxX = width - halfWindow;
-        for (int y = halfWindow; y < maxY; y++) {
+    @Override
+    protected int computePixel(Image image, int y, int x) {
+        double mean = super.computePixel(image, y, x);
 
-            for (int x = halfWindow; x < maxX; x++) {
-                double mean = (meanImage.get(x - halfWindow, y - halfWindow) + meanImage.get(x + halfWindow, y + halfWindow) -
-                        meanImage.get(x + halfWindow, y - halfWindow) - meanImage.get(x - halfWindow, y + halfWindow)) / squareWindow;
+        double meanSquaresSum = (squaresImage.get(x - halfWindow, y - halfWindow) + squaresImage.get(x + halfWindow, y + halfWindow) -
+                squaresImage.get(x + halfWindow, y - halfWindow) - squaresImage.get(x - halfWindow, y + halfWindow)) / squareWindow;
+        // this is our supercool local variance
+        double variance = meanSquaresSum - mean * mean;
 
-                double meanSquaresSum = (squaresImage.get(x - halfWindow, y - halfWindow) + squaresImage.get(x + halfWindow, y + halfWindow) -
-                        squaresImage.get(x + halfWindow, y - halfWindow) - squaresImage.get(x - halfWindow, y + halfWindow)) / squareWindow;
-                // this is our supercool local variance
-                double variance = meanSquaresSum - mean * mean;
+        double thr = mean * (1 + weight * (Math.sqrt(variance) / range - 1));
 
-                double thr = mean * (1 + weight * (Math.sqrt(variance) / range - 1));
-
-                if (image.get(x, y) > thr) {
-                    destination.put(x, y, above);
-                } else {
-                    destination.put(x, y, below);
-                }
-            }
+        if (image.get(x, y) > thr) {
+            return above;
+        } else {
+            return below;
         }
     }
 

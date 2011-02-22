@@ -3,10 +3,10 @@ package net.sourceforge.javaocr.filter;
 import net.sourceforge.javaocr.Image;
 
 /**
- * computes integral image.   result os stored in  the allocated image
+ * computes integral image.   result is stored in  the allocated image
  * to be retrieved.  Basically it is sum of all pixels from top-left part
  * of image relative to current pixel. this filter can work in place, but
- * intendet usage tells us to create and cache destination image
+ * intended usage tells us to create and cache destination image
  */
 public class IntregralImageFilter extends AbstractIntegralImageFilter {
 
