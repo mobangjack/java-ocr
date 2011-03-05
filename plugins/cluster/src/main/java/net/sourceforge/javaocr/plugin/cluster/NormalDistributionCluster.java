@@ -2,7 +2,7 @@ package net.sourceforge.javaocr.plugin.cluster;
 
 /**
  * cluster with normally distributed features. this abstract provides computation of
- * expectation and standart deviation without storing sample values 
+ * expectation and standart deviation without storing sample values
  *
  * @author Konstantin Pribluda
  */
@@ -17,10 +17,15 @@ public abstract class NormalDistributionCluster implements Cluster {
 
 
     /**
+     * default constructor for sake of serialisation frameworks
+     */
+    protected NormalDistributionCluster() {
+    }
+
+    /**
      * constructs
      *
-     * @param dimensions  amount of dimenstions
-
+     * @param dimensions amount of dimenstions
      */
     public NormalDistributionCluster(int dimensions) {
         this.dimensions = dimensions;
@@ -30,7 +35,8 @@ public abstract class NormalDistributionCluster implements Cluster {
 
     /**
      * convenience constructor to create already trained distribution cluster
-     * @param mx precooked expectation values
+     *
+     * @param mx  precooked expectation values
      * @param var precooked variance
      */
     public NormalDistributionCluster(double[] mx, double[] var) {
@@ -63,7 +69,7 @@ public abstract class NormalDistributionCluster implements Cluster {
         if (var == null) {
             var = new double[getDimensions()];
             for (int i = 0; i < getDimensions(); i++) {
-                var[i] = getAmountSamples() == 0 ? 0 : (quads[i] - sum[i] * sum[i]/getAmountSamples()) / getAmountSamples();
+                var[i] = getAmountSamples() == 0 ? 0 : (quads[i] - sum[i] * sum[i] / getAmountSamples()) / getAmountSamples();
             }
         }
         return var;
@@ -118,11 +124,22 @@ public abstract class NormalDistributionCluster implements Cluster {
         return dimensions;
     }
 
-    public double mx() {
-        return 0;
+    public double[] getMx() {
+        return mx;
     }
 
-    public double var() {
-        return 0;  
+    public void setMx(double[] mx) {
+        this.mx = mx;
+        if (mx != null) {
+            setDimensions(mx.length);
+        }
+    }
+
+    public void setVar(double[] var) {
+        this.var = var;
+    }
+
+    public void setDimensions(int dimensions) {
+        this.dimensions = dimensions;
     }
 }

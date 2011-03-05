@@ -17,6 +17,12 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
     double invcov[][];
 
     /**
+     * default constructor for sake of serialisation frameworks
+     */
+    public MahalanobisDistanceCluster() {
+    }
+
+    /**
      * constructs   mahalanobis distance cluster
      *
      * @param dimensions amount of dimensions in  cluster
@@ -114,5 +120,7 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
         return invcov;
     }
 
-
+    public void setInvcov(double[][] invcov) {
+        this.invcov = invcov;
+    }
 }
