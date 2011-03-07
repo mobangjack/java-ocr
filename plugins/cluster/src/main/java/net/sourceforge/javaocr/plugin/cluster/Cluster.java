@@ -3,10 +3,9 @@ package net.sourceforge.javaocr.plugin.cluster;
 import net.sourceforge.javaocr.cluster.Metric;
 
 /**
- * cluster represents some  feature vectors belonging together to
- * image class. cluster can be trained with samples beloged to this class
+ * cluster represents some  feature vectors belonging together.
+ * cluster can be trained with samples
  * <p/>
- * mx and var of cluster membvers can be used to measure quality of cluster match
  *
  * @author Konstantin Pribluda
  */

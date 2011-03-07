@@ -11,7 +11,7 @@ import org.apache.commons.math.linear.RealMatrix;
  *
  * @author Konstantin Pribluda
  */
-public class MahalanobisDistanceCluster extends NormalDistributionCluster {
+public class MahalanobisDistanceCluster extends AbstractBaseCluster {
 
     double[][] sumxy;
     double invcov[][];
@@ -39,7 +39,7 @@ public class MahalanobisDistanceCluster extends NormalDistributionCluster {
      * @param invcov inverse covariance matrix
      */
     public MahalanobisDistanceCluster(double[] mx, double[][] invcov) {
-        super(mx, null);
+        super(mx);
         this.invcov = invcov;
     }
 

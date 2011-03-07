@@ -6,14 +6,9 @@ package net.sourceforge.javaocr.plugin.cluster;
  *
  * @author Konstantin Pribluda
  */
-public abstract class NormalDistributionCluster implements Cluster {
-    double[] sum;
+public abstract class NormalDistributionCluster extends AbstractBaseCluster {
     double[] quads;
-    double[] mx;
     double[] var;
-    int amountSamples;
-
-    int dimensions;
 
 
     /**
@@ -28,8 +23,7 @@ public abstract class NormalDistributionCluster implements Cluster {
      * @param dimensions amount of dimenstions
      */
     public NormalDistributionCluster(int dimensions) {
-        this.dimensions = dimensions;
-        sum = new double[dimensions];
+        super(dimensions);
         quads = new double[dimensions];
     }
 
@@ -40,24 +34,8 @@ public abstract class NormalDistributionCluster implements Cluster {
      * @param var precooked variance
      */
     public NormalDistributionCluster(double[] mx, double[] var) {
-        this.mx = mx;
+        super(mx);
         this.var = var;
-        this.dimensions = mx.length;
-    }
-
-    /**
-     * lazily calculate and return expectation cluster
-     *
-     * @return expectation cluster
-     */
-    public double[] center() {
-        if (mx == null) {
-            mx = new double[getDimensions()];
-            for (int i = 0; i < getDimensions(); i++) {
-                mx[i] = getAmountSamples() == 0 ? 0 : sum[i] / getAmountSamples();
-            }
-        }
-        return mx;
     }
 
     /**
@@ -69,7 +47,7 @@ public abstract class NormalDistributionCluster implements Cluster {
         if (var == null) {
             var = new double[getDimensions()];
             for (int i = 0; i < getDimensions(); i++) {
-                var[i] = getAmountSamples() == 0 ? 0 : (quads[i] - sum[i] * sum[i] / getAmountSamples()) / getAmountSamples();
+                var[i] = getAmountSamples() == 0 ? 0 : (quads[i] - getSum()[i] * getSum()[i] / getAmountSamples()) / getAmountSamples();
             }
         }
         return var;
@@ -82,14 +60,9 @@ public abstract class NormalDistributionCluster implements Cluster {
      * @param samples
      */
     public void train(double samples[]) {
-
-        amountSamples++;
-        // reset mx and variance
-        mx = null;
+        super.train(samples);
         var = null;
-
         for (int i = 0; i < getDimensions(); i++) {
-            sum[i] += samples[i];
             quads[i] += samples[i] * samples[i];
         }
     }
@@ -103,43 +76,9 @@ public abstract class NormalDistributionCluster implements Cluster {
         this.quads = quads;
     }
 
-    public double[] getSum() {
-        return sum;
-    }
-
-    public void setSum(double[] sum) {
-        this.sum = sum;
-    }
-
-
-    public int getAmountSamples() {
-        return amountSamples;
-    }
-
-    public void setAmountSamples(int amountSamples) {
-        this.amountSamples = amountSamples;
-    }
-
-    public int getDimensions() {
-        return dimensions;
-    }
-
-    public double[] getMx() {
-        return mx;
-    }
-
-    public void setMx(double[] mx) {
-        this.mx = mx;
-        if (mx != null) {
-            setDimensions(mx.length);
-        }
-    }
 
     public void setVar(double[] var) {
         this.var = var;
     }
 
-    public void setDimensions(int dimensions) {
-        this.dimensions = dimensions;
-    }
 }
