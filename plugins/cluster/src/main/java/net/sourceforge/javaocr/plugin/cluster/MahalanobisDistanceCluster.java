@@ -1,9 +1,6 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
-import org.apache.commons.math.linear.Array2DRowRealMatrix;
-import org.apache.commons.math.linear.DecompositionSolver;
-import org.apache.commons.math.linear.LUDecompositionImpl;
-import org.apache.commons.math.linear.RealMatrix;
+import org.apache.commons.math.linear.*;
 
 /**
  * cluster providing Mahalanobis distance meassure
@@ -93,27 +90,25 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
      */
     double[][] matrix() {
         double cov[][] = new double[getDimensions()][getDimensions()];
-        //System.out.println("covariance:");
-        //StringBuilder var = new StringBuilder();
         for (int i = 0; i < getDimensions(); i++) {
-            //var.append(getVar()[i]).append("\t");
-            //StringBuilder sb = new StringBuilder();
             for (int j = 0; j < getDimensions(); j++) {
-
                 cov[i][j] += sumxy[i][j] / getAmountSamples() - center()[i] * center()[j];
-
-                //sb.append(cov[i][j]).append("\t");
             }
-            //System.out.println(sb.toString());
         }
-        //System.out.println("variance:");
-        //System.out.println(var.toString());
+
         RealMatrix a = new Array2DRowRealMatrix(cov);
         DecompositionSolver solver = new LUDecompositionImpl(a, Double.MIN_VALUE).getSolver();
-
-        final RealMatrix inverse = solver.getInverse();
-        // System.out.println("inverse:" + inverse);
-        return inverse.getData();
+        try {
+            final RealMatrix inverse = solver.getInverse();
+            return inverse.getData();
+        } catch(SingularMatrixException ex) {
+            // well, matri is singular - return  identity instead
+            double[][] identity = new double[getDimensions()][getDimensions()];
+            for(int i = 0; i < getDimensions(); i++) {
+                identity[i][i] = 1;
+            }
+            return identity;
+        }
     }
 
     public double[][] getInvcov() {

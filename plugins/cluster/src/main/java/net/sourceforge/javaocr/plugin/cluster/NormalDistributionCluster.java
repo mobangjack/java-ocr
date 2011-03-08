@@ -6,7 +6,7 @@ package net.sourceforge.javaocr.plugin.cluster;
  *
  * @author Konstantin Pribluda
  */
-public abstract class NormalDistributionCluster extends AbstractBaseCluster {
+public abstract class NormalDistributionCluster extends EuclidianDistanceCluster {
     double[] quads;
     double[] var;
 

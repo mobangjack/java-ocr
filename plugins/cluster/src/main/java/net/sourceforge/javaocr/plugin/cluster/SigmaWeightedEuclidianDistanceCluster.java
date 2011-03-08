@@ -3,7 +3,7 @@ package net.sourceforge.javaocr.plugin.cluster;
 /**
  * normalise  dimenstion by sigma
  */
-public class SigmaWeightedEuclidianDistanceCluster extends EuclidianDistanceCluster {
+public class SigmaWeightedEuclidianDistanceCluster extends NormalDistributionCluster {
     /**
      * create cluster calculating euclidian distance between center and feature
      * vector

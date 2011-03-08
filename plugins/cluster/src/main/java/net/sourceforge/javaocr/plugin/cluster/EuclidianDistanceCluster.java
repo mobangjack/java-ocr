@@ -5,7 +5,10 @@ package net.sourceforge.javaocr.plugin.cluster;
  *
  * @author Konstantin Pribluda
  */
-public class EuclidianDistanceCluster extends NormalDistributionCluster {
+public class EuclidianDistanceCluster extends AbstractBaseCluster {
+    public EuclidianDistanceCluster() {
+    }
+
     /**
      * create cluster calculating euclidian distance between center and feature
      * vector
@@ -15,6 +18,10 @@ public class EuclidianDistanceCluster extends NormalDistributionCluster {
      */
     public EuclidianDistanceCluster(int dimensions) {
         super(dimensions);
+    }
+
+    public EuclidianDistanceCluster(double[] mx) {
+        super(mx);
     }
 
     public double distance(double[] features) {
