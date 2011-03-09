@@ -1,5 +1,7 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
+import java.util.List;
+
 /**
  * base cluster functionality. provides mx
  *
@@ -88,5 +90,20 @@ public abstract class AbstractBaseCluster implements Cluster {
 
     public void setSum(double[] sum) {
         this.sum = sum;
+    }
+
+    /**
+     * calculate maximal distance for group from center
+     * @param samples sample group, sample size shall correspond to cluster dimensions
+     * @return
+     */
+    public double radius(List<double[]> samples) {
+        double max = 0;
+        for(double[] sample: samples) {
+            final double dist = distance(sample);
+            if(dist > max)
+                max = dist;
+        }
+        return max;
     }
 }
