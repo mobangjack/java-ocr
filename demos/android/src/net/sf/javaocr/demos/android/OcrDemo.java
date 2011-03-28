@@ -385,7 +385,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 moments = new ArrayList<double[]>();
                 // compute moments  and store them into array
                 for (Image glyph : recognition) {
-                    final double[] hu = HuMoments.compute(glyph);
+                    final double[] hu = (new HuMoments()).extract(glyph);
                     moments.add(hu);
                     StringBuilder builder = new StringBuilder();
 

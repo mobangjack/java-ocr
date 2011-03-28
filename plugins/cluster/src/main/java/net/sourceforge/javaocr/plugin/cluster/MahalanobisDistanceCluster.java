@@ -102,6 +102,7 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
             final RealMatrix inverse = solver.getInverse();
             return inverse.getData();
         } catch(SingularMatrixException ex) {
+            System.err.println("singular - return identity!!!!!!");
             // well, matrix is singular - return identity instead
             double[][] identity = new double[getDimensions()][getDimensions()];
             for(int i = 0; i < getDimensions(); i++) {
