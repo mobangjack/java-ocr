@@ -2,6 +2,7 @@ package net.sf.javaocr.demos.android;
 
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,35 +20,68 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import net.sourceforge.javaocr.Image;
-import net.sourceforge.javaocr.filter.HistogramFilter;
+import net.sourceforge.javaocr.cluster.FeatureExtractor;
+import net.sourceforge.javaocr.filter.MedianFilter;
+import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 import net.sourceforge.javaocr.ocr.*;
+import net.sourceforge.javaocr.plugin.cluster.Match;
+import net.sourceforge.javaocr.plugin.cluster.MetricMatcher;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Simple OCR demonstrator. Just tries to match recognised text.
+ *
  * @author Konstantin Pribluda
  */
 public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.AutoFocusCallback, Camera.PreviewCallback, View.OnClickListener {
+    // black and white pixels
+    public static final int WHITE = 0xFFFFFFFF;
+    public static final int BLACK = 0xff000000;
 
-        // hosts preview image
+    // filter window size
+    public static final int WINDOW_SIZE = 50;
+
+    // sauvola filter weight - higher values lover threshold,
+    // practical - 0.2 to 0.5
+    // 0 means just mean value
+    public static final double SAUVOLA_WEIGHT = 0.20;
+    private static final String LOG_TAG = "ocrdemo";
+    private SauvolaBinarisationFilter sauvolaBinarisationFilter;
+
+
+    // window size to be ued by median filter
+    private static final int MEDIAN_WINDOW = 3;
+
+    // median filter will be used to kill saltand pepper inside images
+    // to allow crisper setting of sauvoval filter
+    private MedianFilter medianFilter;
+
+    // drawing surface for entire image
+    private SurfaceView surfaceView;
+    // hosts preview image
     private SurfaceHolder preview;
 
 
     Camera camera;
     private Camera.Parameters cameraParameters;
+    private Camera.Size previewSize;
 
     boolean previewActive = false;
 
 
+    // viewfinder area
     private View scanArea;
+    // work area disaplys processed image and glyph borders
+    private ImageView workArea;
+    // overlay area looks over entire image
     private View overlay;
-    private Camera.Size previewSize;
+
+
     // coordinates for and viewfinder for extraction of subimage
     private int overlayH;
     private int overlayW;
@@ -57,15 +92,15 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
     private float scaleW;
     private float scaleH;
+
     private int bitmapW;
     private int bitmapH;
 
     private PixelImage processImage;
-    private SurfaceView surfaceView;
+
     private Bitmap backBuffer;
-    private ImageView workArea;
-    public static final int WHITE = 0xFFFFFFFF;
-    public static final int BLACK = 0xff000000;
+
+
     private Button snap;
     private Button save;
     private EditText expected;
@@ -75,15 +110,30 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
     private MediaPlayer mediaPlayer;
     private static final float BEEP_VOLUME = 0.10f;
+
     // moments from last recogition attempt, use them to train
     private ArrayList<double[]> moments;
 
-    // performs matching
-    Matcher matcher = new Matcher();
+    // paints to be used in drawing borders over the found glyphs
+    private Paint redPaint;
+    private Paint greenPaint;
+
+    // matcher will be used to train  and recognise
+    private MetricMatcher matcher;
+    // feature extractor
+    private FeatureExtractor extractor;
+
+
+    //whether surface size was already set
+    private boolean surfaceSizeSet = false;
+    // whether applucation active - guards against strange racing confitions
+    // set to true upon completion og onResume() and to false on onPause()
+    private boolean active = false;
+
 
     /**
+     * create actvity and initalise interface elements
      *
-     * create actvity and initalise interface elements 
      * @param savedInstanceState
      */
     @Override
@@ -101,7 +151,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
         scanArea = findViewById(R.id.scanarea);
         overlay = findViewById(R.id.overlay);
-
         workArea = (ImageView) findViewById(R.id.workarea);
 
         // make it stay on
@@ -118,8 +167,20 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         resultText = (TextView) findViewById(R.id.recognitionResult);
 
 
-    }
+        redPaint = new Paint();
+        redPaint.setColor(0xffFF0000);
+        redPaint.setStyle(Paint.Style.STROKE);
+        redPaint.setStrokeWidth(2);
 
+        greenPaint = new Paint();
+        greenPaint.setColor(0xffFF0000);
+        greenPaint.setStyle(Paint.Style.STROKE);
+        greenPaint.setStrokeWidth(2);
+
+        matcher = new MetricMatcher();
+
+        extractor = new HuMoments();
+    }
 
 
     /**
@@ -140,8 +201,18 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
         // activate camera
         camera = Camera.open();
-        // set  preview if already created
-        setPreviewDisplay();
+
+
+        // restart preview is already set surface size
+        if (surfaceSizeSet) {
+            Log.d(LOG_TAG, "surface size was already set, start preview ");
+            // set  preview if already created
+            setPreviewDisplay();
+            startPreview();
+        }
+
+        // say  that we are active now
+        active = true;
     }
 
 
@@ -170,10 +241,13 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
     @Override
     protected void onPause() {
         super.onPause();
-        System.err.println("****************** paused ");
+        active = false;
+
+        Log.d(LOG_TAG, "paused ");
         if (camera != null) {
             // avoid race condition
             synchronized (camera) {
+                camera.stopPreview();
                 previewActive = false;
                 camera.release();
                 camera = null;
@@ -188,13 +262,15 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
      * @param surfaceHolder
      */
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        System.err.println("********************* surface created");
-        if (surfaceHolder == preview) {
-            setPreviewDisplay();
-        } else if (surfaceHolder == workArea) {
-            System.err.println("************** work area created ");
+        Log.d(LOG_TAG, "surface created");
+        if (active) {
+            Log.d(LOG_TAG, "active - proceed");
+            if (surfaceHolder == preview) {
+                setPreviewDisplay();
+            }
+        } else {
+            Log.d(LOG_TAG, "inactive - ignore");
         }
-
     }
 
     /**
@@ -202,23 +278,45 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
      *
      * @param surfaceHolder
      * @param i
-     * @param w
-     * @param h
+     * @param width
+     * @param height
      */
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int width, int height) {
+        // only if we are active
+        Log.d(LOG_TAG, " surface changed");
+        if (active) {
+            Log.d(LOG_TAG, " as we are active, activate preview etc");
+            if (surfaceHolder == preview) {
+                surfaceSizeSet = true;
+                overlayW = width;
+                overlayH = height;
+                if (camera != null) {
+                    startPreview();
+                }
+            }
+        } else {
+            Log.d(LOG_TAG, " inactive - ignore for good");
+        }
+    }
 
-        // NOTE:  we switch coordinates, to camera space!!!!!!
-        overlayH = w;
-        overlayW = h;
-        System.err.println("************************* surface changed:" + overlayH + ":" + overlayW);
-        // Now that the size is known, set up the camera parameters and begin
-        // the preview.
-        System.err.println("***************** overlay area:" + overlay.getLeft() + "/" + overlay.getTop() + "-" + overlay.getRight() + "/" + overlay.getBottom());
-        System.err.println("***************** scan area:" + scanArea.getLeft() + "/" + scanArea.getTop() + "-" + scanArea.getRight() + "/" + scanArea.getBottom());
 
-        startPreview();
+    /**
+     * need this because wake lock sometimes forces application in portaint mode.
+     *
+     * @param newConfig
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (previewActive && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(LOG_TAG, "reconfiguring for landscape layout");
+            setPreviewDisplay();
+            setUpImagesAndBitmaps();
+        }
+        Log.d(LOG_TAG, " configuration was changed:" + newConfig);
 
     }
+
 
     private void startPreview() {
         cameraParameters = camera.getParameters();
@@ -257,23 +355,19 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         snap.setEnabled(true);
     }
 
-    /**
-     * encapsulate logic to compute viewfinder origin - as viewfinder may be shifted
-     * because of ad display
-     */
+
     private void computeViewfinderOrigin() {
         int[] absPos = new int[2];
         scanArea.getLocationOnScreen(absPos);
-        System.err.println("***************** abs position:" + absPos[1]);
-
         viewfinderOriginX = absPos[1];
         // subtract origin of preview view
         surfaceView.getLocationOnScreen(absPos);
         viewfinderOriginX -= absPos[1];
     }
 
+
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        System.err.println("*******************  surface destroyed");
+
         if (camera != null) {
             camera.stopPreview();
             camera.release();
@@ -314,45 +408,53 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         mediaPlayer.start();
         //just in case - readjust
         computeViewfinderOrigin();
-        System.err.println("************* received preview frame:" + bytes.length);
+        Log.d(LOG_TAG, "received preview frame:" + bytes.length);
         // create subimage containing preview area
 
 
         ByteImage image = new ByteImage(bytes, previewSize.width, previewSize.height, (int) ((float) viewfinderOriginX / scaleW), (int) ((float) viewfinderOriginY / scaleH), bitmapW, bitmapH);
-        System.err.println("****************** image:" + image);
+        Log.d(LOG_TAG, "image:" + image);
 
+        // copy image data into out process image expanding it to int
+        // original image data is mmapped and will be destroyed by next frame
+        image.copy(processImage);
+        Log.d(LOG_TAG, "pixel image:" + processImage);
 
-        image.flip(processImage);
-        System.err.println("************ pixel image:" + processImage);
-
-        // fire into separate thread
+        // perform processing  in  separate thread
         (new Thread(new Runnable() {
             public void run() {
-                // 1 is white and thus empty
-                Shrinker shrinker = new Shrinker(1);
-                // compute histogram
-                final HistogramFilter histogramFilter = new HistogramFilter();
-                histogramFilter.process(processImage);
-                // extract adaptive threshold
-                final int threshold = histogramFilter.adaptiveThreshold();
-                System.err.println("******************** threshold: " + threshold);
 
-                // make image binary
-                final ThresholdFilter thresholdFilter = new ThresholdFilter(threshold, 1, 0);
-                thresholdFilter.process(processImage);
+                //  eliminate salt and pepper
+                medianFilter.process(processImage);
+                // perform adaptive thresholding
+                sauvolaBinarisationFilter.process(processImage);
 
+                // since borders of sauvola processed image image are unusable,
+                // extract subimage for further processing
+                Image binarzedImage = processImage.chisel(WINDOW_SIZE / 2, WINDOW_SIZE / 2, bitmapW, bitmapH);
+
+
+                // after sauvola processing,  dark pixels are set to 1
+                // while empty pixels are set to 0
+
+                //shrinker to sjring glyphs
+                Shrinker shrinker = new Shrinker(0);
+
+
+                // slice image
                 List<List<Image>> rows = new ArrayList();
-                SlicerH hslicer = new SlicerH(processImage, 1);
+                SlicerH hslicer = new SlicerH(binarzedImage, 0);
+
                 hslicer.slice(0);
                 while (hslicer.hasNext()) {
                     Image row = hslicer.next();
                     // if there is a row and it is smaller than process image
-                    if (row != null && row.getHeight() < processImage.getHeight()) {
+                    if (row != null && row.getHeight() < binarzedImage.getHeight()) {
                         System.err.println("************** row: " + row);
                         List<Image> cells = new ArrayList<Image>();
                         rows.add(cells);
                         // slice V
-                        SlicerV vslicer = new SlicerV(row, 1);
+                        SlicerV vslicer = new SlicerV(row, 0);
                         vslicer.slice(0);
                         Image glyph;
                         int j = 1;
@@ -367,34 +469,34 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                         }
                     }
                 }
+
                 // ok,   we have segmented image - which row do we select for further processing
                 // this has to contain the same amount of characters as expected text
                 String expectedText = expected.getText().toString();
 
-                System.err.println("*************expected size:" + expectedText.length());
+                Log.d(LOG_TAG, "expected size:" + expectedText.length());
                 List<Image> recognition = new ArrayList<Image>();
                 for (List<Image> row : rows) {
-                    System.err.println("*************** row length:" + row.size());
+                    Log.d(LOG_TAG, "row length:" + row.size());
                     if (row.size() == expectedText.length()) {
-                        System.err.println("************recognise this one");
+                        Log.d(LOG_TAG, "recognise this one");
                         recognition = row;
                     }
                 }
-                // reverse it, because of coordinate switch
-                Collections.reverse(recognition);
+
                 moments = new ArrayList<double[]>();
                 // compute moments  and store them into array
                 for (Image glyph : recognition) {
-                    final double[] hu = (new HuMoments()).extract(glyph);
-                    moments.add(hu);
+                    final double[] features = extractor.extract(glyph);
+                    moments.add(features);
                     StringBuilder builder = new StringBuilder();
 
                     for (int i = 0; i < 7; i++) {
-                        builder.append(hu[i] + "|");
+                        builder.append(features[i] + "|");
                     }
-                    System.err.println("**************");
-                    System.err.println("************" + builder.toString());
-                    System.err.println("**************");
+                    Log.d(LOG_TAG, "**************");
+                    Log.d(LOG_TAG, builder.toString());
+                    Log.d(LOG_TAG, "**************");
                 }
 
                 // perform recognition attempt
@@ -405,11 +507,12 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                     StringBuilder mb = new StringBuilder();
                     for (double m : moment)
                         mb.append(m).append(':');
-                    System.err.println("*********** expecting " + expectedText.charAt(i++));
-                    System.err.println("*********** matching " + mb.toString());
+                    Log.d(LOG_TAG, "expecting " + expectedText.charAt(i++));
+                    Log.d(LOG_TAG, "matching with" + mb.toString());
 
-                    char c = matcher.match(moment);
-                    recognitionResult.append(c);
+                    List<Match> matches = matcher.match(moment);
+                    // TODO: append it here
+                    // recognitionResult.append(c);
                 }
 
 
@@ -421,15 +524,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 // create canvas to draw borders to bitmap
                 Canvas canvas = new Canvas(backBuffer);
 
-                Paint paint = new Paint();
-                paint.setColor(0xffff0000);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth(1);
-
-                Paint activePaint = new Paint();
-                activePaint.setColor(0xff00FF00);
-                activePaint.setStyle(Paint.Style.STROKE);
-                activePaint.setStrokeWidth(1);
 
                 canvas.drawBitmap(Bitmap.createBitmap(processImage.pixels, bitmapH, bitmapW, Bitmap.Config.ARGB_8888), 0, 0, null);
 
@@ -437,7 +531,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 for (List<Image> row : rows)
                     for (Image glyph : row) {
                         // ... but row under recognition has to be highlighted green
-                        canvas.drawRect(glyph.getOriginX(), glyph.getOriginY(), glyph.getOriginX() + glyph.getWidth(), glyph.getOriginY() + glyph.getHeight(), row == recognition ? activePaint : paint);
+                        canvas.drawRect(glyph.getOriginX(), glyph.getOriginY(), glyph.getOriginX() + glyph.getWidth(), glyph.getOriginY() + glyph.getHeight(), row == recognition ? greenPaint : redPaint);
                     }
 
 
@@ -465,7 +559,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
             }
         })).start();
 
-        System.err.println("***************** snapshot ready");
+        Log.d(LOG_TAG, "snapshot ready processing ready");
     }
 
     public void onClick(View view) {
@@ -487,14 +581,50 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 final char[] chars = exp.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
 
-
-                    matcher.train(chars[i], moments.get(i));
+                // TODO: train clusters
+                // matcher.train(chars[i], moments.get(i));
 
                 }
             }
         }
     }
 
+    /**
+     * set up images and bitmaps to adjust for change in screen size
+     */
+    private void setUpImagesAndBitmaps() {
+        previewSize = cameraParameters.getPreviewSize();
+
+        Log.d(LOG_TAG, "preview width:" + previewSize.width + " preview height:" + previewSize.height);
+        // compute and prepare working images
+
+        // size of preview area in screen coordinates
+        int viewfinderH = scanArea.getBottom() - scanArea.getTop();
+        int viewfinderW = scanArea.getRight() - scanArea.getLeft();
+
+        // scaling factor between preview image and screen coordinates
+        scaleW = (float) overlayW / (float) previewSize.width;
+        scaleH = (float) overlayH / (float) previewSize.height;
+
+        // bitmap size
+        bitmapW = (int) ((float) viewfinderW / scaleW);
+        bitmapH = (int) ((float) viewfinderH / scaleH);
+
+        // and now create byte image
+        // image to hold copy to be processed  - allow for borders
+        processImage = new PixelImage(bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
+        Log.d(LOG_TAG, "image width:" + processImage.getWidth() + " height:" + processImage.getHeight());
+
+        // median folter for preprocessing
+        medianFilter = new MedianFilter(processImage, MEDIAN_WINDOW);
+
+        // and local threshold for it  - note that we like to have dark as 1 and lite as 0
+        sauvolaBinarisationFilter = new SauvolaBinarisationFilter(0, 1, processImage, 256, SAUVOLA_WEIGHT, WINDOW_SIZE);
+
+
+        // bitmap to draw information
+        backBuffer = Bitmap.createBitmap(bitmapW, bitmapH, Bitmap.Config.ARGB_8888);
+    }
 
     /**
      * Creates the beep MediaPlayer in advance so that the sound can be triggered with the least
