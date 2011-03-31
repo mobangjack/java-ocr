@@ -80,7 +80,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
     private ImageView workArea;
 
 
-
     // coordinates for and viewfinder for extraction of subimage
     private int overlayH;
     private int overlayW;
@@ -144,7 +143,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        
+
         setContentView(R.layout.main);
 
         surfaceView = (SurfaceView) findViewById(R.id.preview);
@@ -153,7 +152,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         preview.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         preview.addCallback(this);
 
-        scanArea = findViewById(R.id.scanarea);      
+        scanArea = findViewById(R.id.scanarea);
         workArea = (ImageView) findViewById(R.id.workarea);
 
         // make it stay on
@@ -322,33 +321,15 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
 
     private void startPreview() {
+
         cameraParameters = camera.getParameters();
 
 
         previewSize = cameraParameters.getPreviewSize();
 
 
-        System.err.println("***************  preview size:" + previewSize.width + "x" + cameraParameters.getPreviewSize().height);
 
-        // store viewfinder params (in PREVIEW!!!! CAMERA!!!!! coordinates)
-        viewfinderW = scanArea.getBottom() - scanArea.getTop();
-        viewfinderH = scanArea.getRight() - scanArea.getLeft();
-        viewfinderOriginY = overlayH - scanArea.getRight();
-
-        computeViewfinderOrigin();
-
-        scaleW = (float) overlayW / (float) previewSize.width;
-        scaleH = (float) overlayH / (float) previewSize.height;
-
-        System.err.println("************ viewfinder scale:" + scaleW + "/" + scaleH);
-
-        bitmapW = (int) ((float) viewfinderW / scaleW);
-        bitmapH = (int) ((float) viewfinderH / scaleH);
-        // image to hold copy to be processed
-        processImage = new PixelImage(bitmapH, bitmapW);
-
-        // back buffer to be drawn to surface holder
-        backBuffer = Bitmap.createBitmap(bitmapH, bitmapW, Bitmap.Config.ARGB_8888);
+        setUpImagesAndBitmaps();
 
         camera.startPreview();
         // activate auto focus
@@ -584,8 +565,8 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 final char[] chars = exp.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
 
-                // TODO: train clusters
-                // matcher.train(chars[i], moments.get(i));
+                    // TODO: train clusters
+                    // matcher.train(chars[i], moments.get(i));
 
                 }
             }
