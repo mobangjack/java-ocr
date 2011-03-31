@@ -76,10 +76,9 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
     // viewfinder area
     private View scanArea;
-    // work area disaplys processed image and glyph borders
+    // work area displays processed image and glyph borders
     private ImageView workArea;
-    // overlay area looks over entire image
-    private View overlay;
+
 
 
     // coordinates for and viewfinder for extraction of subimage
@@ -141,6 +140,11 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         super.onCreate(savedInstanceState);
 
 
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        
         setContentView(R.layout.main);
 
         surfaceView = (SurfaceView) findViewById(R.id.preview);
@@ -149,8 +153,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         preview.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         preview.addCallback(this);
 
-        scanArea = findViewById(R.id.scanarea);
-        overlay = findViewById(R.id.overlay);
+        scanArea = findViewById(R.id.scanarea);      
         workArea = (ImageView) findViewById(R.id.workarea);
 
         // make it stay on

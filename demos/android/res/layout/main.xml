@@ -9,26 +9,37 @@
                  android:layout_weight="1"
                  android:gravity="top"
             />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-    <LinearLayout android:id="@+id/overlay"
-                  xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-            >
-     
-        <!-- display processing result -->
-        <ImageView android:id="@+id/workarea"
-                   android:layout_width="fill_parent"
-                   android:layout_height="80dp"
-                   android:layout_gravity="center"
-                ></ImageView>
+        <!-- left strut   -->
 
-        <LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:background="#00000000"
-                      android:orientation="vertical"
+        <ImageView android:layout_width="60dp"
+                   android:layout_height="fill_parent"
+                   android:background="#00000000"
+                   android:layout_weight="0"
+                />
+
+        <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 >
+            <!-- central area -->
+
+            <!-- display processing result -->
+            <ImageView android:id="@+id/workarea"
+                       android:layout_width="fill_parent"
+                       android:layout_height="70dp"
+                    >
+
+
+            </ImageView>
+
             <TextView
                     android:layout_gravity="center"
                     android:layout_width="fill_parent"
@@ -40,7 +51,7 @@
             <ImageView
                     android:id="@+id/scanarea"
                     android:layout_width="fill_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="70dp"
                     android:src="@drawable/scanarea"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
@@ -52,19 +63,19 @@
                       android:layout_gravity="center"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:text="Recognition result"
+                      android:text="result..."
                       android:textColor="#ff000000"
                       android:background="#ffffffff"
-                      android:textSize="30dp">
+                      android:textSize="20dp">
 
             </TextView>
             <EditText android:id="@+id/expectedText"
                       android:layout_gravity="center"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:text="X48759022955"
+                      android:text="expected text..."
                       android:editable="true"
-                      android:textSize="30dp">
+                      android:textSize="20dp">
             </EditText>
 
             <LinearLayout android:layout_width="fill_parent"
@@ -89,5 +100,15 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- right strut   -->
+
+        <ImageView android:layout_width="60dp"
+                   android:layout_height="fill_parent"
+                   android:background="#00000000"
+                   android:layout_weight="0"
+                />
+
     </LinearLayout>
+
+
 </FrameLayout>
