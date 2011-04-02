@@ -14,10 +14,9 @@
         Master project for JavaOCR demos
     </description>
     <modules>
-        <!--  no android module configuired to avoid automatic build of
-        android stugg ehrtr it is not necessary
+        <!--  no android module configured to avoid automatic build 
         <module>android</module>
-        -->
+          -->
     </modules>
     <dependencies>
         <dependency>

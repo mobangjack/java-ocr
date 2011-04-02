@@ -11,10 +11,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,6 +28,8 @@ import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -143,7 +142,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
+         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
 
         surfaceView = (SurfaceView) findViewById(R.id.preview);
@@ -325,28 +324,68 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         cameraParameters = camera.getParameters();
 
 
-        previewSize = cameraParameters.getPreviewSize();
-
-
-
-        setUpImagesAndBitmaps();
-
-        camera.startPreview();
         // activate auto focus
+
+
+        // as we know,  that big preview size can produce RE on HTC Hero,
+        // we just iterate through allowed preview sizes until we find something proper
+        //  go for maximal allowed preview size
+        previewSize = cameraParameters.getPreviewSize();
+        if (previewSize.width <= 480) {
+            Log.d(LOG_TAG, "preview size is too small:" + previewSize.width + "x" + previewSize.height);
+            final List<Camera.Size> sizes = cameraParameters.getSupportedPreviewSizes();
+            Collections.sort(sizes, new Comparator<Camera.Size>() {
+                public int compare(Camera.Size o1, Camera.Size o2) {
+                    return new Integer(o2.width).compareTo(o1.width);
+                }
+            });
+
+            for (Camera.Size size : sizes) {
+                cameraParameters.setPreviewSize(size.width, size.height);
+                camera.setParameters(cameraParameters);
+                Log.d(LOG_TAG, "attempt preview size:" + size.width + "x" + size.height);
+                try {
+                    camera.startPreview();
+                    Log.d(LOG_TAG, "...accepted - go along");
+                    //  ok, camera accepted out settings.  since we know,
+                    //  ok, camera accepted out settings.  since we know,
+                    // that some implementations may choose different preview format,
+                    // we retrieve parameters again. just to be sure
+                    cameraParameters = camera.getParameters();
+                    break;
+                } catch (RuntimeException rx) {
+                    // ups, camera did not like this size
+                    Log.d(LOG_TAG, "...barfed, try next");
+                }
+
+            }
+        } else {
+            Log.d(LOG_TAG, " accepted preview size on the spot:" + previewSize.width + "x" + previewSize.height);
+            camera.startPreview();
+        }
+
         previewActive = true;
 
+        setUpImagesAndBitmaps();
         // activate snap button
         snap.setEnabled(true);
     }
 
 
     private void computeViewfinderOrigin() {
+
         int[] absPos = new int[2];
         scanArea.getLocationOnScreen(absPos);
-        viewfinderOriginX = absPos[1];
+
+
+        viewfinderOriginX = absPos[0];
+        viewfinderOriginY = absPos[1];
+
         // subtract origin of preview view
         surfaceView.getLocationOnScreen(absPos);
-        viewfinderOriginX -= absPos[1];
+
+        viewfinderOriginX -= absPos[0];
+        viewfinderOriginY -= absPos[1];
     }
 
 
@@ -396,7 +435,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         // create subimage containing preview area
 
 
-        ByteImage image = new ByteImage(bytes, previewSize.width, previewSize.height, (int) ((float) viewfinderOriginX / scaleW), (int) ((float) viewfinderOriginY / scaleH), bitmapW, bitmapH);
+        ByteImage image = new ByteImage(bytes, previewSize.width, previewSize.height, (int) ((float) viewfinderOriginX / scaleW), (int) ((float) viewfinderOriginY / scaleH), bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
         Log.d(LOG_TAG, "image:" + image);
 
         // copy image data into out process image expanding it to int
@@ -434,7 +473,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                     Image row = hslicer.next();
                     // if there is a row and it is smaller than process image
                     if (row != null && row.getHeight() < binarzedImage.getHeight()) {
-                        System.err.println("************** row: " + row);
+                        Log.d(LOG_TAG, "row: " + row);
                         List<Image> cells = new ArrayList<Image>();
                         rows.add(cells);
                         // slice V
@@ -448,7 +487,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                             // is it valid glyph?
                             if (glyph != null && glyph.getWidth() < row.getWidth()) {
                                 cells.add(glyph);
-                                System.err.println("************* glyph " + (j++) + ":" + glyph);
+                                Log.d(LOG_TAG, "glyph " + (j++) + ":" + glyph);
                             }
                         }
                     }
@@ -501,16 +540,20 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
 
                 // transfer image to B&W ARGS
-                final ThresholdFilter argbFilter = new ThresholdFilter(0, WHITE, BLACK);
+                final ThresholdFilter argbFilter = new ThresholdFilter(0,  BLACK,WHITE);
                 argbFilter.process(processImage);
 
 
                 // create canvas to draw borders to bitmap
                 Canvas canvas = new Canvas(backBuffer);
-
-
-                canvas.drawBitmap(Bitmap.createBitmap(processImage.pixels, bitmapH, bitmapW, Bitmap.Config.ARGB_8888), 0, 0, null);
-
+                // offset , stride, width, height
+                canvas.drawBitmap(
+                        Bitmap.createBitmap(processImage.pixels,
+                                (processImage.getWidth() + 1) * WINDOW_SIZE / 2,  // offset
+                                processImage.getWidth(), // stride
+                                bitmapW, // width
+                                bitmapH, //height
+                                Bitmap.Config.ARGB_8888), 0, 0, null);
                 // draw glyph borders on image
                 for (List<Image> row : rows)
                     for (Image glyph : row) {
@@ -599,7 +642,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         processImage = new PixelImage(bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
         Log.d(LOG_TAG, "image width:" + processImage.getWidth() + " height:" + processImage.getHeight());
 
-        // median folter for preprocessing
+        // median filter for preprocessing
         medianFilter = new MedianFilter(processImage, MEDIAN_WINDOW);
 
         // and local threshold for it  - note that we like to have dark as 1 and lite as 0
