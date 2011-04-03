@@ -22,15 +22,14 @@ import net.sourceforge.javaocr.filter.MedianFilter;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 import net.sourceforge.javaocr.ocr.*;
+import net.sourceforge.javaocr.plugin.cluster.Cluster;
+import net.sourceforge.javaocr.plugin.cluster.MahalanobisDistanceCluster;
 import net.sourceforge.javaocr.plugin.cluster.Match;
 import net.sourceforge.javaocr.plugin.cluster.MetricMatcher;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Simple OCR demonstrator. Just tries to match recognised text.
@@ -127,6 +126,9 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
     // set to true upon completion og onResume() and to false on onPause()
     private boolean active = false;
 
+    //  we will use it for recognition. clusters will be teached on save
+    Map<Cluster, Character> characterMap = new HashMap<Cluster, Character>();
+    Map<Character, Cluster> clusterMap = new HashMap<Character, Cluster>();
 
     /**
      * create actvity and initalise interface elements
@@ -582,11 +584,8 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                         if (finalRecognition.size() > 0) {
                             save.setEnabled(true);
                         }
-
                         // now we are ready with recognition, reenable snap
                         snap.setEnabled(true);
-
-
                     }
                 });
 
@@ -608,16 +607,30 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
             // save result coefficients
             final String exp = expected.getText().toString();
             if (moments.size() == exp.length()) {
-                System.err.println("************* teaching:" + exp);
+                Log.d(LOG_TAG, "teaching:" + exp);
 
 
                 // process for every character
                 final char[] chars = exp.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
+                    // train individual clusters
+                    Cluster cluster = clusterMap.get(chars[i]);
+                    if (cluster == null) {
 
-                    // TODO: train clusters
-                    // matcher.train(chars[i], moments.get(i));
+                        // we see this character for the first time,
+                        // create and register clusters
+                        cluster = new MahalanobisDistanceCluster(extractor.getSize());
 
+                        clusterMap.put(chars[i], cluster);
+                        characterMap.put(cluster, chars[i]);
+
+                        // also register it into matcher
+                        matcher.getClusters().add(cluster);
+
+                    }
+                    // ok, now we have cluster, it is registered, so we can train it.
+                    //TODO: complete me - keep list of glzph features, and use it to train cluster
+                    // and also save sample with timestamp & text
                 }
             }
         }
