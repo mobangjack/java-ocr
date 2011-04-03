@@ -142,7 +142,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
 
         surfaceView = (SurfaceView) findViewById(R.id.preview);
@@ -427,20 +427,26 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
      * image
      */
     public void onPreviewFrame(byte[] bytes, Camera camera) {
-        // beep
+        // play beep
         mediaPlayer.start();
-        //just in case - readjust
+
+        //just in case - readjust position og viewfinder,
+        // in case layout was shifted by ad views (if any)
         computeViewfinderOrigin();
+
         Log.d(LOG_TAG, "received preview frame:" + bytes.length);
-        // create subimage containing preview area
 
-
-        ByteImage image = new ByteImage(bytes, previewSize.width, previewSize.height, (int) ((float) viewfinderOriginX / scaleW), (int) ((float) viewfinderOriginY / scaleH), bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
+        // create sub-image containing preview area,  note that we
+        // use offset of WINDOW_SIZE to add borders to the image
+        // those borders are invalid, because local thresholding produces
+        // invalid data there
+        ByteImage image = new ByteImage(bytes, previewSize.width, previewSize.height, (int) ((float) viewfinderOriginX / scaleW) - WINDOW_SIZE / 2, (int) ((float) viewfinderOriginY / scaleH) - WINDOW_SIZE / 2, bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
         Log.d(LOG_TAG, "image:" + image);
 
         // copy image data into out process image expanding it to int
         // original image data is mmapped and will be destroyed by next frame
         image.copy(processImage);
+
         Log.d(LOG_TAG, "pixel image:" + processImage);
 
         // perform processing  in  separate thread
@@ -540,7 +546,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
 
                 // transfer image to B&W ARGS
-                final ThresholdFilter argbFilter = new ThresholdFilter(0,  BLACK,WHITE);
+                final ThresholdFilter argbFilter = new ThresholdFilter(0, BLACK, WHITE);
                 argbFilter.process(processImage);
 
 
@@ -555,12 +561,13 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                                 bitmapH, //height
                                 Bitmap.Config.ARGB_8888), 0, 0, null);
                 // draw glyph borders on image
-                for (List<Image> row : rows)
+                for (List<Image> row : rows) {
+                    // ... but row under recognition has to be highlighted green
+                    Paint paint = row == recognition ? greenPaint : redPaint;
                     for (Image glyph : row) {
-                        // ... but row under recognition has to be highlighted green
-                        canvas.drawRect(glyph.getOriginX(), glyph.getOriginY(), glyph.getOriginX() + glyph.getWidth(), glyph.getOriginY() + glyph.getHeight(), row == recognition ? greenPaint : redPaint);
+                        canvas.drawRect(glyph.getOriginX() - WINDOW_SIZE / 2, glyph.getOriginY() - WINDOW_SIZE / 2, glyph.getOriginX() + glyph.getWidth() - WINDOW_SIZE / 2, glyph.getOriginY() + glyph.getHeight() - WINDOW_SIZE / 2, paint);
                     }
-
+                }
 
                 // draw back buffer ASAP
                 final List<Image> finalRecognition = recognition;
