@@ -10,6 +10,7 @@ import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
@@ -28,6 +29,9 @@ import net.sourceforge.javaocr.plugin.cluster.Match;
 import net.sourceforge.javaocr.plugin.cluster.MetricMatcher;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -176,7 +180,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         redPaint.setStrokeWidth(2);
 
         greenPaint = new Paint();
-        greenPaint.setColor(0xffFF0000);
+        greenPaint.setColor(0xff00FF00);
         greenPaint.setStyle(Paint.Style.STROKE);
         greenPaint.setStrokeWidth(2);
 
@@ -325,6 +329,12 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
 
         cameraParameters = camera.getParameters();
 
+        // print out parameters for information purposes
+        Log.d(LOG_TAG, "flash modes:" + cameraParameters.getSupportedFlashModes());
+        Log.d(LOG_TAG, "autofocus:" + cameraParameters.getSupportedFocusModes());
+        Log.d(LOG_TAG, "preview formats:" + cameraParameters.getSupportedPreviewFormats());
+        Log.d(LOG_TAG, "scene modes:" + cameraParameters.getSupportedSceneModes());
+        Log.d(LOG_TAG, "white balance modes:" + cameraParameters.getSupportedWhiteBalance());
 
         // activate auto focus
 
@@ -506,7 +516,11 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 String expectedText = expected.getText().toString();
 
                 Log.d(LOG_TAG, "expected size:" + expectedText.length());
-                List<Image> recognition = new ArrayList<Image>();
+                // glyph to be recognized
+                List<Image> recognition = null;
+                //also invalidate list of moments
+                moments = null;
+
                 for (List<Image> row : rows) {
                     Log.d(LOG_TAG, "row length:" + row.size());
                     if (row.size() == expectedText.length()) {
@@ -515,38 +529,48 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                     }
                 }
 
-                moments = new ArrayList<double[]>();
-                // compute moments  and store them into array
-                for (Image glyph : recognition) {
-                    final double[] features = extractor.extract(glyph);
-                    moments.add(features);
-                    StringBuilder builder = new StringBuilder();
+                // candidate row found, perform recognition
+                if (recognition != null) {
 
-                    for (int i = 0; i < 7; i++) {
-                        builder.append(features[i] + "|");
+                    moments = new ArrayList<double[]>();
+                    // compute moments  and store them into array
+                    for (Image glyph : recognition) {
+                        final double[] features = extractor.extract(glyph);
+                        moments.add(features);
+                        StringBuilder builder = new StringBuilder();
+
+                        for (int i = 0; i < 7; i++) {
+                            builder.append(features[i] + "|");
+                        }
+                        Log.d(LOG_TAG, "**************");
+                        Log.d(LOG_TAG, builder.toString());
+                        Log.d(LOG_TAG, "**************");
                     }
-                    Log.d(LOG_TAG, "**************");
-                    Log.d(LOG_TAG, builder.toString());
-                    Log.d(LOG_TAG, "**************");
+
+
+                    // perform recognition attempt
+                    recognitionResult = new StringBuilder();
+
+                    int i = 0;
+                    for (double[] moment : moments) {
+                        StringBuilder mb = new StringBuilder();
+                        for (double m : moment)
+                            mb.append(m).append(':');
+                        Log.d(LOG_TAG, "expecting: " + expectedText.charAt(i++));
+                        Log.d(LOG_TAG, "matching with: " + mb.toString());
+
+                        List<Match> matches = matcher.match(moment);
+                        if (matches.size() > 0) {
+                            Match match = matches.get(0);
+                            Character c = characterMap.get(match.getCluster());
+                            Log.d(LOG_TAG, "matched:" + c);
+                            Log.d(LOG_TAG, "distance:" + match.getDistance());
+                            recognitionResult.append(c);
+                        } else {
+                            Log.d(LOG_TAG, "no matches found, please do some training first");
+                        }
+                    }
                 }
-
-                // perform recognition attempt
-                recognitionResult = new StringBuilder();
-
-                int i = 0;
-                for (double[] moment : moments) {
-                    StringBuilder mb = new StringBuilder();
-                    for (double m : moment)
-                        mb.append(m).append(':');
-                    Log.d(LOG_TAG, "expecting " + expectedText.charAt(i++));
-                    Log.d(LOG_TAG, "matching with" + mb.toString());
-
-                    List<Match> matches = matcher.match(moment);
-                    // TODO: append it here
-                    // recognitionResult.append(c);
-                }
-
-
                 // transfer image to B&W ARGS
                 final ThresholdFilter argbFilter = new ThresholdFilter(0, BLACK, WHITE);
                 argbFilter.process(processImage);
@@ -565,7 +589,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                 // draw glyph borders on image
                 for (List<Image> row : rows) {
                     // ... but row under recognition has to be highlighted green
-                    Paint paint = row == recognition ? greenPaint : redPaint;
+                    Paint paint = (row == recognition) ? greenPaint : redPaint;
                     for (Image glyph : row) {
                         canvas.drawRect(glyph.getOriginX() - WINDOW_SIZE / 2, glyph.getOriginY() - WINDOW_SIZE / 2, glyph.getOriginX() + glyph.getWidth() - WINDOW_SIZE / 2, glyph.getOriginY() + glyph.getHeight() - WINDOW_SIZE / 2, paint);
                     }
@@ -581,7 +605,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                         // also set recognised text
                         resultText.setText(recognitionResult.toString());
                         // if we have something to recognise,  we may as well enable learning
-                        if (finalRecognition.size() > 0) {
+                        if (finalRecognition!= null && finalRecognition.size() > 0) {
                             save.setEnabled(true);
                         }
                         // now we are ready with recognition, reenable snap
@@ -616,24 +640,32 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                     // train individual clusters
                     Cluster cluster = clusterMap.get(chars[i]);
                     if (cluster == null) {
-
                         // we see this character for the first time,
                         // create and register clusters
                         cluster = new MahalanobisDistanceCluster(extractor.getSize());
-
                         clusterMap.put(chars[i], cluster);
                         characterMap.put(cluster, chars[i]);
-
                         // also register it into matcher
                         matcher.getClusters().add(cluster);
-
                     }
                     // ok, now we have cluster, it is registered, so we can train it.
-                    //TODO: complete me - keep list of glzph features, and use it to train cluster
-                    // and also save sample with timestamp & text
+                    cluster.train(moments.get(i));
+
                 }
+                // and also save sample with timestamp & text
             }
         }
+    }
+
+    /**
+     * train respective cluster with features
+     *
+     * @param aChar    character in question
+     * @param features extracted features to perform teaching
+     */
+    private void teachCharacter(char aChar, double[] features) {
+
+
     }
 
     /**
@@ -642,7 +674,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
     private void setUpImagesAndBitmaps() {
         previewSize = cameraParameters.getPreviewSize();
 
-        Log.d(LOG_TAG, "preview width:" + previewSize.width + " preview height:" + previewSize.height);
+        Log.d(LOG_TAG, "preview width: " + previewSize.width + " preview height: " + previewSize.height);
         // compute and prepare working images
 
         // size of preview area in screen coordinates
@@ -660,7 +692,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         // and now create byte image
         // image to hold copy to be processed  - allow for borders
         processImage = new PixelImage(bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
-        Log.d(LOG_TAG, "image width:" + processImage.getWidth() + " height:" + processImage.getHeight());
+        Log.d(LOG_TAG, "image width: " + processImage.getWidth() + " height: " + processImage.getHeight());
 
         // median filter for preprocessing
         medianFilter = new MedianFilter(processImage, MEDIAN_WINDOW);
@@ -707,4 +739,29 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
             mediaPlayer.seekTo(0);
         }
     };
+
+
+
+    /**
+     * save image for later processing. image name contains expected text,
+     * and   timestamp.    image size and window are saved first to allow easier
+     * processing of samples afterwards
+     */
+    public void saveTrainingImage(String expected, int[] data, int w, int h) throws IOException {
+        File outdir = new File(Environment.getExternalStorageDirectory() + "/" + LOG_TAG);
+        outdir.mkdirs();
+
+        final DataOutputStream dos = new DataOutputStream(new FileOutputStream(outdir.getAbsolutePath() + "/" + expected + "_" + (System.currentTimeMillis() / 1000) + ".dat"));
+
+
+        // save size
+        dos.writeInt(w);
+        dos.writeInt(h);
+        dos.writeInt(WINDOW_SIZE);
+
+
+        for (int value : data)
+            dos.writeInt(value);
+        dos.close();
+    }
 }
