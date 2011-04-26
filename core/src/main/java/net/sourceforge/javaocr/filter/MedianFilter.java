@@ -13,7 +13,7 @@ public class MedianFilter implements ImageFilter {
     final int squareWindow;
     protected PixelImage augmentedMeanImage;
     private Image meanImage;
-    protected IntregralImageFilter integralImageFilter;
+    protected IntegralImageFilter integralImageFilter;
 
     /**
      * create median filter
@@ -30,7 +30,7 @@ public class MedianFilter implements ImageFilter {
         augmentedMeanImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
         meanImage = augmentedMeanImage.chisel(halfWindow, halfWindow, destination.getWidth(), destination.getHeight());
 
-        integralImageFilter = new IntregralImageFilter(meanImage);
+        integralImageFilter = new IntegralImageFilter(meanImage);
     }
 
 

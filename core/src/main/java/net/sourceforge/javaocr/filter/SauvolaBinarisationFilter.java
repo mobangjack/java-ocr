@@ -34,8 +34,8 @@ public class SauvolaBinarisationFilter extends MedianFilter {
     private Image squaresImage;
 
     /**
-     * @param above       value to use for above pixels
-     * @param below       value to use for below pixels
+     * @param above       value to use for pixels above threshold
+     * @param below       value to use for pixels below threshold
      * @param destination destination image
      * @param maxValue    maxValue of intensity values
      * @param weight      weight of variance term (determines relation of threshold to local mean)

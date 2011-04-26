@@ -23,7 +23,7 @@ public class IntegralFilterTest extends TestCase {
         int[] result = new int[6];
         Image dst = new PixelImage(result, 2, 3);
 
-        IntregralImageFilter iff = new IntregralImageFilter(dst);
+        IntegralImageFilter iff = new IntegralImageFilter(dst);
 
         iff.process(src);
 
