@@ -84,7 +84,7 @@ public class HistogramFilter extends AbstractSinglePixelFilter {
      * @return
      */
     public int adaptiveThreshold() {
-        return adaptiveThreshold(128);
+        return adaptiveThreshold(amount_bins / 2);
     }
 
     /**
