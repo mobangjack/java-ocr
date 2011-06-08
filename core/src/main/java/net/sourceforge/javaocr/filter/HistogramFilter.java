@@ -11,9 +11,20 @@ import java.util.Arrays;
  */
 public class HistogramFilter extends AbstractSinglePixelFilter {
     int[] defaultSmooth = {1, 2, 1};
-    int[] histogramm = new int[AMOUNT_BINS];
+    int[] histogramm;
     int totalCount;
-    private static final int AMOUNT_BINS = 256;
+    private static final int DEFAULT_BINS = 256;
+    final int amount_bins;
+
+
+    public HistogramFilter() {
+        this(DEFAULT_BINS);
+    }
+
+    public HistogramFilter(int amount_bins) {
+        this.amount_bins = amount_bins;
+        histogramm = new int[amount_bins];
+    }
 
     public int[] getHistogramm() {
         return histogramm;
@@ -53,7 +64,7 @@ public class HistogramFilter extends AbstractSinglePixelFilter {
     public void fold(int[] folder) throws IllegalArgumentException {
         if (folder.length % 2 == 0)
             throw new IllegalArgumentException("folding array must have odd length");
-        int[] result = new int[AMOUNT_BINS];
+        int[] result = new int[amount_bins];
         final int start = folder.length / 2;
         final int end = histogramm.length - start;
         for (int i = start; i < end; i++) {
@@ -85,7 +96,7 @@ public class HistogramFilter extends AbstractSinglePixelFilter {
     public int adaptiveThreshold(int threshold) {
         //System.err.println("computing threshold from:" + threshold);
         int mLeft = computeM(0, threshold);
-        int mRight = computeM(threshold, AMOUNT_BINS);
+        int mRight = computeM(threshold, amount_bins);
         //System.err.println("left: " + mLeft + " right: " + mRight);
         int newThr = (mLeft + mRight) / 2;
         if(Math.abs(newThr - threshold) <= 1)

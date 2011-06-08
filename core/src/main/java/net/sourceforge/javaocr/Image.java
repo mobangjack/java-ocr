@@ -45,7 +45,7 @@ public interface Image {
     void put(int value);
 
     /**
-     * whether horisontal line is empty between specified coordinates
+     * whether horizontal line is empty between specified coordinates
      * in image specific fashion
      *
      * @param y     Y value
@@ -75,12 +75,13 @@ public interface Image {
     int getWidth();
 
     /**
-     * image height
-     *
-     * @return
+     * @return   image height
      */
     int getHeight();
 
+    /**
+     * @return origin inside bigger image.  0 if this is not subimage
+     */
     public int getOriginX();
 
     public int getOriginY();

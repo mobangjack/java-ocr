@@ -27,7 +27,6 @@ public class SauvolaBinarisationFilter extends MedianFilter {
     final int range;
     final double weight;
 
-    Image destination;
     private PixelImage augmentedSquaresImage;
     private SquaredIntergalImageFilter squaredIntergalImageFilter;
 
@@ -66,7 +65,6 @@ public class SauvolaBinarisationFilter extends MedianFilter {
     public void process(Image image) {
         // compute squares here
         squaredIntergalImageFilter.process(image);
-
         super.process(image);
     }
 
