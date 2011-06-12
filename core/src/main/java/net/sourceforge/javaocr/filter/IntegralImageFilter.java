@@ -8,7 +8,7 @@ import net.sourceforge.javaocr.Image;
  * of image relative to current pixel. this filter can work in place, but
  * intended usage tells us to create and cache destination image
  */
-public class IntregralImageFilter extends AbstractIntegralImageFilter {
+public class IntegralImageFilter extends AbstractIntegralImageFilter {
 
     /**
      * image to be used as result.  size shall match to processed
@@ -17,7 +17,7 @@ public class IntregralImageFilter extends AbstractIntegralImageFilter {
      *
      * @param resultImage
      */
-    public IntregralImageFilter(Image resultImage) {
+    public IntegralImageFilter(Image resultImage) {
         super(resultImage);
     }
 
