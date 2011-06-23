@@ -8,12 +8,12 @@ import net.sourceforge.javaocr.ocr.PixelImage;
  * applies median filter to image ( pixel is Mx from  his window)
  */
 public class MedianFilter implements ImageFilter {
-    final Image destination;
-    final int halfWindow;
-    final int squareWindow;
-    protected PixelImage augmentedMeanImage;
-    private Image meanImage;
-    protected IntegralImageFilter integralImageFilter;
+    final private Image destination;
+    final private int halfWindow;
+    final private int squareWindow;
+    private final PixelImage augmentedMeanImage;
+    private final Image meanImage;
+    protected final IntegralImageFilter integralImageFilter;
 
     /**
      * create median filter
@@ -58,7 +58,14 @@ public class MedianFilter implements ImageFilter {
      * compute median pixel value
      */
     protected int computePixel(Image image, int y, int x) {
-        return (meanImage.get(x - halfWindow, y - halfWindow) + meanImage.get(x + halfWindow, y + halfWindow) -
-                meanImage.get(x + halfWindow, y - halfWindow) - meanImage.get(x - halfWindow, y + halfWindow)) / squareWindow;
+        return (integralImageFilter.windowValue(x - halfWindow, y - halfWindow,x+halfWindow,y+halfWindow)) / squareWindow;
+    }
+
+    public int getHalfWindow() {
+        return halfWindow;
+    }
+
+    public int getSquareWindow() {
+        return squareWindow;
     }
 }

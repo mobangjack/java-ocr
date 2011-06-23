@@ -4,7 +4,7 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
- * Performs local image threshloding with Sauvola algorythm.
+ * Performs local image threshloding with Sauvola algorithm.
  * allocates integral images to achieve O(N) performance instead  ow O(N2W2).
  * This filter allocates working images and can  be reused with destination image of same size.
  * Please note,  that  window/2 pixels on borders of image are invalid. It is responsibility of caller
@@ -22,10 +22,10 @@ import net.sourceforge.javaocr.ocr.PixelImage;
 public class SauvolaBinarisationFilter extends MedianFilter {
 
 
-    final int above;
-    final int below;
-    final int range;
-    final double weight;
+    final private int above;
+    final private int below;
+    final private int range;
+    final private double weight;
 
     private PixelImage augmentedSquaresImage;
     private SquaredIntergalImageFilter squaredIntergalImageFilter;
@@ -51,12 +51,12 @@ public class SauvolaBinarisationFilter extends MedianFilter {
 
         // augmented images have empty borders for kernel processing
         augmentedSquaresImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
-        squaresImage = augmentedSquaresImage.chisel(halfWindow, halfWindow, destination.getWidth(), destination.getHeight());
+        squaresImage = augmentedSquaresImage.chisel(getHalfWindow(), getHalfWindow(), destination.getWidth(), destination.getHeight());
         squaredIntergalImageFilter = new SquaredIntergalImageFilter(squaresImage);
     }
 
     /**
-     * traversal will be done bt median filter, actual processing delegated
+     * traversal will be done by median filter, actual processing delegated
      * to derived method
      *
      * @param image
@@ -72,8 +72,8 @@ public class SauvolaBinarisationFilter extends MedianFilter {
     protected int computePixel(Image image, int y, int x) {
         double mean = super.computePixel(image, y, x);
 
-        double meanSquaresSum = (squaresImage.get(x - halfWindow, y - halfWindow) + squaresImage.get(x + halfWindow, y + halfWindow) -
-                squaresImage.get(x + halfWindow, y - halfWindow) - squaresImage.get(x - halfWindow, y + halfWindow)) / squareWindow;
+        double meanSquaresSum = squaredIntergalImageFilter.windowValue(x - getHalfWindow(), y - getHalfWindow(), x + getHalfWindow(), y + getHalfWindow()) / getSquareWindow();
+
         // this is our supercool local variance
         double variance = meanSquaresSum - mean * mean;
 
@@ -94,7 +94,11 @@ public class SauvolaBinarisationFilter extends MedianFilter {
         return below;
     }
 
-    public int getHalfWindow() {
-        return halfWindow;
+    public int getRange() {
+        return range;
+    }
+
+    public double getWeight() {
+        return weight;
     }
 }
