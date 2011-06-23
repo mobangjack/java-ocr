@@ -79,11 +79,15 @@ public class SauvolaBinarisationFilter extends MedianFilter {
 
         double thr = mean * (1 + weight * (Math.sqrt(variance) / range - 1));
 
-        if (image.get(x, y) > thr) {
+        if (retrievePixel(image, y, x) > thr) {
             return above;
         } else {
             return below;
         }
+    }
+
+    protected int retrievePixel(Image image, int y, int x) {
+        return image.get(x, y);
     }
 
     public int getAbove() {
@@ -100,5 +104,9 @@ public class SauvolaBinarisationFilter extends MedianFilter {
 
     public double getWeight() {
         return weight;
+    }
+
+    public SquaredIntergalImageFilter getSquaredIntergalImageFilter() {
+        return squaredIntergalImageFilter;
     }
 }

@@ -68,4 +68,8 @@ public class MedianFilter implements ImageFilter {
     public int getSquareWindow() {
         return squareWindow;
     }
+
+    public IntegralImageFilter getIntegralImageFilter() {
+        return integralImageFilter;
+    }
 }
