@@ -22,12 +22,10 @@ import net.sourceforge.javaocr.ocr.PixelImage;
 public class SauvolaBinarisationFilter extends MedianFilter {
 
 
-    final private int above;
-    final private int below;
-    final private int range;
-    final private double weight;
-
-    private PixelImage augmentedSquaresImage;
+    final protected int above;
+    final protected int below;
+    final protected int range;
+    final protected double weight;
     private SquaredIntergalImageFilter squaredIntergalImageFilter;
 
     private Image squaresImage;
@@ -50,8 +48,7 @@ public class SauvolaBinarisationFilter extends MedianFilter {
 
 
         // augmented images have empty borders for kernel processing
-        augmentedSquaresImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
-        squaresImage = augmentedSquaresImage.chisel(getHalfWindow(), getHalfWindow(), destination.getWidth(), destination.getHeight());
+        squaresImage = new PixelImage(destination.getWidth(), destination.getHeight());
         squaredIntergalImageFilter = new SquaredIntergalImageFilter(squaresImage);
     }
 
@@ -63,7 +60,7 @@ public class SauvolaBinarisationFilter extends MedianFilter {
      */
     @Override
     public void process(Image image) {
-        // compute squares here
+        // compute squares first, as we need them for processing of individual pixels
         squaredIntergalImageFilter.process(image);
         super.process(image);
     }
@@ -79,7 +76,7 @@ public class SauvolaBinarisationFilter extends MedianFilter {
 
         double thr = mean * (1 + weight * (Math.sqrt(variance) / range - 1));
 
-        if (retrievePixel(image, y, x) > thr) {
+        if (image.get(x, y) > thr) {
             return above;
         } else {
             return below;

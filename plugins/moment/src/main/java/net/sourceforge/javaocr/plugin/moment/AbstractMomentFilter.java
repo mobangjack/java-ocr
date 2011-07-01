@@ -5,6 +5,8 @@ import net.sourceforge.javaocr.ImageFilter;
 
 /**
  * base functionality for moment filters (traversal
+ * TODO: overall performance filtering can be improved by precomputing power values of coordinates on start,
+ * and caching those values for future invocations  og filter.
  */
 public abstract class AbstractMomentFilter implements ImageFilter {
     int currentX;

@@ -43,11 +43,27 @@ public abstract class AbstractIntegralImageFilter implements ImageFilter {
     protected abstract int processPixel(int i);
 
     /**
-     * compute sum of pixels in defined window
-     * 
+     * compute sum of pixels in defined window, all borders are inclusive
+     *
      * @return sum of pixels in defined window
      */
     public int windowValue(int left, int top, int right, int bottom) {
-        return resultImage.get(right, bottom) - resultImage.get(right, top) - resultImage.get(left, bottom) + resultImage.get(left, top);
+
+        int ll = left - 1;
+        int tt = top - 1;
+
+
+        int sum = resultImage.get(right, bottom);
+
+        if (ll >= 0) {
+            sum -= resultImage.get(ll, bottom);
+        }
+        if (tt >= 0) {
+            sum -= resultImage.get(right, tt);
+        }
+        if (tt >= 0 && ll >= 0) {
+            sum += resultImage.get(ll, tt);
+        }
+        return sum;
     }
 }

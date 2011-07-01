@@ -5,30 +5,31 @@ import net.sourceforge.javaocr.ImageFilter;
 import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
- * applies median filter to image ( pixel is Mx from  his window)
+ * applies median filter to image (pixel is Mx from  his surrounding window)
+ * result is collected in destination image.  Pixels outside source image are treated as non
+ * existing. Border pixels are considered invalid, and their treatment is upon user
  */
 public class MedianFilter implements ImageFilter {
-    final private Image destination;
-    final private int halfWindow;
-    final private int squareWindow;
-    private final PixelImage augmentedMeanImage;
-    private final Image meanImage;
+    final protected Image destination;
+    final protected int halfWindow;
+    final protected int squareWindow;
+
+    private final PixelImage meanImage;
     protected final IntegralImageFilter integralImageFilter;
 
     /**
      * create median filter
      *
-     * @param destination
-     * @param window
+     * @param destination overscan image where result is collected.
+     * @param window      window size, in case of even value will be treated  as one less
      */
     public MedianFilter(Image destination, int window) {
         this.destination = destination;
         // we need those for all the computations, so precompute them
         this.halfWindow = window / 2;
-        this.squareWindow = halfWindow * halfWindow * 4;
-        // augmented images have empty borders for kernel processing
-        augmentedMeanImage = new PixelImage(destination.getWidth() + window, destination.getHeight() + window);
-        meanImage = augmentedMeanImage.chisel(halfWindow, halfWindow, destination.getWidth(), destination.getHeight());
+        this.squareWindow = (halfWindow * 2 + 1) * (halfWindow * 2 + 1);
+
+        meanImage = new PixelImage(destination.getWidth(), destination.getHeight());
 
         integralImageFilter = new IntegralImageFilter(meanImage);
     }
@@ -47,7 +48,6 @@ public class MedianFilter implements ImageFilter {
         final int maxY = height - halfWindow;
         final int maxX = width - halfWindow;
         for (int y = halfWindow; y < maxY; y++) {
-
             for (int x = halfWindow; x < maxX; x++) {
                 destination.put(x, y, computePixel(image, y, x));
             }
@@ -58,7 +58,9 @@ public class MedianFilter implements ImageFilter {
      * compute median pixel value
      */
     protected int computePixel(Image image, int y, int x) {
-        return (integralImageFilter.windowValue(x - halfWindow, y - halfWindow,x+halfWindow,y+halfWindow)) / squareWindow;
+
+        int sum = integralImageFilter.windowValue(x - halfWindow, y - halfWindow, x + halfWindow, y + halfWindow);
+        return sum / squareWindow;
     }
 
     public int getHalfWindow() {

@@ -45,5 +45,9 @@ public class IntegralFilterTest extends TestCase {
         assertEquals(6, result[3]);
         assertEquals(6, result[4]);
         assertEquals(15, result[5]);
+
+        // test window computation
+        // sum of values inside window tlbr is:  br - bl - tr + tl
+        assertEquals(14,iff.windowValue(0,1,1,2));
     }
 }
