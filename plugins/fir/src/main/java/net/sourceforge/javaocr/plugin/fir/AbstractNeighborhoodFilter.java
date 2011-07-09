@@ -9,7 +9,7 @@ import net.sourceforge.javaocr.ImageFilter;
  */
 public abstract class AbstractNeighborhoodFilter implements ImageFilter {
 	
-	protected int filterW, filterH; 
+	protected int filterW, filterH;
 	private int sizeL, sizeR, sizeT, sizeB;
 	private Image destImage;
 
@@ -33,7 +33,7 @@ public abstract class AbstractNeighborhoodFilter implements ImageFilter {
 	/**
 	 * Chisels out image neighborhood and then calls <code>processNeighborhood()</code>
 	 */
-    public void process(Image image) {
+  public void process(Image image) {
 		final int imageW = image.getWidth();
 		final int imageH = image.getHeight();
 		
@@ -50,10 +50,10 @@ public abstract class AbstractNeighborhoodFilter implements ImageFilter {
 		image.chisel(0, imageH-sizeB, imageW, sizeB).copy(destImage.chisel(0, imageH-sizeB, imageW, sizeB));
 		image.chisel(0, 0, sizeL, imageH).copy(destImage.chisel(0, 0, sizeL, imageH));
 		image.chisel(imageW-sizeR, 0, sizeR, imageH).copy(destImage.chisel(imageW-sizeR, 0, sizeR, imageH));
-    }
+  }
 
-    /**
-     * compute pixel value by looking up values in the neighborhood image
-     */
-    protected abstract int processNeighborhood(Image nImage);
+  /**
+   * compute pixel value by looking up values in the neighborhood image
+   */
+  protected abstract int processNeighborhood(Image nImage);
 }

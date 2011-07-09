@@ -28,21 +28,21 @@ public class MedianFilter extends AbstractNeighborhoodFilter {
 	}
 
 	protected int processNeighborhood(Image nImage) {
-		counter = 0;
-		
-		int nHeight = nImage.getHeight();
-        for (int i = 0; i < nHeight; i++) {
-            for (nImage.iterateH(i); nImage.hasNext();) {
-            	pixels[counter++] = nImage.next();
-            }
-        }
-		
-        Arrays.sort(pixels, 0, counter);
-        if (counter % 2 == 0) {
-        	return (pixels[counter/2] + pixels[(counter/2)-1]) / 2;
-        } else {
-        	return pixels[(counter-1)/2];
-        }
+    counter = 0;
+    
+    int nHeight = nImage.getHeight();
+    for (int i = 0; i < nHeight; i++) {
+      for (nImage.iterateH(i); nImage.hasNext();) {
+      	pixels[counter++] = nImage.next();
+      }
+    }
+
+    Arrays.sort(pixels, 0, counter);
+    if (counter % 2 == 0) {
+    	return (pixels[counter/2] + pixels[(counter/2)-1]) / 2;
+    } else {
+    	return pixels[(counter-1)/2];
+    }
 	}
 
 }

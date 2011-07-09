@@ -19,7 +19,6 @@ public class Shrinker implements ImageShrinker {
     public Image shrink(Image source) {
         int originX;
         int originY;
-        boolean spanEmpty;
         for (originX = 0; originX < source.getWidth(); originX++) {
             source.iterateV(originX);
             if (!spanEmpty(source))
