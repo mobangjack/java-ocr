@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
-import net.sourceforge.javaocr.filter.MedianFilter;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 import net.sourceforge.javaocr.ocr.*;
@@ -56,12 +55,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
     private SauvolaBinarisationFilter sauvolaBinarisationFilter;
 
 
-    // window size to be ued by median filter
-    private static final int MEDIAN_WINDOW = 3;
-
-    // median filter will be used to kill saltand pepper inside images
-    // to allow crisper setting of sauvoval filter
-    private MedianFilter medianFilter;
 
     // drawing surface for entire image
     private SurfaceView surfaceView;
@@ -465,8 +458,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         (new Thread(new Runnable() {
             public void run() {
 
-                //  eliminate salt and pepper
-                medianFilter.process(processImage);
                 // perform adaptive thresholding
                 sauvolaBinarisationFilter.process(processImage);
 
@@ -694,8 +685,6 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
         processImage = new PixelImage(bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
         Log.d(LOG_TAG, "image width: " + processImage.getWidth() + " height: " + processImage.getHeight());
 
-        // median filter for preprocessing
-        medianFilter = new MedianFilter(processImage, MEDIAN_WINDOW);
 
         // and local threshold for it  - note that we like to have dark as 1 and lite as 0
         sauvolaBinarisationFilter = new SauvolaBinarisationFilter(0, 1, processImage, 256, SAUVOLA_WEIGHT, WINDOW_SIZE);
