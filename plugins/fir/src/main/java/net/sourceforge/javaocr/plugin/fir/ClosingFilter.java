@@ -6,7 +6,13 @@ import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
  * Apply closing by structuring element to binarized source image.
- * TODO FIXME Works for binarized images only!
+ * TODO Works for binarized images only, could be extended to grayscale.
+ * 
+ * The closing of an image A by a structuring element B is obtained by the 
+ * dilation of A by B, followed by erosion of the resulting structure by B.
+ * 
+ * http://en.wikipedia.org/wiki/Closing_(morphology)
+ * 
  * @author Andrea De Pasquale
  */
 public class ClosingFilter implements ImageFilter {

@@ -4,7 +4,17 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ImageFilter;
 
 /**
- * Abstract class for mathematical morphology filters
+ * Abstract class for mathematical morphology filters.
+ * 
+ * The basic idea in binary morphology is to probe an image with a simple,
+ * pre-defined shape, drawing conclusions on how this shape fits or misses the
+ * shapes in the image. This simple "probe" is called structuring element, and
+ * is itself a binary image. Typical structuring elements are 3x3 square and
+ * 3x3 cross (i.e. a 3x3 "plus sign" image).
+ * 
+ * http://en.wikipedia.org/wiki/Mathematical_morphology#Binary_morphology
+ * http://en.wikipedia.org/wiki/Structuring_element
+ * 
  * @author Andrea De Pasquale
  */
 public abstract class AbstractMorphologyFilter implements ImageFilter {

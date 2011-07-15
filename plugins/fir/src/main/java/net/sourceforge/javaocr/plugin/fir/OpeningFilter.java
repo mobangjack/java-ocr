@@ -6,7 +6,13 @@ import net.sourceforge.javaocr.ocr.PixelImage;
 
 /**
  * Apply opening by structuring element to binarized source image.
- * TODO FIXME Works for binarized images only!
+ * TODO Works for binarized images only, could be extended to grayscale.
+ * 
+ * The opening of an image A by a structuring element B is obtained by the 
+ * erosion of A by B, followed by dilation of the resulting image by B.
+ * 
+ * http://en.wikipedia.org/wiki/Opening_%28morphology%29
+ * 
  * @author Andrea De Pasquale
  */
 public class OpeningFilter implements ImageFilter {

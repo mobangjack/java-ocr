@@ -6,7 +6,7 @@ import net.sourceforge.javaocr.Image;
 
 /**
  * Apply median filter to image, useful to clean up after thresholding.
- * TODO FIXME currently works only for grayscale images
+ * TODO Works for binarized images only, could be extended to grayscale.
  * @author Andrea De Pasquale
  */
 public class MedianFilter extends AbstractNeighborhoodFilter {

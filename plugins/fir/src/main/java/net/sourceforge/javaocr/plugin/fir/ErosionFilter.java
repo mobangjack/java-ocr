@@ -4,7 +4,13 @@ import net.sourceforge.javaocr.Image;
 
 /**
  * Apply erosion by structuring element to binarized source image.
- * TODO FIXME Works for binarized images only!
+ * TODO Works for binarized images only, could be extended to grayscale.
+ * 
+ * The erosion of an image A by a structuring element B can be understood as 
+ * the locus of points reached by the center of B when B moves inside A.
+ * 
+ * http://en.wikipedia.org/wiki/Erosion_(morphology)
+ * 
  * @author Andrea De Pasquale
  */
 public class ErosionFilter extends AbstractMorphologyFilter {

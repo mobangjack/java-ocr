@@ -3,8 +3,14 @@ package net.sourceforge.javaocr.plugin.fir;
 import net.sourceforge.javaocr.Image;
 
 /**
- * Apply dilation by structuring element to binarized source image.
- * TODO FIXME Works for binarized images only!
+ * Apply dilation by structuring element to binarized source image. 
+ * TODO Works for binarized images only, could be extended to grayscale.
+ * 
+ * The dilation of an image A by a structuring element B can be understood as 
+ * the locus of the points covered by B when the center of B moves inside A.
+ * 
+ * http://en.wikipedia.org/wiki/Dilation_%28morphology%29
+ * 
  * @author Andrea De Pasquale
  */
 public class DilationFilter extends AbstractMorphologyFilter {
