@@ -1,4 +1,4 @@
-package net.sourceforge.javaocr.plugin.fir;
+package net.sourceforge.javaocr.plugin.morphology;
 
 import junit.framework.TestCase;
 import net.sourceforge.javaocr.ocr.PixelImage;

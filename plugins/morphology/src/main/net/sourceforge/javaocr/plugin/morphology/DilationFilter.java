@@ -1,43 +1,43 @@
-package net.sourceforge.javaocr.plugin.fir;
+package net.sourceforge.javaocr.plugin.morphology;
 
 import net.sourceforge.javaocr.Image;
 
 /**
- * Apply erosion by structuring element to binarized source image.
+ * Apply dilation by structuring element to binarized source image. 
  * TODO Works for binarized images only, could be extended to grayscale.
  * 
- * The erosion of an image A by a structuring element B can be understood as 
- * the locus of points reached by the center of B when B moves inside A.
+ * The dilation of an image A by a structuring element B can be understood as 
+ * the locus of the points covered by B when the center of B moves inside A.
  * 
- * http://en.wikipedia.org/wiki/Erosion_(morphology)
+ * http://en.wikipedia.org/wiki/Dilation_%28morphology%29
  * 
  * @author Andrea De Pasquale
  */
-public class ErosionFilter extends AbstractMorphologyFilter {
+public class DilationFilter extends AbstractMorphologyFilter {
 
   /**
-   * Create an <code>ErosionFilter</code> with default values
+   * Create a <code>DilationFilter</code> with default values
    * of 255 for the foreground and 0 for the background.
    * @param strElem Structuring element
    * @param dest Output image
    */
-  public ErosionFilter(Image strElem, Image dest) {
+  public DilationFilter(Image strElem, Image dest) {
     this(strElem, dest, 255, 0);
   }
   
   /**
-   * Create an <code>ErosionFilter</code>.
+   * Create a <code>DilationFilter</code>.
    * @param strElem Structuring element
    * @param dest Output image
    * @param full Foreground value 
    * @param empty Background value
    */
-  public ErosionFilter(Image strElem, Image dest, int full, int empty) {
+  public DilationFilter(Image strElem, Image dest, int full, int empty) {
     super(strElem, dest, full, empty);
   }
   
   /**
-   * Apply erosion to the given image, leaving borders unprocessed.
+   * Apply dilation to the given image, leaving borders unprocessed.
    * @param image Input image
    */
   public void process(Image image) {
@@ -53,23 +53,23 @@ public class ErosionFilter extends AbstractMorphologyFilter {
     // process valid area of the image
     for (int y = sizeT; y < imageH-sizeB; ++y) {
       for (int x = sizeL; x < imageW-sizeR; ++x) {
-        Image nImage = image.chisel(x-sizeL, y-sizeT, seImageW, seImageH);
-        destImage.put(x, y, processNeighborhood(nImage));
+        if (image.get(x, y) == full) {
+          Image nImage = destImage.chisel(x-sizeL, y-sizeT, seImageW, seImageH);
+          processNeighborhood(nImage);
+        }
       }
     }
   }
 
-  protected int processNeighborhood(Image nImage) {
+  protected void processNeighborhood(Image nImage) {
     for (int i = 0; i < seImageH; ++i) {
       for (seImage.iterateH(i), nImage.iterateH(i); 
            seImage.hasNext() && nImage.hasNext(); ) {
-        seImage.next(); nImage.next();
-        if (seImage.get() == full && nImage.get() == empty)
-          return empty;
+        if (seImage.next() == full)
+          nImage.next(full);
+        else nImage.next();
       }
     }
-    
-    return full;
   }
 
 }

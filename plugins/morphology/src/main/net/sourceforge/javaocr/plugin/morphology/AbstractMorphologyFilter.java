@@ -1,4 +1,4 @@
-package net.sourceforge.javaocr.plugin.fir;
+package net.sourceforge.javaocr.plugin.morphology;
 
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ImageFilter;

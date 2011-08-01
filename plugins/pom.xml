@@ -17,6 +17,7 @@
         <module>moment</module>
         <module>cluster</module>
         <module>fir</module>
+        <module>morphology</module>
         <module>awt</module>
     </modules>
     <dependencies>
