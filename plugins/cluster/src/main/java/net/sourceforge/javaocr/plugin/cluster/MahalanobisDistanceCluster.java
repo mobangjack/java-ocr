@@ -47,10 +47,8 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
      * @return calculated distance
      */
     public double distance(double[] features) {
-        // if we were invalidated,  recalculate matrix
-        if (invcov == null) {
-            invcov = matrix();
-        }
+        // force matrix recalculation if necessary
+        getInvcov();
         // calculate mahalanobis distance
         double cumulated = 0;
         for (int i = 0; i < getDimensions(); i++) {
@@ -113,6 +111,9 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
     }
 
     public double[][] getInvcov() {
+        if(invcov == null) {
+            invcov = matrix();
+        }
         return invcov;
     }
 
