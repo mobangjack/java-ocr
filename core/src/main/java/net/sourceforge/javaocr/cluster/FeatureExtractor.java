@@ -5,6 +5,7 @@ import net.sourceforge.javaocr.Image;
 /**
  * extract image features to be used in cluster analysis. concrete implementations will be
  * provided by plugins.
+ * @author Konstantin Pribluda
  */
 public interface FeatureExtractor {
     /**
