@@ -3,7 +3,7 @@ package net.sourceforge.javaocr.plugin.cluster;
 /**
  * container for cluster and distance - usefull to keep together cluster and distance,
  * and makes sorting easier
- *
+ * @deprecated use more advanced stuff on core
  * @author Konstantin Pribluda
  */
 public class Match implements Comparable<Match> {

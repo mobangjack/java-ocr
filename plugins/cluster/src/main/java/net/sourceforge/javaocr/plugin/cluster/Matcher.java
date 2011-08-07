@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * matches feature vector to clusters
+ * @deprecated use alternatives in core 
  */
 public interface Matcher {
     /**

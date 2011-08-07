@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * base metric matcher.  returns ordered list of matches
- *
+ *  @deprecated use more advanced matcher in core instead
  * @author Konstantin Pribluda
  */
 public class MetricMatcher implements Matcher {

@@ -8,7 +8,7 @@ import java.util.*;
  * classifies supplied features
  * @author Konstantin Pribluda
  */
-public class MetricMatcher implements Matcher {
+public class MetricMatcher {
 
     // metrics to characters
     Map<Metric, Character> metrics;
