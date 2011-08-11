@@ -7,6 +7,8 @@ import net.sourceforge.javaocr.filter.AbstractSinglePixelFilter;
 /**
  * extracts amount of contiguous free spaces in a glyph.  As it is basically integer value,
  * and also pretty stable - some classificators utilizing statistical methods may barf due to zero variance
+ * TODO: I'm not happy with this location - maybe it is best somewhere else
+ * 
  * @author Konstantin Pribluda
  */
 public class FreeSpacesExtractor extends AbstractSinglePixelFilter implements FeatureExtractor {
