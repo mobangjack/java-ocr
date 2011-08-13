@@ -4,24 +4,32 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.ImageFilter;
 
 /**
- * base functionality for moment filters (traversal
- * TODO: overall performance filtering can be improved by precomputing power values of coordinates on start,
+ * base functionality for moment filters (traversal 
  * and caching those values for future invocations  og filter.
  */
 public abstract class AbstractMomentFilter implements ImageFilter {
-    int currentX;
-    int currentY;
-    int p;
-    int q;
+
+    final int p;
+    final int q;
     double moment;
+
+    // precomputed coeffs
+    double coeffx[], coeffy[];
 
     public AbstractMomentFilter(int p, int q) {
         this.p = p;
         this.q = q;
     }
 
+    /**
+     * precompute  x coefficient array
+     */
+    protected abstract double[] precomputeX(Image image);
 
-    protected abstract void computeIndividualMoment(int pixel, int currentX, int currentY);
+    /**
+     * precompute y coefficients array
+     */
+    protected abstract double[] precomputeY(Image image);
 
     /**
      * navigate through while image
@@ -30,12 +38,15 @@ public abstract class AbstractMomentFilter implements ImageFilter {
      */
     public void process(Image image) {
         int x;
+        coeffx = precomputeX(image);
+        coeffy = precomputeY(image);
+        
         for (int y = 0; y < image.getHeight(); y++) {
 
             image.iterateH(y);
             x = 0;
             while (image.hasNext())
-                computeIndividualMoment(image.next(), x++, y);
+                moment += image.next() * coeffx[x++] * coeffy[y];
         }
     }
 

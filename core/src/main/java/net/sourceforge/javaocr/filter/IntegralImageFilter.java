@@ -23,7 +23,7 @@ public class IntegralImageFilter extends AbstractIntegralImageFilter {
 
 
 
-    protected int processPixel(int pixel) {
+    protected int processPixel(final int pixel) {
         return pixel;
     }
 

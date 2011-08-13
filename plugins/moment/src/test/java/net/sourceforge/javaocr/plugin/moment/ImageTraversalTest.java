@@ -19,8 +19,7 @@ public class ImageTraversalTest extends TestCase {
         final ArrayList pixels = new ArrayList();
         Image image = new AbstractLinearImage(5, 5, 2, 2, 3, 3) {
             @Override
-            public int get() {
-                System.err.println("retrieve");
+            public int get() {              
                 pixels.add(currentIndex);
                 return 0;
             }
@@ -36,9 +35,16 @@ public class ImageTraversalTest extends TestCase {
         };
 
         AbstractMomentFilter filter = new AbstractMomentFilter(0, 0) {
+         
+
             @Override
-            protected void computeIndividualMoment(int pixel, int currentX, int currentY) {
-                // do nothing here as we harvest pixels in ALI
+            protected double[] precomputeX(Image image) {
+                return new double[image.getWidth()];  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            protected double[] precomputeY(Image image) {
+                return new double[image.getHeight()];  //To change body of implemented methods use File | Settings | File Templates.
             }
         };
 

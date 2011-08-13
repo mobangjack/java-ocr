@@ -14,7 +14,7 @@ public class SquaredIntergalImageFilter extends AbstractIntegralImageFilter {
     }
 
     @Override
-    protected int processPixel(int i) {
+    protected int processPixel(final int i) {
         return i * i;
     }
 }

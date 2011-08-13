@@ -23,24 +23,29 @@ public abstract class AbstractIntegralImageFilter implements ImageFilter {
      */
     public void process(Image image) {
         final int height = image.getHeight();
+        final int width = image.getWidth();
         int cumulated;
 
-        for (int i = 0; i < height; i++) {
+        // alternate variant, computing rows and then colums
+        // does not provide any significant performance boost
 
-            cumulated = 0;
-            // iterate over all the  scans
-            Image sourceScan = image.row(i);
-            Image destinationScan = resultImage.row(i);
-            Image previous = i > 0 ? resultImage.row(i - 1) : empty;
+         for (int i = 0; i < height; i++) {
 
-            for (sourceScan.iterateH(0), destinationScan.iterateH(0), previous.iterateH(0); sourceScan.hasNext();) {
-                cumulated += processPixel(sourceScan.next());
-                destinationScan.next(cumulated + previous.next());
-            }
-        }
+         cumulated = 0;
+         // iterate over all the  scans
+         Image sourceScan = image.row(i);
+         Image destinationScan = resultImage.row(i);
+         Image previous = i > 0 ? resultImage.row(i - 1) : empty;
+
+         for (sourceScan.iterateH(0), destinationScan.iterateH(0), previous.iterateH(0); sourceScan.hasNext();) {
+         cumulated += processPixel(sourceScan.next());
+         destinationScan.next(cumulated + previous.next());
+         }
+         }
+
     }
 
-    protected abstract int processPixel(int i);
+    protected abstract int processPixel(final int i);
 
     /**
      * compute sum of pixels in defined window, all borders are inclusive
