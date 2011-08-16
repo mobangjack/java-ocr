@@ -7,11 +7,11 @@
         <version>1.102-SNAPSHOT</version>
     </parent>
     <groupId>net.sourceforge.javaocr.demos</groupId>
-    <artifactId>javaocr-android-demo</artifactId>
+    <artifactId>javaocr-recognizer</artifactId>
     <packaging>apk</packaging>
     <name>Android demo application</name>
     <description>
-        Amdroid demo app utilising java ocr project
+        Android demo app demonstrating image recognition with javaocr library
     </description>
     <build>
         <plugins>
@@ -38,7 +38,7 @@
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
             <version>2.1_r1</version>
-        </dependency>      
+        </dependency>
         <dependency>
             <groupId>net.sourceforge.javaocr</groupId>
             <artifactId>javaocr-core</artifactId>
@@ -49,9 +49,14 @@
             <artifactId>javaocr-plugin-moment</artifactId>
             <version>${pom.version}</version>
         </dependency>
-          <dependency>
+        <dependency>
             <groupId>net.sourceforge.javaocr.plugins</groupId>
             <artifactId>javaocr-plugin-cluster</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javaocr.demos</groupId>
+            <artifactId>javaocr-android-camera-utils</artifactId>
             <version>${pom.version}</version>
         </dependency>
     </dependencies>

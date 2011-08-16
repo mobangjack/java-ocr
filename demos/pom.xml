@@ -14,9 +14,10 @@
         Master project for JavaOCR demos
     </description>
     <modules>
-        <!--  no android module configured to avoid automatic build 
-        <module>android</module>
-          -->
+        <module>camera-utils</module>
+        <!--
+        <module>recognizer</module>
+        -->
     </modules>
     <dependencies>
         <dependency>

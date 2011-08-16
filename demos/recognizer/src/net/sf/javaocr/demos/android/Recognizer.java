@@ -21,11 +21,10 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
+import net.sourceforge.javaocr.matcher.Match;
+import net.sourceforge.javaocr.matcher.MetricMatcher;
 import net.sourceforge.javaocr.ocr.*;
 import net.sourceforge.javaocr.plugin.cluster.Cluster;
-import net.sourceforge.javaocr.plugin.cluster.MahalanobisDistanceCluster;
-import net.sourceforge.javaocr.plugin.cluster.Match;
-import net.sourceforge.javaocr.plugin.cluster.MetricMatcher;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.DataOutputStream;
@@ -39,7 +38,7 @@ import java.util.*;
  *
  * @author Konstantin Pribluda
  */
-public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.AutoFocusCallback, Camera.PreviewCallback, View.OnClickListener {
+public class Recognizer extends Activity implements SurfaceHolder.Callback, Camera.AutoFocusCallback, Camera.PreviewCallback, View.OnClickListener {
     // black and white pixels
     public static final int WHITE = 0xFFFFFFFF;
     public static final int BLACK = 0xff000000;
@@ -550,10 +549,10 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
                         Log.d(LOG_TAG, "expecting: " + expectedText.charAt(i++));
                         Log.d(LOG_TAG, "matching with: " + mb.toString());
 
-                        List<Match> matches = matcher.match(moment);
+                        List<Match> matches = matcher.classify(moment);
                         if (matches.size() > 0) {
                             Match match = matches.get(0);
-                            Character c = characterMap.get(match.getCluster());
+                            Character c = match.getChr();
                             Log.d(LOG_TAG, "matched:" + c);
                             Log.d(LOG_TAG, "distance:" + match.getDistance());
                             recognitionResult.append(c);
@@ -616,35 +615,7 @@ public class OcrDemo extends Activity implements SurfaceHolder.Callback, Camera.
             snap.setEnabled(false);
             save.setEnabled(false);
             requestAutofocus();
-        } else if (view == save) {
-            // only once
-            save.setEnabled(false);
-            // save result coefficients
-            final String exp = expected.getText().toString();
-            if (moments.size() == exp.length()) {
-                Log.d(LOG_TAG, "teaching:" + exp);
-
-
-                // process for every character
-                final char[] chars = exp.toCharArray();
-                for (int i = 0; i < chars.length; i++) {
-                    // train individual clusters
-                    Cluster cluster = clusterMap.get(chars[i]);
-                    if (cluster == null) {
-                        // we see this character for the first time,
-                        // create and register clusters
-                        cluster = new MahalanobisDistanceCluster(extractor.getSize());
-                        clusterMap.put(chars[i], cluster);
-                        characterMap.put(cluster, chars[i]);
-                        // also register it into matcher
-                        matcher.getClusters().add(cluster);
-                    }
-                    // ok, now we have cluster, it is registered, so we can train it.
-                    cluster.train(moments.get(i));
-
-                }
-                // and also save sample with timestamp & text
-            }
+                    
         }
     }
 
