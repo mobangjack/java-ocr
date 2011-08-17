@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import net.sf.javaocr.demos.android.utils.camera.CameraManager;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
@@ -24,14 +25,19 @@ import net.sourceforge.javaocr.filter.ThresholdFilter;
 import net.sourceforge.javaocr.matcher.Match;
 import net.sourceforge.javaocr.matcher.MetricMatcher;
 import net.sourceforge.javaocr.ocr.*;
-import net.sourceforge.javaocr.plugin.cluster.Cluster;
+import net.sourceforge.javaocr.plugin.cluster.CompositeExtractor;
+import net.sourceforge.javaocr.plugin.cluster.extractor.AspectRatioExtractor;
+import net.sourceforge.javaocr.plugin.cluster.extractor.FreeSpacesExtractor;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Simple OCR demonstrator. Just tries to match recognised text.
@@ -60,12 +66,6 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, Came
     // hosts preview image
     private SurfaceHolder preview;
 
-
-    Camera camera;
-    private Camera.Parameters cameraParameters;
-    private Camera.Size previewSize;
-
-    boolean previewActive = false;
 
 
     // viewfinder area
@@ -110,21 +110,18 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, Came
     private Paint redPaint;
     private Paint greenPaint;
 
-    // matcher will be used to train  and recognise
+    // matcher will be used to recognise image samples
     private MetricMatcher matcher;
+
     // feature extractor
     private FeatureExtractor extractor;
 
 
     //whether surface size was already set
     private boolean surfaceSizeSet = false;
-    // whether applucation active - guards against strange racing confitions
-    // set to true upon completion og onResume() and to false on onPause()
-    private boolean active = false;
+    //  encapsulated cameera management logic
+    private CameraManager cameraManager;
 
-    //  we will use it for recognition. clusters will be teached on save
-    Map<Cluster, Character> characterMap = new HashMap<Cluster, Character>();
-    Map<Character, Cluster> clusterMap = new HashMap<Character, Cluster>();
 
     /**
      * create actvity and initalise interface elements
@@ -142,6 +139,10 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, Came
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+
+
+        // create camera manager
+        cameraManager = new CameraManager();
 
         surfaceView = (SurfaceView) findViewById(R.id.preview);
 
@@ -176,9 +177,26 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, Came
         greenPaint.setStyle(Paint.Style.STROKE);
         greenPaint.setStrokeWidth(2);
 
+        //  as cluster data is potentially big, and may take long time to load
+        // we read them in separate thread
+        
+        Thread thr = new Thread(new Runnable() {
+            public void run() {
+                readClusterData();
+            }
+        });
+        thr.start();
+
         matcher = new MetricMatcher();
 
         extractor = new HuMoments();
+    }
+
+    /**
+     * read clister data  from storage
+     */
+    private void readClusterData() {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
 

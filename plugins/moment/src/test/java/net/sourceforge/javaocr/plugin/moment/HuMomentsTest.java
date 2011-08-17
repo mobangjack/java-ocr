@@ -19,7 +19,7 @@ public class HuMomentsTest extends TestCase {
         Image image = new ByteImage(data, 1, 2);
 
         final double[] moments = (new HuMoments()).extract(image);
-        assertEquals(7, moments.length);
+        assertEquals(8, moments.length);
        
     }
 

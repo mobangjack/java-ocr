@@ -52,7 +52,7 @@ public class HuMoments implements FeatureExtractor {
         double n02 = N02.normalise(m00);
 
 
-        double moments[] = new double[7];
+        double moments[] = new double[8];
 
         moments[0] = n20 + n02;
 
@@ -102,6 +102,10 @@ public class HuMoments implements FeatureExtractor {
         moments[6] = (3 * n21 - n03) * (n30 + n12) * (Math.pow(n30 + n12, 2) - 3 * Math.pow(n21 + n03, 2)) +
                 (n30 - 3 * n12) * (n21 + n03) * (Math.pow(n03 + n21, 2) - 3 * Math.pow(n30 + n12, 2));
 
+        // Phi 8.  Was missing from original Hu moments and proposed later
+        // see http://en.wikipedia.org/wiki/Image_moment
+        moments[7] = n11 * (Math.pow(n30 + n12, 2) - Math.pow(n03 + n21,2)) - (n20 -n02 )* (n30 + n12) * (n03 + n21);
+        
         return moments;
     }
 
@@ -111,7 +115,7 @@ public class HuMoments implements FeatureExtractor {
      * @return
      */
     public int getSize() {
-        return 7;
+        return 8;
     }
 
 }
