@@ -66,9 +66,9 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
     }
 
     /**
-     * gather samples - sum of x*y into matrix
+     * gather sampler - sum of x*y into matrix
      *
-     * @param samples samples belonging to cluster
+     * @param samples sampler belonging to cluster
      */
     @Override
     public void train(double[] samples) {

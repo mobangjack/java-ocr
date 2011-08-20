@@ -7,11 +7,12 @@
         <version>1.102-SNAPSHOT</version>
     </parent>
     <groupId>net.sourceforge.javaocr.demos</groupId>
-    <artifactId>javaocr-recognizer</artifactId>
+    <artifactId>javaocr-sampler</artifactId>
     <packaging>apk</packaging>
     <name>Android demo application</name>
     <description>
-        Android demo app demonstrating image recognition with javaocr library
+        Demo appliocation to gather samples for further training
+        of matchers
     </description>
     <build>
         <plugins>
@@ -43,16 +44,6 @@
         <dependency>
             <groupId>net.sourceforge.javaocr</groupId>
             <artifactId>javaocr-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.javaocr.plugins</groupId>
-            <artifactId>javaocr-plugin-moment</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.javaocr.plugins</groupId>
-            <artifactId>javaocr-plugin-cluster</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>

@@ -70,7 +70,7 @@ public abstract class AbstractBaseCluster implements Cluster {
     }
 
     /**
-     * training means coputing sum of values. mx shall be reset and samples countet up
+     * training means coputing sum of values. mx shall be reset and sampler countet up
      *
      * @param features
      */

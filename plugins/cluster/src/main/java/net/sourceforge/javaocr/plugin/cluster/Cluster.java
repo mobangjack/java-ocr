@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * cluster represents some  feature vectors belonging together.
- * cluster can be trained with samples
+ * cluster can be trained with sampler
  * <p/>
  *
  * @author Konstantin Pribluda

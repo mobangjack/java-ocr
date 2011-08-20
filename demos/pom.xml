@@ -15,9 +15,8 @@
     </description>
     <modules>
         <module>camera-utils</module>
-        <!--
-        <module>recognizer</module>
-        -->
+        <module>recognizer</module>   
+        <module>sampler</module>
     </modules>
     <dependencies>
         <dependency>

@@ -22,7 +22,7 @@ public class NormalDistributionClusterTest extends TestCase {
     }
 
     /**
-     * if there are no samples, expectation and variance shall be null
+     * if there are no sampler, expectation and variance shall be null
      */
     @Test
     public void testThatNoSamplesMeansNullExpectationEndVariation() {
