@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import net.sf.javaocr.demos.android.utils.camera.CameraManager;
 import net.sf.javaocr.demos.android.utils.image.ImageProcessor;
 import net.sf.javaocr.demos.android.utils.image.ImageSlicer;
+import net.sf.javaocr.demos.android.utils.image.SauvolaImageProcessor;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
 import net.sourceforge.javaocr.ocr.PixelImage;
