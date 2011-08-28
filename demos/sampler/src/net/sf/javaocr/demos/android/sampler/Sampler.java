@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import net.sf.javaocr.demos.android.utils.camera.CameraManager;
 import net.sf.javaocr.demos.android.utils.image.ImageProcessor;
 import net.sf.javaocr.demos.android.utils.image.ImageSlicer;
+import net.sf.javaocr.demos.android.utils.image.IntegralImageSlicer;
 import net.sf.javaocr.demos.android.utils.image.SauvolaImageProcessor;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
@@ -28,7 +29,9 @@ import java.util.List;
 
 /**
  * android demo application gathering samples. no real OCR here, just preprocessing
- * and sample save
+ * and sample saving. Saved samples can be retrieved from SD card, and used to train
+ * macthers for later recognition.
+ *
  * @author Konstantin Pribluda
  */
 public class Sampler extends Activity implements SurfaceHolder.Callback, View.OnClickListener{
@@ -40,7 +43,7 @@ public class Sampler extends Activity implements SurfaceHolder.Callback, View.On
 
     private SurfaceView surfaceView;
     private SurfaceHolder preview;
-    private static final String LOG_TAG = "teacher";
+    private static final String LOG_TAG = "sampler";
 
     CameraManager cameraManager;
 

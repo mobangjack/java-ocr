@@ -9,9 +9,11 @@
     <groupId>net.sourceforge.javaocr.demos</groupId>
     <artifactId>javaocr-recognizer</artifactId>
     <packaging>apk</packaging>
-    <name>Android demo application</name>
+    <name>Android recognizer</name>
     <description>
-        Android demo app demonstrating image recognition with javaocr library
+        Android demo app demonstrating image recognition with javaocr library.
+        Recogniyion config shall be produced via trainer application, from samples gatehred by
+        sampler app
     </description>
     <build>
         <plugins>
@@ -21,7 +23,7 @@
                 <version>2.6.0</version>
                 <configuration>
                     <sdk>
-                        <platform>3</platform>
+                        <platform>7</platform>
                     </sdk>
                     <emulator>
                         <avd>16</avd>
@@ -33,13 +35,7 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <version>2.1_r1</version>
-            <scope>runtime</scope>
-        </dependency>
+    <dependencies>    
         <dependency>
             <groupId>net.sourceforge.javaocr</groupId>
             <artifactId>javaocr-core</artifactId>
