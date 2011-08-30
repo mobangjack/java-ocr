@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -19,11 +20,17 @@ import android.view.*;
 import android.widget.*;
 import net.sf.javaocr.demos.android.R;
 import net.sf.javaocr.demos.android.utils.camera.CameraManager;
+import net.sf.javaocr.demos.android.utils.image.ImageProcessor;
+import net.sf.javaocr.demos.android.utils.image.IntegralImageSlicer;
+import net.sf.javaocr.demos.android.utils.image.SauvolaImageProcessor;
 import net.sourceforge.javaocr.Image;
+import net.sourceforge.javaocr.ImageSlicer;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
+import net.sourceforge.javaocr.matcher.FreeSpacesMatcher;
 import net.sourceforge.javaocr.matcher.Match;
+import net.sourceforge.javaocr.matcher.MatcherUtil;
 import net.sourceforge.javaocr.matcher.MetricMatcher;
 import net.sourceforge.javaocr.ocr.*;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
@@ -92,15 +99,13 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     private StringBuilder recognitionResult;
     private TextView resultText;
 
-    private MediaPlayer mediaPlayer;
-    private static final float BEEP_VOLUME = 0.10f;
-
     // paints to be used in drawing borders over the found glyphs
     private Paint redPaint;
     private Paint greenPaint;
 
     // matcher will be used to recognise image sampler
-    private MetricMatcher matcher;
+    private MetricMatcher metricMatcher;
+    FreeSpacesMatcher freeSpacesMatcher;
 
     // feature extractor
     private FeatureExtractor extractor;
@@ -111,6 +116,9 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     //  encapsulated camera management logic
     private CameraManager cameraManager;
 
+
+    ImageProcessor imageProcessor;
+    IntegralImageSlicer slicer;
 
     /**
      * create actvity and initalise interface elements
@@ -172,16 +180,17 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
         });
         thr.start();
 
-        matcher = new MetricMatcher();
-
+        metricMatcher = new MetricMatcher();
+        freeSpacesMatcher = new FreeSpacesMatcher();
         extractor = new HuMoments();
+
     }
 
     /**
      * read cluster data  from storage
      */
     private void readClusterData() {
-        
+
     }
 
 
@@ -191,11 +200,10 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     @Override
     protected void onResume() {
         super.onResume();
-        // init beep sound
-        initBeepSound();
+
 
         // init buttons
-        snap.setEnabled(false);      
+        snap.setEnabled(false);
 
         // in case we already have surface, we can start camera ASAP
         if (haveSurface) {
@@ -275,7 +283,6 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     }
 
 
-
     /**
      * as image processing is long running task ( obtain camera focus,
      * retrieve preview image, and finally process it ) it us launched in a separate thread
@@ -319,7 +326,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
      * set up images and bitmaps to adjust for change in screen size
      */
     private void setUpImagesAndBitmaps() {
-        previewSize = cameraParameters.getPreviewSize();
+        final Camera.Size previewSize = cameraManager.getPreviewSize();
 
         Log.d(LOG_TAG, "preview width: " + previewSize.width + " preview height: " + previewSize.height);
         // compute and prepare working images
@@ -341,72 +348,13 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
         processImage = new PixelImage(bitmapW + WINDOW_SIZE, bitmapH + WINDOW_SIZE);
         Log.d(LOG_TAG, "image width: " + processImage.getWidth() + " height: " + processImage.getHeight());
 
-
-        // and local threshold for it  - note that we like to have dark as 1 and lite as 0
-        sauvolaBinarisationFilter = new SauvolaBinarisationFilter(0, 1, processImage, 256, SAUVOLA_WEIGHT, WINDOW_SIZE);
-
-
         // bitmap to draw information
         backBuffer = Bitmap.createBitmap(bitmapW, bitmapH, Bitmap.Config.ARGB_8888);
-    }
-
-    /**
-     * Creates the beep MediaPlayer in advance so that the sound can be triggered with the least
-     * latency possible.
-     */
-    private void initBeepSound() {
-        if (mediaPlayer == null) {
-            // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
-            // so we now play on the music stream.
-            setVolumeControlStream(AudioManager.STREAM_MUSIC);
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(beepListener);
-
-            AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
-            try {
-                mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
-                        file.getLength());
-                file.close();
-                mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-                mediaPlayer.prepare();
-            } catch (IOException e) {
-                mediaPlayer = null;
-            }
-        }
-    }
-
-    /**
-     * When the beep has finished playing, rewind to queue up another one.
-     */
-    private final MediaPlayer.OnCompletionListener beepListener = new MediaPlayer.OnCompletionListener() {
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.seekTo(0);
-        }
-    };
 
 
-    /**
-     * save image for later processing. image name contains expected text,
-     * and   timestamp.    image size and window are saved first to allow easier
-     * processing of sampler afterwards
-     */
-    public void saveTrainingImage(String expected, int[] data, int w, int h) throws IOException {
-        File outdir = new File(Environment.getExternalStorageDirectory() + "/" + LOG_TAG);
-        outdir.mkdirs();
-
-        final DataOutputStream dos = new DataOutputStream(new FileOutputStream(outdir.getAbsolutePath() + "/" + expected + "_" + (System.currentTimeMillis() / 1000) + ".dat"));
-
-
-        // save size
-        dos.writeInt(w);
-        dos.writeInt(h);
-        dos.writeInt(WINDOW_SIZE);
-
-
-        for (int value : data)
-            dos.writeInt(value);
-        dos.close();
+        imageProcessor = new SauvolaImageProcessor(previewSize.width, previewSize.height, bitmapW, bitmapH, 0, 1);
+        // slicer receivers template image which will hold integral image copy
+        slicer = new IntegralImageSlicer(new PixelImage(bitmapW, bitmapH));
     }
 
 
@@ -444,7 +392,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
         scanArea.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING | HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
 
 
-        // recompute origin in case ad was displayed and shifted  layout
+        // recompute origin just in case layout was shifted - could happen sometimes
         computeViewfinderOrigin();
 
         PixelImage processedImage = imageProcessor.prepareImage(previewFrame, (int) ((float) viewfinderOriginX / scaleW), (int) ((float) viewfinderOriginY / scaleH));
@@ -476,14 +424,14 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
             // cluster mathcer
             List<Match> matches = metricMatcher.classify(features);
             // perform matching of free spaces
-            List<Match> freeSpaceMatches = freeSpaceMatcher.classify(new double[]{features[1]});
+            List<Match> freeSpaceMatches = freeSpacesMatcher.classify(new double[]{features[1]});
 
             // ... and bayes it
 
-            List<Match> mergedMatches = merge(matches, freeSpaceMatches);
+            List<Match> mergedMatches = MatcherUtil.merge(matches, freeSpaceMatches);
 
 
-            // proceed to bext glyph on empty matches
+            // proceed to next glyph on empty matches
             // decide which border color to draw
             Paint paint = redPaint;
             if (!mergedMatches.isEmpty()) {
@@ -504,11 +452,8 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
               }
               Log.d(LOG_TAG, "--------------------------------");
                 */
-                if (match.getDistance() < match.getYellow()) {
-                    // green area
-                    paint = borderPaint;
-                } else if (match.getDistance() < match.getRed()) {
-                    paint = yellowPaint;
+                if (match.getDistance() < match.getRed()) {
+                    paint = greenPaint;
                 }
             } else {
                 Log.d(LOG_TAG, ".... ignore because merged list is empty");
@@ -549,11 +494,9 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
         runOnUiThread(new Runnable() {
             public void run() {
                 // display recognition result
-                scanArea.setImageBitmap(backBuffer);
-                scanArea.invalidate();
-                recognition.setText(result);
-                recogntionPanel.setVisibility(View.VISIBLE);
-
+                workArea.setImageBitmap(backBuffer);
+                workArea.invalidate();
+                resultText.setText(result);
             }
         }
         );

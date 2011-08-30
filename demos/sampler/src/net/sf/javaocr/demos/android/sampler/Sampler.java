@@ -174,7 +174,6 @@ public class Sampler extends Activity implements SurfaceHolder.Callback, View.On
         Thread worker = new Thread(new Runnable() {
             public void run() {
                 acquireAndProcess();
-
             }
         });
 
