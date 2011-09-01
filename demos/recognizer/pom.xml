@@ -63,5 +63,10 @@
             <artifactId>javaocr-android-camera-utils</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.pribluda.android</groupId>
+            <artifactId>jsonmarshaller</artifactId>
+            <version>0.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
