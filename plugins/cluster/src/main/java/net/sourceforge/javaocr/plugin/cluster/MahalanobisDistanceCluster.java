@@ -99,11 +99,11 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
         try {
             final RealMatrix inverse = solver.getInverse();
             return inverse.getData();
-        } catch(SingularMatrixException ex) {
+        } catch (SingularMatrixException ex) {
             System.err.println("singular - return identity!!!!!!");
             // well, matrix is singular - return identity instead
             double[][] identity = new double[getDimensions()][getDimensions()];
-            for(int i = 0; i < getDimensions(); i++) {
+            for (int i = 0; i < getDimensions(); i++) {
                 identity[i][i] = 1;
             }
             return identity;
@@ -111,7 +111,7 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
     }
 
     public double[][] getInvcov() {
-        if(invcov == null) {
+        if (invcov == null) {
             invcov = matrix();
         }
         return invcov;
@@ -120,4 +120,6 @@ public class MahalanobisDistanceCluster extends AbstractBaseCluster {
     public void setInvcov(double[][] invcov) {
         this.invcov = invcov;
     }
+
+
 }

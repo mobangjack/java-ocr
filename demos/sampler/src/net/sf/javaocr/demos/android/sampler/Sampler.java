@@ -43,7 +43,7 @@ public class Sampler extends Activity implements SurfaceHolder.Callback, View.On
 
     private SurfaceView surfaceView;
     private SurfaceHolder preview;
-    private static final String LOG_TAG = "sampler";
+    private static final String LOG_TAG = "javaocr.sampler";
 
     CameraManager cameraManager;
 

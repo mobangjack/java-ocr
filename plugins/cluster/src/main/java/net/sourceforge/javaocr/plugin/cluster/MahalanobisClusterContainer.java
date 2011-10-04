@@ -1,23 +1,21 @@
-package net.sf.javaocr.demos.android.utils.container;
-
-import net.sourceforge.javaocr.plugin.cluster.MahalanobisDistanceCluster;
+package net.sourceforge.javaocr.plugin.cluster;
 
 /**
  * container class to serialize and deserialize cluster data to external storage
  */
 public class MahalanobisClusterContainer {
 
-    MahalanobisDistanceCluster cluster;
+    MahalanobisDistanceCluster metric;
     Character character;
     double red;
     double yellow;
 
-    public MahalanobisDistanceCluster getCluster() {
-        return cluster;
+    public MahalanobisDistanceCluster getMetric() {
+        return metric;
     }
 
-    public void setCluster(MahalanobisDistanceCluster cluster) {
-        this.cluster = cluster;
+    public void setMetric(MahalanobisDistanceCluster metric) {
+        this.metric = metric;
     }
 
     public double getRed() {

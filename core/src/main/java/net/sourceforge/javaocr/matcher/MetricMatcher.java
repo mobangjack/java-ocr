@@ -6,6 +6,7 @@ import java.util.*;
 
 /**
  * classifies supplied features
+ *
  * @author Konstantin Pribluda
  */
 public class MetricMatcher {
@@ -51,5 +52,32 @@ public class MetricMatcher {
         Collections.sort(matches);
 
         return matches;
+    }
+
+
+    public Map<Metric, Character> getMetrics() {
+        return metrics;
+    }
+
+    public Map<Metric, Double> getRed() {
+        return red;
+    }
+
+    public Map<Metric, Double> getYellow() {
+        return yellow;
+    }
+
+
+    public List<MetricContainer> containers() {
+        List<MetricContainer> values = new ArrayList();
+        for (Metric metric : getMetrics().keySet()) {
+            MetricContainer clusterContainer = new MetricContainer();
+            clusterContainer.setMetric(metric);
+            clusterContainer.setRed(getRed().get(metric));
+            clusterContainer.setYellow(getYellow().get(metric));
+            clusterContainer.setCharacter(getMetrics().get(metric));
+            values.add(clusterContainer);
+        }
+        return values;
     }
 }

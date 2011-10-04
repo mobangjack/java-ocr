@@ -39,7 +39,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Simple OCR demonstrator. Just tries to match recognised text.
+ * Simple OCR demonstrator. Performs text recognition.  Recognition settings are
+ * produced by  trainer app from samples acquired via sampler application
  *
  * @author Konstantin Pribluda
  */
@@ -55,7 +56,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     // practical - 0.2 to 0.5
     // 0 means just mean value
     public static final double SAUVOLA_WEIGHT = 0.20;
-    private static final String LOG_TAG = "ocrdemo";
+    private static final String LOG_TAG = "javaocr.recognizer";
     private SauvolaBinarisationFilter sauvolaBinarisationFilter;
 
 

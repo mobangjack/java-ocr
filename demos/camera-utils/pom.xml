@@ -20,6 +20,7 @@
             <artifactId>android</artifactId>
             <version>2.1_r1</version>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javaocr.plugins</groupId>

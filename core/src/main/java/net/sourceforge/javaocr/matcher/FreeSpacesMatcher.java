@@ -19,7 +19,6 @@ public class FreeSpacesMatcher implements Matcher {
      * @return ordered list of matches.  weight == probability
      */
     public List<Match> classify(double[] features) {
-        List<Match> ret = new ArrayList();
 
         // retrieve total count
         final int key = (int) features[0];
@@ -39,7 +38,7 @@ public class FreeSpacesMatcher implements Matcher {
             double distance = (double) countsMap.get(c) / (double) total;
             // distance or red/yelow concept are not really applicable for this kind
             // of matches 
-            Match match = new Match(c, distance,0,0);
+            Match match = new Match(c, distance, 0, 0);
             matches.add(match);
         }
 
@@ -53,8 +52,8 @@ public class FreeSpacesMatcher implements Matcher {
     /**
      * train certain character occurence
      *
-     * @param c   character
-     * @param i   amount of free spaces
+     * @param c character
+     * @param i amount of free spaces
      */
     public void train(char c, int i) {
         // update amount of totals
@@ -73,6 +72,51 @@ public class FreeSpacesMatcher implements Matcher {
         integer = characterCounts.get(c);
         int accumulatedCount = integer != null ? integer + 1 : 1;
         characterCounts.put(c, accumulatedCount);
+    }
+
+
+    public Map<Integer, Map<Character, Integer>> getCounts() {
+        return counts;
+    }
+
+    public Map<Integer, Integer> getTotals() {
+        return totals;
+    }
+
+
+    /**
+     * extract list of configuration beans for serialisation
+     *
+     * @return
+     */
+    public List<FreeSpacesContainer> getContainers() {
+        List<FreeSpacesContainer> freeSpaceContainers = new ArrayList<FreeSpacesContainer>();
+        for (Integer count : getCounts().keySet()) {
+            final FreeSpacesContainer spacesContainer = new FreeSpacesContainer();
+            spacesContainer.setCount(count);
+            final Map<Character, Integer> countsMap = getCounts().get(count);
+            spacesContainer.setCharacters(new char[countsMap.size()]);
+            spacesContainer.setCounts(new int[countsMap.size()]);
+
+            int i = 0;
+            for (Character c : countsMap.keySet()) {
+                spacesContainer.getCharacters()[i] = c;
+                spacesContainer.getCounts()[i] = countsMap.get(c);
+                i++;
+            }
+            freeSpaceContainers.add(spacesContainer);
+        }
+
+        return freeSpaceContainers;
+    }
+
+    /**
+     * configure matcher  with external configuration data
+     *
+     * @param containers
+     */
+    public void setContainers(List<FreeSpacesContainer> containers) {
+
     }
 
 }

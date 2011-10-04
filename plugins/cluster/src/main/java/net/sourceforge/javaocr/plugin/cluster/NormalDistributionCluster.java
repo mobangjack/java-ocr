@@ -1,5 +1,8 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * cluster with normally distributed features. this abstract provides computation of
  * expectation and standard deviation without storing sample values
@@ -81,4 +84,5 @@ public abstract class NormalDistributionCluster extends EuclidianDistanceCluster
         this.var = var;
     }
 
+  
 }
