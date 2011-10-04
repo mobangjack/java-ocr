@@ -1,12 +1,8 @@
 import com.google.gson.stream.JsonWriter;
 import de.pribluda.android.jsonmarshaller.JSONMarshaller;
-import net.sourceforge.javaocr.plugin.cluster.MahalanobisClusterContainer;
 import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
-import net.sourceforge.javaocr.matcher.FreeSpacesMatcher;
-import net.sourceforge.javaocr.matcher.Match;
-import net.sourceforge.javaocr.matcher.MatcherUtil;
-import net.sourceforge.javaocr.matcher.MetricMatcher;
+import net.sourceforge.javaocr.matcher.*;
 import net.sourceforge.javaocr.ocr.PixelImage;
 import net.sourceforge.javaocr.plugin.cluster.MahalanobisDistanceCluster;
 import net.sourceforge.javaocr.plugin.cluster.extractor.FreeSpacesExtractor;
@@ -69,6 +65,9 @@ public class Trainer {
 
         //  character features will be used to create indivudual clusters 
         Map<Character, List<double[]>> characterFeatures = new HashMap();
+        for (Character c : POSSIBLE.toCharArray()) {
+            characterFeatures.put(c, new ArrayList<double[]>());
+        }
 
         /**
          * loop through sample files
@@ -102,7 +101,7 @@ public class Trainer {
 
                 // also train freespaces matcher
                 freeSpaces.add(extractedFreeSpaces);
-                freeSpacesMatcher.train(c, (int) Math.round(extractedMoments[1]));
+                freeSpacesMatcher.train(c, (int) Math.round(extractedFreeSpaces[0]));
 
                 moments.add(extractedMoments);
                 characterFeatures.get(c).add(extractedMoments);
@@ -185,19 +184,19 @@ public class Trainer {
         // write configuration JSON to standart output
 
         //   save out data
-        System.out.println("--------------------- free -----------------");
+        System.out.println("---------------------[ free ]-----------------");
 
         // TODO:  maybe this logic belongs into matcher.
 
         writeJsonArray(freeSpacesMatcher.getContainers());
 
-        System.out.println("--------------------- free ends  -----------------");
+        System.out.println("---------------------[ free ends ]-----------------");
 
-        System.out.println("---------- cluster data ----------------");
-        List<MahalanobisClusterContainer> mahalanobisClusterContainers = new ArrayList<MahalanobisClusterContainer>();
+        System.out.println("----------[ cluster data ]----------------");
 
-      
-        writeJsonArray(mahalanobisClusterContainers);
+        final List<MetricContainer> metricContainerList = metricMatcher.containers();
+        writeJsonArray(metricContainerList);
+
         System.out.println("----------------------------------------");
 
     }
