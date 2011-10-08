@@ -80,4 +80,10 @@ public class MetricMatcher {
         }
         return values;
     }
+
+    public void setContainers(Collection<? extends MetricContainer> containers) {
+        for (MetricContainer container : containers) {
+            addMetric(container.getMetric(),container.getCharacter(),container.getYellow(),container.getRed());
+        }
+    }
 }

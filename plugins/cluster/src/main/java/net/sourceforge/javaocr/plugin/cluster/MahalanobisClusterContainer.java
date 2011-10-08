@@ -1,44 +1,16 @@
 package net.sourceforge.javaocr.plugin.cluster;
 
+import net.sourceforge.javaocr.matcher.MetricContainer;
+
 /**
- * container class to serialize and deserialize cluster data to external storage
+ * container class to serialize and deserialize cluster data to external storage.
+ * Purpose of this class is to provide type information for deserialisation of JSON
+ * @author Konsyantin Pribluda
  */
-public class MahalanobisClusterContainer {
-
-    MahalanobisDistanceCluster metric;
-    Character character;
-    double red;
-    double yellow;
-
-    public MahalanobisDistanceCluster getMetric() {
-        return metric;
-    }
+public class MahalanobisClusterContainer extends MetricContainer{
 
     public void setMetric(MahalanobisDistanceCluster metric) {
-        this.metric = metric;
+       super.setMetric(metric);
     }
 
-    public double getRed() {
-        return red;
-    }
-
-    public void setRed(double red) {
-        this.red = red;
-    }
-
-    public double getYellow() {
-        return yellow;
-    }
-
-    public void setYellow(double yellow) {
-        this.yellow = yellow;
-    }
-
-    public Character getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(Character character) {
-        this.character = character;
-    }
 }

@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.gson.stream.JsonReader;
+import de.pribluda.android.jsonmarshaller.JSONUnmarshaller;
 import net.sf.javaocr.demos.android.R;
 import net.sf.javaocr.demos.android.utils.camera.CameraManager;
 import net.sf.javaocr.demos.android.utils.image.ImageProcessor;
@@ -26,14 +28,15 @@ import net.sourceforge.javaocr.Image;
 import net.sourceforge.javaocr.cluster.FeatureExtractor;
 import net.sourceforge.javaocr.filter.SauvolaBinarisationFilter;
 import net.sourceforge.javaocr.filter.ThresholdFilter;
-import net.sourceforge.javaocr.matcher.FreeSpacesMatcher;
-import net.sourceforge.javaocr.matcher.Match;
-import net.sourceforge.javaocr.matcher.MatcherUtil;
-import net.sourceforge.javaocr.matcher.MetricMatcher;
+import net.sourceforge.javaocr.matcher.*;
 import net.sourceforge.javaocr.ocr.PixelImage;
+import net.sourceforge.javaocr.plugin.cluster.MahalanobisClusterContainer;
+import net.sourceforge.javaocr.plugin.cluster.extractor.FreeSpacesExtractor;
 import net.sourceforge.javaocr.plugin.moment.HuMoments;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +95,6 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     private Button snap;
 
 
-    private StringBuilder recognitionResult;
     private TextView resultText;
 
     // paints to be used in drawing borders over the found glyphs
@@ -105,7 +107,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
 
     // feature extractor
     private FeatureExtractor extractor;
-
+    private FreeSpacesExtractor freeSpaceExtractor;
 
     //whether surface size was already set
     private boolean haveSurface = false;
@@ -115,6 +117,8 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
 
     ImageProcessor imageProcessor;
     IntegralImageSlicer slicer;
+
+    private boolean loadReady = false;
 
     /**
      * create actvity and initalise interface elements
@@ -166,27 +170,48 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
         greenPaint.setStyle(Paint.Style.STROKE);
         greenPaint.setStrokeWidth(2);
 
-        //  as cluster data is potentially big, and may take long time to load
-        // we read them in separate thread
-
-        Thread thr = new Thread(new Runnable() {
-            public void run() {
-                readClusterData();
-            }
-        });
-        thr.start();
 
         metricMatcher = new MetricMatcher();
         freeSpacesMatcher = new FreeSpacesMatcher();
-        extractor = new HuMoments();
 
+        extractor = new HuMoments();
+        freeSpaceExtractor = new FreeSpacesExtractor();
+
+        // fire up thread loading recognition data
+        new Thread(new Runnable() {
+            public void run() {
+                readClusterData();
+            }
+        }).run();
     }
 
     /**
      * read cluster data  from storage
      */
     private void readClusterData() {
+        Log.d(LOG_TAG, "start reading cluster data");
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.freespaces);
+            InputStreamReader reader = new InputStreamReader(inputStream);
+            JsonReader jreader = new JsonReader(reader);
+            jreader.setLenient(true);
 
+
+            freeSpacesMatcher.setContainers(JSONUnmarshaller.unmarshallArray(jreader, FreeSpacesContainer.class));
+
+            reader.close();
+
+            inputStream = getResources().openRawResource(R.raw.moments);
+            reader = new InputStreamReader(inputStream);
+            jreader = new JsonReader(reader);
+            jreader.setLenient(true);
+
+            metricMatcher.setContainers(JSONUnmarshaller.unmarshallArray(jreader, MahalanobisClusterContainer.class));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        loadReady = true;
     }
 
 
@@ -197,9 +222,6 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     protected void onResume() {
         super.onResume();
 
-
-        // init buttons
-        snap.setEnabled(false);
 
         // in case we already have surface, we can start camera ASAP
         if (haveSurface) {
@@ -244,7 +266,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     }
 
     /**
-     * suradce was changed means that we  are up and ready to display - time to start camera
+     * surface was changed means that we  are up and ready to display - time to start camera
      *
      * @param surfaceHolder
      * @param i
@@ -310,8 +332,13 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
     }
 
 
+    /**
+     * start image processing on button click
+     *
+     * @param view
+     */
     public void onClick(View view) {
-        if (view == snap) {
+        if (view == snap && loadReady) {
             // start snapping picrture
             snap.setEnabled(false);
             startProcessing();
@@ -416,11 +443,13 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
 
         for (Image glyph : row) {
             Log.d(LOG_TAG, "glyph:" + glyph);
-            double[] features = extractor.extract(glyph);
+            final double[] features = extractor.extract(glyph);
+            final double[] freeSpaces = freeSpaceExtractor.extract(glyph);
+
             // cluster mathcer
             List<Match> matches = metricMatcher.classify(features);
             // perform matching of free spaces
-            List<Match> freeSpaceMatches = freeSpacesMatcher.classify(new double[]{features[1]});
+            List<Match> freeSpaceMatches = freeSpacesMatcher.classify(freeSpaces);
 
             // ... and bayes it
 
@@ -436,6 +465,8 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
                 Character character = match.getChr();
                 Log.d(LOG_TAG, "recognised:" + character + " dist: " + match.getDistance());
                 Log.d(LOG_TAG, "yellow:" + match.getYellow() + " red:" + match.getRed());
+                Log.d(LOG_TAG, "-------------------------------");
+                
                 result.append(character);
                 if (match.getDistance() > match.getRed()) {
                     result.setSpan(new ForegroundColorSpan(redColor), result.length() - 1, result.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -493,6 +524,7 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
                 workArea.setImageBitmap(backBuffer);
                 workArea.invalidate();
                 resultText.setText(result);
+                snap.setEnabled(true);
             }
         }
         );

@@ -4,17 +4,16 @@ package net.sourceforge.javaocr.matcher;
  * container to serialize and deserialize free space matcher data
  */
 public class FreeSpacesContainer {
-    char[] characters;
-    int[] counts;
+    Character[] characters;
     int count;
 
     
 
-    public char[] getCharacters() {
+    public Character[] getCharacters() {
         return characters;
     }
 
-    public void setCharacters(char[] characters) {
+    public void setCharacters(Character[] characters) {
         this.characters = characters;
     }
 
@@ -24,13 +23,5 @@ public class FreeSpacesContainer {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public int[] getCounts() {
-        return counts;
-    }
-
-    public void setCounts(int[] counts) {
-        this.counts = counts;
     }
 }
