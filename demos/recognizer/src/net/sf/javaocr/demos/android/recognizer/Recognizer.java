@@ -466,7 +466,11 @@ public class Recognizer extends Activity implements SurfaceHolder.Callback, View
                 Log.d(LOG_TAG, "recognised:" + character + " dist: " + match.getDistance());
                 Log.d(LOG_TAG, "yellow:" + match.getYellow() + " red:" + match.getRed());
                 Log.d(LOG_TAG, "-------------------------------");
-                
+                for (Match mergedMatch : mergedMatches) {
+                        Log.d(LOG_TAG,mergedMatch.getChr() + " : " +  mergedMatch.getDistance());
+                }
+                Log.d(LOG_TAG, "-------------------------------");
+
                 result.append(character);
                 if (match.getDistance() > match.getRed()) {
                     result.setSpan(new ForegroundColorSpan(redColor), result.length() - 1, result.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
