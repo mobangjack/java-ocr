@@ -1,4 +1,4 @@
-To build with Maven:
+To build project with Maven:
 
    mvn clean install
 
