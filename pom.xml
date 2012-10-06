@@ -10,18 +10,18 @@
     <artifactId>javaocr-parent</artifactId>
     <packaging>pom</packaging>
     <name>Java OCR Parent project</name>
+    <description>JavaOCR - pure java image processing and OCR</description>
     <version>1.102-SNAPSHOT</version>
     <url>http://www.sourceforge.net/projects/javaocr/</url>
     <inceptionYear></inceptionYear>
     <scm>
-        <connection>scm:svn:https://javaocr.svn.sourceforge.net/svnroot/javaocr</connection>
-        <developerConnection>scm:svn:https://javaocr.svn.sourceforge.net/svnroot/javaocr</developerConnection>
+        <connection>scm:git:git://git.code.sf.net/p/javaocr/source</connection>
+        <developerConnection>scm:git:git://git.code.sf.net/p/javaocr/source</developerConnection>
     </scm>
     <modules>
         <module>core</module>
         <module>plugins</module>
         <module>demos</module>
-        <module>tools</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

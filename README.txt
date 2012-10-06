@@ -1,33 +1,17 @@
-To build project with Maven:
-
-   mvn clean install
-
-Attention:  This library in under heavy refactoring right now -
-you may have difficulty to recognise it next day
-
+JavaOCR is pure java image processing library with focus on OCR.  As this is pure java and
+does not use AWT code it is suitable for android.  JavaOCR os split in several modules.
 
 Module overview
 
 core - core image processing stuff (images over linear arrays, some basic filters,
-        image slicing and traversal code)
+       image slicing and traversal code)
 plugins - separated plugin modules (awt - utilises AWT routines for image processing,
-fir - FIR filtering, moment - invariant moments computation)
-tools - SWING Applications and demonstrators,  currently in bad shape
+       fir - FIR filtering, moment - invariant moments computation, cluster analysis)
+demos - usage demos, focused on android with complete roundtrip (sample acquisition,
+       training, recognition)
 
-Android support
 
-All modulles not utlising AWT are suitable for use on android
+Legacy code
 
-To create an Eclipse 3.6 project for the android demo:
-File -> New -> Android project
-	Create project from existing source
-	Location: browse to trunk/demos/android
-	select a build target
-In Package Explorer, Right-click the project -> Properties
-	Java build path -> Source
-	Link Source: Browse to trunk/core/src/main/java ; for Folder Name, enter javaocr-core
-	Link Source: Browse to trunk/plugins/moment/src/main/java ; for Folder Name, enter javaocr-plugin-moment
-Remove trunk/core/src/main/java/net/sourceforge/javaocr/scanner/*.java, these deprecated classes are not Android-compatible
-In Package Explorer, right-click the project -> Android tools -> Fix project properties
-Project -> Clean -> OcrDemo (or your project name)
-Now, you should be able to right-click the project and Run as an Android Application.
+Some code is orphaned and never reached release quality.  This code is moved into legacy subdirectory.
+If you like to adopt and improve it - you are welcome.
