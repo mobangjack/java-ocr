@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -10,9 +11,9 @@
     <packaging>pom</packaging>
     <name>Java OCR Parent project</name>
     <description>JavaOCR - pure java image processing and OCR</description>
-    <version>1.0</version>
+    <version>1.102-SNAPSHOT</version>
     <url>http://www.sourceforge.net/projects/javaocr/</url>
-    <inceptionYear />
+    <inceptionYear></inceptionYear>
     <scm>
         <connection>scm:git:git://git.code.sf.net/p/javaocr/source</connection>
         <developerConnection>scm:git:git://git.code.sf.net/p/javaocr/source</developerConnection>
