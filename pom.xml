@@ -22,6 +22,7 @@
         <module>core</module>
         <module>plugins</module>
         <module>demos</module>
+        <module>distribution</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -118,22 +119,6 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>bin</descriptorRef>
-                        <descriptorRef>src</descriptorRef>
-                        <descriptorRef>project</descriptorRef>
-                    </descriptorRefs>
-                    <formats>
-                        <format>tar.gz</format>
-                        <format>tar.bz2</format>
-                        <format>zip</format>
-                    </formats>
-                </configuration>
-            </plugin>
         </plugins>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
@@ -146,7 +131,19 @@
                 </includes>
             </resource>
         </resources>
-
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>src/assembly/assembly-bin.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <dependencies>
