@@ -73,14 +73,23 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
     public void load(String imageFilename, CharacterRange charRange, HashMap<Character, ArrayList<TrainingImage>> dest)
             throws IOException
     {
-
-        Image image = ImageIO.read(new File(imageFilename));
+        File imageFile = new File(imageFilename);
+        if(!imageFile.exists()) {
+            throw new IllegalArgumentException(String.format("file '%s' doesn't exist", imageFilename));
+        }else if(imageFile.isDirectory()) {
+            throw new IllegalArgumentException(String.format("image file path '%s' points to a directory", imageFilename));
+        }
+        Image image = ImageIO.read(imageFile);
 
         if (image == null)
         {
             throw new IOException("Cannot find training image file: " + imageFilename);
         }
-        load(image, charRange, dest, imageFilename);
+        try {
+            load(image, charRange, dest);
+        }catch(IOException ex) {
+            throw new IOException(String.format("an error during loading file '%s' occured (see nested exception for details)", imageFilename), ex);
+        }
     }
 
     public void setDebug(boolean debug)
@@ -88,14 +97,19 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
         this.debug = debug;
     }
 
+    /**
+     * 
+     * @param image see {@link #load(java.lang.String, net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange, java.util.HashMap) }
+     * @param charRange see {@link #load(java.lang.String, net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange, java.util.HashMap) }
+     * @param dest see {@link #load(java.lang.String, net.sourceforge.javaocr.ocrPlugins.mseOCR.CharacterRange, java.util.HashMap) }
+     * @throws IOException if an exception during encoding occured
+     */
     public void load(
             Image image,
             CharacterRange charRange,
-            HashMap<Character, ArrayList<TrainingImage>> dest,
-            String imageFilename)
+            HashMap<Character, ArrayList<TrainingImage>> dest)
             throws IOException
-    {
-      
+    {        
         PixelImage pixelImage = new PixelImage(image);
         pixelImage.toGrayScale(true);
         pixelImage.filter();
@@ -107,7 +121,7 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor
             throw new IOException(
                     "Expected to decode " + ((charRange.max + 1) - charRange.min)
                     + " characters but actually decoded " + (charValue - charRange.min)
-                    + " characters in training: " + imageFilename);
+                    + " characters in training");
         }
     }
 
